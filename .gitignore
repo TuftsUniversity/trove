@@ -22,8 +22,17 @@
 
 .byebug_history
 
-config/database.yml
-config/solr.yml
+# config files
+config/devise.yml
+config/ldap.yml
 config/blacklight.yml
+config/database.yml
 config/fedora.yml
 config/redis.yml
+config/secrets.yml
+config/solr.yml
+public/assets/
+
+fits.log
+
+.idea
