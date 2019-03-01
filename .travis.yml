@@ -16,6 +16,7 @@ before_script:
   - cp config/blacklight.yml.sample config/blacklight.yml
   - cp config/secrets.yml.sample config/secrets.yml
     #- cp config/ldap.yml.sample config/ldap.yml
+  - bundle update --bundler
   - bundle exec rake db:create
 script:
   - bundle exec rubocop
