@@ -29,7 +29,7 @@ before_script:
   - bundle exec rake db:create
 
 script:
-  - bundle exec rubocop
+  #- bundle exec rubocop
   - bundle exec rake db:migrate
     #- bundle exec rake travis
 
