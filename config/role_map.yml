@@ -1,6 +1,8 @@
 development:
   archivist:
     - archivist1@example.com
+  admin:
+    - tlille01@tufts.edu
 
 stage:
   archivist:
