@@ -60,6 +60,7 @@ group :development, :test do
 end
 
 gem 'rsolr', '>= 1.0'
+gem 'blacklight_range_limit', '~> 6.3', '>= 6.3.2'
 gem 'bootstrap-sass', '~> 3.0'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'jquery-rails'
