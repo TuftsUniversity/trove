@@ -51,4 +51,10 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  Hyrax.config do |config|
+    config.derivatives_path = Pathname.new('/usr/local/hydra/mira-data/derivatives')
+    config.upload_path = ->() { Pathname.new('/usr/local/hydra/mira-data/uploads') }
+    config.cache_path  = ->() { Pathname.new('/usr/local/hydra/mira-data/cache') }
+  end
 end
