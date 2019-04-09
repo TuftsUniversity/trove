@@ -1,4 +1,6 @@
 class CatalogController < ApplicationController
+
+  include BlacklightRangeLimit::ControllerOverride
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
 
@@ -21,7 +23,7 @@ class CatalogController < ApplicationController
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
-    config.search_builder_class = Hyrax::CatalogSearchBuilder
+    config.search_builder_class = ::SearchBuilder
 
     # Show gallery view
     config.view.gallery.partials = [:index_header, :index]
@@ -39,19 +41,23 @@ class CatalogController < ApplicationController
     config.index.display_type_field = solr_name("has_model", :symbol)
     config.index.thumbnail_field = 'thumbnail_path_ss'
 
+    config.add_facet_field solr_name("subject", :facetable), limit: 5
+    config.add_facet_field solr_name('names', :facetable), limit: 5, label: 'Names'
+    config.add_facet_field 'pub_date_facet_isim', label: 'Year', range: true
+
+
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
-    config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
-    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
-    config.add_facet_field solr_name("creator", :facetable), limit: 5
-    config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", limit: 5
-    config.add_facet_field solr_name("keyword", :facetable), limit: 5
-    config.add_facet_field solr_name("subject", :facetable), limit: 5
-    config.add_facet_field solr_name("language", :facetable), limit: 5
-    config.add_facet_field solr_name("based_near_label", :facetable), limit: 5
-    config.add_facet_field solr_name("publisher", :facetable), limit: 5
-    config.add_facet_field solr_name("file_format", :facetable), limit: 5
-    config.add_facet_field solr_name('member_of_collection_ids', :symbol), limit: 5, label: 'Collections', helper_method: :collection_title_by_id
+    #config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
+    #config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
+    #config.add_facet_field solr_name("creator", :facetable), limit: 5
+    #config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", limit: 5
+    #config.add_facet_field solr_name("keyword", :facetable), limit: 5
+    #config.add_facet_field solr_name("language", :facetable), limit: 5
+    #config.add_facet_field solr_name("based_near_label", :facetable), limit: 5
+    #config.add_facet_field solr_name("publisher", :facetable), limit: 5
+    #config.add_facet_field solr_name("file_format", :facetable), limit: 5
+    #config.add_facet_field solr_name('member_of_collection_ids', :symbol), limit: 5, label: 'Collections', helper_method: :collection_title_by_id
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
