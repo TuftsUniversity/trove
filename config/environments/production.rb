@@ -91,4 +91,10 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  Hyrax.config do |config|
+    config.derivatives_path = Pathname.new('/usr/local/hydra/mira-data/derivatives')
+    config.upload_path = ->() { Pathname.new('/usr/local/hydra/mira-data/uploads') }
+    config.cache_path  = ->() { Pathname.new('/usr/local/hydra/mira-data/cache') }
+  end
 end
