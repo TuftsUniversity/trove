@@ -1,0 +1,10 @@
+# Generate a secret using this command:
+#   rake secret
+development:
+  secret_key: '8c015a57f7fc2267850ca67f9c1cb4ebd2d7c3fdeb11d93503bd4703099c3661b3b176c7669b568b46cb7ca9577e56c8dc93013259eda0e6583770bf73fcd936'
+  ldap_create_user: true
+test:
+  secret_key: '2d6c716f04a145f2ce8e1e64fd076535ead2815431e60710aa6938a46fb28fa1118ab11fab79afdfd82ab63dc813d386314e8458ce515c5fe29ebfffc363f023'
+  ldap_create_user: true
+production:
+  secret_key:
