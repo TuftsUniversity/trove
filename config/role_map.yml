@@ -3,10 +3,12 @@ development:
     - archivist1@example.com
   admin:
     - tlille01@tufts.edu
+    - tlille01
 
 stage:
   archivist:
     - archivist1@example.com
+    - tlille01
 
 
 test:
