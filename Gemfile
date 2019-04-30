@@ -54,6 +54,7 @@ end
 #gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'hyrax', '2.4.0'
+gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'update'
 
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
