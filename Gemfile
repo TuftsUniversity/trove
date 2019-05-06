@@ -55,6 +55,7 @@ end
 
 gem 'hyrax', '2.4.0'
 gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'update'
+#gem 'tufts-curation', path: '/Users/tlille01/Sites/tufts-curation'
 
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'

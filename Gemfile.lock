@@ -1,7 +1,5 @@
-GIT
-  remote: https://github.com/TuftsUniversity/tufts-curation
-  revision: 54c6abb3936a8af17aae6c1bad0cba71cc607489
-  branch: update
+PATH
+  remote: /Users/tlille01/Sites/tufts-curation
   specs:
     tufts-curation (0.1.0)
       active-fedora (>= 11.5, <= 12.99)
