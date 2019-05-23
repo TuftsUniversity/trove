@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  
+
   concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
-  
+
     concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
@@ -31,6 +31,16 @@ Rails.application.routes.draw do
       delete 'clear'
     end
   end
+
+  # constraints: { id: ALLOW_DOTS }
+  resources :trove_collections #do
+    #member do
+    #  post :copy
+    #  patch :append_to
+    #  patch :update_type
+    #end
+    #resources :members, only: :show, constraints: { id: /[1-9][0-9]*/ }
+  # end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

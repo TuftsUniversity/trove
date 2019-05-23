@@ -1,0 +1,2 @@
+class TroveCollection < Collection
+end

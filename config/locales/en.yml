@@ -31,3 +31,6 @@
 
 en:
   hello: "Hello world"
+  trove_collections:
+    new:
+      header: "New %{type_title}"
