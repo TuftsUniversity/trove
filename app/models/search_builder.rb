@@ -10,7 +10,7 @@ class SearchBuilder < Hyrax::CatalogSearchBuilder
 
   def add_trove_filter(solr_parameters)
     solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << 'displays_in_sim:trove'
+    solr_parameters[:fq] << 'displays_in_tesim:trove'
   end
 
   # Override default behavior so admin users can see unpublished works in the search results
