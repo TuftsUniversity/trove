@@ -3,8 +3,8 @@ class SearchBuilder < Hyrax::CatalogSearchBuilder
   include BlacklightRangeLimit::RangeLimitBuilder
 
   # Add a filter query to restrict the search to documents the current user has access to
-  #include Hydra::AccessControlsEnforcement
-  #include Hyrax::SearchFilters
+  include Hydra::AccessControlsEnforcement
+  include Hyrax::SearchFilters
 
   self.default_processor_chain += [:add_trove_filter, :suppress_embargo_records]
 
