@@ -32,15 +32,5 @@ Rails.application.routes.draw do
     end
   end
 
-  # constraints: { id: ALLOW_DOTS }
-  resources :trove_collections #do
-    #member do
-    #  post :copy
-    #  patch :append_to
-    #  patch :update_type
-    #end
-    #resources :members, only: :show, constraints: { id: /[1-9][0-9]*/ }
-  # end
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

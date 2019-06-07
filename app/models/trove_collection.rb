@@ -1,2 +1,0 @@
-class TroveCollection < Collection
-end
