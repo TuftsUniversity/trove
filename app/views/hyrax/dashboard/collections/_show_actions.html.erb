@@ -1,0 +1,17 @@
+<% #@file  Removing the Add to Collection button %>
+<h2 class="sr-only"><%= t('hyrax.collection.actions.header') %></h2>
+<% if can? :edit, presenter.solr_document %>
+    <%= link_to t('hyrax.collection.actions.edit.label'),
+                hyrax.edit_dashboard_collection_path(presenter),
+                title: t('hyrax.collection.actions.edit.desc'),
+                class: 'btn btn-primary' %>
+<% end %>
+
+<% if can? :destroy, presenter.solr_document %>
+    <%= link_to t('hyrax.collection.actions.delete.label'),
+                hyrax.dashboard_collection_path(presenter),
+                title: t('hyrax.collection.actions.delete.desc'),
+                class: 'btn btn-danger',
+                data: { confirm: t('hyrax.collection.actions.delete.confirmation'),
+                        method: :delete } %>
+<% end %>
