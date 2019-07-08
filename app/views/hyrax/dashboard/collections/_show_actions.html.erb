@@ -1,6 +1,32 @@
 <% #@file  Removing the Add to Collection button %>
 <h2 class="sr-only"><%= t('hyrax.collection.actions.header') %></h2>
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+    <span class="sr-only" data-search-element="label"><%= t("trove_collections.additional_actions.label") %></span>
+    <span aria-hidden="true"><%= t("trove_collections.additional_actions.label") %></span>
+    <span class="caret"></span>
+  </button>
+  
+  <ul class="dropdown-menu pull-right">
+    <li>
+      <%= link_to t("trove_collections.additional_actions.copy"), request.path %>
+    </li>
+    <li>
+      <%= link_to t("trove_collections.additional_actions.powerpoint"), request.path %>
+    </li>
+    <li>
+      <%= link_to t("trove_collections.additional_actions.pdf"), request.path %>
+    </li>
+    <li>
+      <%= link_to t("trove_collections.additional_actions.upgrade"), request.path %>
+    </li>
+    <li>
+      <%= link_to t("trove_collections.additional_actions.downgrade"), request.path %>
+    </li>
+  </ul>
+</div>
 <% if can? :edit, presenter.solr_document %>
+
     <%= link_to t('hyrax.collection.actions.edit.label'),
                 hyrax.edit_dashboard_collection_path(presenter),
                 title: t('hyrax.collection.actions.edit.desc'),

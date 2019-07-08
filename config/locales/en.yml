@@ -34,3 +34,10 @@ en:
   trove_collections:
     new:
       header: "New %{type_title}"
+    additional_actions:
+      label: "Additional Actions"
+      copy: "Copy Collection"
+      powerpoint: "Download Powerpoint"
+      pdf: "Download PDF"
+      upgrade: "Upgrade to Course Collection"
+      downgrade: "Downgrade to Personal Collection"
