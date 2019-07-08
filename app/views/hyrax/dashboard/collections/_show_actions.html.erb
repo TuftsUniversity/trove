@@ -6,22 +6,24 @@
     <span aria-hidden="true"><%= t("trove_collections.additional_actions.label") %></span>
     <span class="caret"></span>
   </button>
-  
+
   <ul class="dropdown-menu pull-right">
     <li>
-      <%= link_to t("trove_collections.additional_actions.copy"), request.path %>
+      <!-- hyrax/dashboard/collections#copy -->
+      <!-- controller: '/dashboard/collections', action: 'copy', -->
+      <%= link_to t("trove_collections.additional_actions.copy"), "copy/#{@collection.id}" %>
     </li>
     <li>
-      <%= link_to t("trove_collections.additional_actions.powerpoint"), request.path %>
+      <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{@collection.id}" %>
     </li>
     <li>
-      <%= link_to t("trove_collections.additional_actions.pdf"), request.path %>
+      <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{@collection.id}" %>
     </li>
     <li>
-      <%= link_to t("trove_collections.additional_actions.upgrade"), request.path %>
+      <%= link_to t("trove_collections.additional_actions.upgrade"), "upgrade/#{@collection.id}" %>
     </li>
     <li>
-      <%= link_to t("trove_collections.additional_actions.downgrade"), request.path %>
+      <%= link_to t("trove_collections.additional_actions.downgrade"), "downgrade/#{@collection.id}" %>
     </li>
   </ul>
 </div>
