@@ -6,6 +6,9 @@ module Hyrax
     class CollectionsController < Hyrax::My::CollectionsController
       with_themed_layout '1_column'
 
+      ##
+      # @function
+      # Overwrites collection create method to add various customizations for trove.
       def create
         # Manual load and authorize necessary because Cancan will pass in all
         # form attributes. When `permissions_attributes` are present the
@@ -16,7 +19,7 @@ module Hyrax
         # use the default collection type (provides backward compatibility with versions < Hyrax 2.1.0)
         @collection.collection_type_gid = params[:collection_type_gid].presence || default_collection_type.gid
         @collection.attributes = collection_params.except(:members, :parent_id, :collection_type_gid)
-        @collection.assign_attributes({'displays_in' => ['trove']}) # For Trove
+        @collection.assign_attributes({'displays_in' => ['trove']}) # Added for Trove
         @collection.apply_depositor_metadata(current_user.user_key)
         add_members_to_collection unless batch.empty?
         @collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC # Changed for Trove
@@ -27,6 +30,9 @@ module Hyrax
         end
       end
 
+      ##
+      # @function
+      # Overwrites collection after_create callback to redirect to root, instead of dashboard.
       def after_create
         form
         set_default_permissions
@@ -40,6 +46,71 @@ module Hyrax
           format.json { render json: @collection, status: :created, location: dashboard_collection_path(@collection) }
         end
       end
+
+      ##
+      # @function
+      # Copies collections, along with their child/parent collections, works, and work order.
+      def copy
+        new_collection = create_copy
+
+        ActiveFedora::SolrService.instance.conn.commit
+
+        copy_children(new_collection)
+        copy_parents(new_collection)
+
+        ActiveFedora::SolrService.instance.conn.commit
+        redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
+      end
+
+        private
+
+        ##
+        # @function
+        # Creates a copy of a collection, with all its attributes.
+        def create_copy
+          new_collection = ::Collection.new(@collection.attributes.except('id'))
+          new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+          new_collection.save
+          new_collection
+        end
+
+        ##
+        # @function
+        # Copies child collections and child works from @collection to a new collection.
+        # @param {::Collection} collection_copy
+        #   The collection to copy the children to.
+        def copy_children(collection_copy)
+          work_ids = []
+
+          @collection.member_objects.each do |m|
+            if m.collection?
+              Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(
+                parent: collection_copy,
+                child: m
+              )
+            else
+              work_ids << m.id
+            end
+          end
+
+          collection_copy.add_member_objects(work_ids) unless work_ids.empty?
+        end
+
+        ##
+        # @function
+        # Copies parent collections from @collection to a new collection.
+        # @param {::Collection} collection_copy
+        #   The collection to copy the parents to.
+        def copy_parents(collection_copy)
+          unless @collection.parent_collections.empty?
+            @collection.parent_collections.each do |parent|
+              Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(
+                parent: parent,
+                child: collection_copy
+              )
+            end
+          end
+        end
 
     end
   end

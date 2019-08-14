@@ -32,5 +32,12 @@ Rails.application.routes.draw do
     end
   end
 
+  # Adding copy method to collections
+  scope module: 'hyrax' do
+    namespace :dashboard do
+      get '/collections/copy/:id', controller: 'collections', action: :copy
+    end
+  end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
