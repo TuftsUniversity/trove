@@ -36,6 +36,8 @@ Rails.application.routes.draw do
   scope module: 'hyrax' do
     namespace :dashboard do
       get '/collections/copy/:id', controller: 'collections', action: :copy
+      get '/collections/upgrade/:id', controller: 'collections', action: :upgrade
+      get '/collections/downgrade/:id', controller: 'collections', action: :downgrade
     end
   end
 

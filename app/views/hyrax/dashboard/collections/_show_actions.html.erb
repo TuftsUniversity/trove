@@ -9,8 +9,6 @@
 
   <ul class="dropdown-menu pull-right">
     <li>
-      <!-- hyrax/dashboard/collections#copy -->
-      <!-- controller: '/dashboard/collections', action: 'copy', -->
       <%= link_to t("trove_collections.additional_actions.copy"), "copy/#{@collection.id}" %>
     </li>
     <li>
@@ -19,12 +17,16 @@
     <li>
       <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{@collection.id}" %>
     </li>
-    <li>
-      <%= link_to t("trove_collections.additional_actions.upgrade"), "upgrade/#{@collection.id}" %>
-    </li>
-    <li>
-      <%= link_to t("trove_collections.additional_actions.downgrade"), "downgrade/#{@collection.id}" %>
-    </li>
+    <% if is_personal_collection?(@collection) %>
+      <li>
+        <%= link_to t("trove_collections.additional_actions.upgrade"), "upgrade/#{@collection.id}" %>
+      </li>
+    <% end %>
+    <% if is_course_collection?(@collection) %>
+      <li>
+        <%= link_to t("trove_collections.additional_actions.downgrade"), "downgrade/#{@collection.id}" %>
+      </li>
+    <% end %>
   </ul>
 </div>
 <% if can? :edit, presenter.solr_document %>

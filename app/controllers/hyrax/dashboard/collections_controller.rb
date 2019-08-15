@@ -62,6 +62,35 @@ module Hyrax
         redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
       end
 
+      ##
+      # Add permissions!
+      def upgrade
+        if(@collection.collection_type.title != "Personal Collection")
+          redirect_to root_path, notice: t('trove_collections.notices.not_personal_collection')
+        end
+
+        course_collection_type = Hyrax::CollectionType.where(title: "Course Collection").first
+        @collection.collection_type = course_collection_type
+        @collection.save
+
+        redirect_to :back, notice: t('trove_collections.additional_actions.notices.upgrade_success')
+      end
+
+      ##
+      # Add permissions!
+      def downgrade
+        if(@collection.collection_type.title != "Course Collection")
+          redirect_to root_path, notice: t('trove_collections.notices.not_course_collection')
+        end
+
+        personal_collection_type = Hyrax::CollectionType.where(title: "Personal Collection").first
+        @collection.collection_type = personal_collection_type
+        @collection.save
+
+        redirect_to :back, notice: t('trove_collections.additional_actions.notices.downgrade_success')
+      end
+
+
         private
 
         ##
