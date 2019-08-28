@@ -4,7 +4,7 @@ include Warden::Test::Helpers
 RSpec.feature 'Copy a Collection' do
   #let(:collection_type) { create(:user_collection_type) }
   let(:user) do
-    User.new { |u| u.save(validate: false) }
+    FactoryBot.create(:user)
   end
 
   let(:collection) { build(:collection_lw, user: user) }
@@ -14,7 +14,7 @@ RSpec.feature 'Copy a Collection' do
   end
 
   scenario do
-    visit '/dashboard/collections'
+    visit '/dashboard'
     save_and_open_page
   end
 end
