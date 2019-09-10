@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       get '/collections/copy/:id', controller: 'collections', action: :copy
       get '/collections/upgrade/:id', controller: 'collections', action: :upgrade
       get '/collections/downgrade/:id', controller: 'collections', action: :downgrade
+      get '/collections/update_work_order/:id', controller: 'collections', action: :update_work_order
     end
   end
 

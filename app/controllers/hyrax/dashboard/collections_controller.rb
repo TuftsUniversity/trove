@@ -92,6 +92,12 @@ module Hyrax
         redirect_to :back, notice: t('trove_collections.additional_actions.notices.downgrade_success')
       end
 
+      ##
+      # @function
+      def update_work_order
+        @collection.update_work_order(JSON.parse(params[:order]))
+      end
+
 
         private
 
