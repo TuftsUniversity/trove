@@ -1,6 +1,6 @@
 (function() {
   // Initialize the sortable library on the lists we need.
-  var sortable_elements = [ 'div#documents', 'table.collection-works-table > tbody' ], active_list,
+  var sortable_elements = [ 'div#documents.gallery', 'table.collection-works-table > tbody' ], active_list,
     initialize_sorting, sortable_update, list_to_json, collection_id;
 
   /*
