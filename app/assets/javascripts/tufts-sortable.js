@@ -23,8 +23,6 @@
    *   The jQuery.ui interface.
    */
   sortable_update = function(event, ui) {
-    let json = (list_to_json(active_list));
-
     $.ajax({
       url: '/dashboard/collections/update_work_order/' + collection_id(),
       data: { order: list_to_json }
@@ -48,12 +46,11 @@
   /*
    * @function
    * Turns the sortable node object into an array, then that array into a JSON string of document IDs.
-   * @param {sortable node} element
-   *   The node that had sortable called on it.
+   *
    * @return {JSON}
    *   A JSON string of just the ids in the sortable list.
    */
-  list_to_json = function(element) {
+  list_to_json = function() {
     let just_ids = active_list.sortable('toArray')
       .filter(function _remove_detail_ids(id_string) {
         return id_string.includes('document_');
