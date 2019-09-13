@@ -4,7 +4,16 @@ module HyraxHelper
   include Hyrax::HyraxHelperBehavior
 
   def sort_works(documents)
-    order = @collection.work_order
+    if @collection.nil?
+      if @presenter.nil?
+        logger.error("ERROR: Couldn't find collection or presenter.")
+        return documents
+      end
+
+      order = Collection.find(@presenter.id).work_order
+    else
+      order = @collection.work_order
+    end
 
     if validate_matching_orders(order, documents)
       ordered_docs = []
