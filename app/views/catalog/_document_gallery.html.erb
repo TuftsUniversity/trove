@@ -1,5 +1,7 @@
 <% # container for all documents in index view -%>
 <% # @tufts - Sort the documents in gallery %>
-<div id="documents" class="row gallery">
+<% dash_or_public = request.path.include?('dashboard') ? 'dashboard' : 'public' %>
+
+<div id="documents" class="row gallery <%= dash_or_public %>">
   <%= render_gallery_collection sort_works(documents) %>
 </div>
