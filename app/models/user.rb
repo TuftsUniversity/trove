@@ -1,6 +1,10 @@
 class User < ApplicationRecord
   # Connects this user object to Hydra behaviors.
   include Hydra::User
+  # Connects this user object to Role-management behaviors.
+  include Hydra::RoleManagement::UserRoles
+
+
   # Connects this user object to Hyrax behaviors.
   include Hyrax::User
   include Hyrax::UserUsageStats
@@ -21,6 +25,25 @@ class User < ApplicationRecord
   # the account.
   def to_s
     display_name || user_key
+  end
+
+  def add_role(name)
+    role = Role.find_by(name: name)
+    role = Role.create(name: name) if role.nil?
+    role.users << self
+    role.save
+    reload
+  end
+
+  def remove_role(name)
+    role = Role.find_by(name: name)
+    role.users.delete(self) if role && role.users && role.users.include?(self)
+    reload
+  end
+
+  # Hyrax 2.0 expects this to be set for the user
+  def preferred_locale
+    'en'
   end
 
   def ldap_before_save

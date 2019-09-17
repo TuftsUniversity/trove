@@ -33,14 +33,6 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
-end
-
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
@@ -57,21 +49,33 @@ gem 'hyrax', '2.4.0'
 gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'update'
 #gem 'tufts-curation', path: '/Users/tlille01/Sites/tufts-curation'
 
-group :development, :test do
-  gem 'solr_wrapper', '>= 0.3'
-end
-
 gem 'rsolr', '>= 1.0'
 gem 'blacklight_range_limit', '~> 6.3', '>= 6.3.2'
+
 gem 'bootstrap-sass', '~> 3.0'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 gem 'jquery-rails'
+
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
 gem 'devise_ldap_authenticatable'
-group :development, :test do
-  gem 'fcrepo_wrapper'
-  gem 'rspec-rails'
-end
+gem 'hydra-role-management'
 
 gem 'riiif', '~> 1.1'
+
+group :development, :test do
+  gem 'solr_wrapper', '>= 0.3'
+  gem 'fcrepo_wrapper'
+
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'ffaker'
+
+  gem 'capybara', '~> 2.13'
+  gem 'selenium-webdriver'
+  gem 'launchy'
+  #gem 'webdrivers', '~> 4.0'
+
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+end
+

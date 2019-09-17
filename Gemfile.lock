@@ -129,6 +129,9 @@ GEM
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
+    bootstrap_form (4.2.0)
+      actionpack (>= 5.0)
+      activemodel (>= 5.0)
     breadcrumbs_on_rails (3.0.1)
     browse-everything (0.15.1)
       addressable (~> 2.5)
@@ -244,12 +247,18 @@ GEM
       nokogiri (>= 1.4.3)
     erubi (1.8.0)
     execjs (2.7.0)
+    factory_bot (5.0.2)
+      activesupport (>= 4.2.0)
+    factory_bot_rails (5.0.2)
+      factory_bot (~> 5.0.2)
+      railties (>= 4.2.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
     faraday-encoding (0.0.4)
       faraday
     fcrepo_wrapper (0.9.0)
       ruby-progressbar
+    ffaker (2.12.0)
     ffi (1.10.0)
     flipflop (2.4.0)
       activesupport (>= 4.0)
@@ -324,6 +333,10 @@ GEM
     hydra-pcdm (1.0.1)
       active-fedora (>= 10, < 13)
       mime-types (>= 1)
+    hydra-role-management (1.0.0)
+      blacklight
+      bootstrap_form
+      cancancan
     hydra-works (1.1.0)
       activesupport (>= 4.2.10, < 6.0)
       hydra-derivatives (~> 3.0)
@@ -422,6 +435,8 @@ GEM
     kaminari-core (1.1.1)
     kaminari_route_prefix (0.1.1)
       kaminari (~> 1.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     ld-patch (0.3.3)
       ebnf (~> 1.1)
       rdf (>= 2.2, < 4.0)
@@ -779,10 +794,14 @@ DEPENDENCIES
   devise
   devise-guests (~> 0.6)
   devise_ldap_authenticatable
+  factory_bot_rails
   fcrepo_wrapper
+  ffaker
+  hydra-role-management
   hyrax (= 2.4.0)
   jbuilder (~> 2.5)
   jquery-rails
+  launchy
   listen (>= 3.0.5, < 3.2)
   mysql2
   puma (~> 3.7)
