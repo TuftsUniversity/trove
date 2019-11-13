@@ -73,6 +73,11 @@ Hyrax.config do |config|
 
   # Template for your repository's NOID IDs
   # config.noid_template = ".reeddeeddk"
+  config.noid_template = "trove-.reeddeeddk"
+
+
+  # Use our trove namesapce for minting ids
+  #Noid::Rails.config.namespace = 'trove'
 
   # Use the database-backed minter class
   # config.noid_minter_class = Noid::Rails::Minter::Db
