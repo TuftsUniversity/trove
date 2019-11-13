@@ -5,7 +5,7 @@ namespace :tufts do
   task migrate_trove_collections: :environment do
     collections_dir = 'tmp/trove_collections'
     migrated_collections = []
-    max_collections = 1
+    max_collections = 5
     i = 0
 
     puts "\n\nStarting Migration"

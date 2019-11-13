@@ -7,7 +7,7 @@ module Tufts
     # @param {hash} old_coll
     #   The old collection hash.
     def self.migrate(old_coll)
-      # begin
+      begin
         @old_coll = old_coll
 
         puts "\n-----"
@@ -21,24 +21,27 @@ module Tufts
 
         set_child_collections unless @old_coll['child_collections'].nil?
 
-        #@new_coll.add_member_objects(build_member_list)
-        #puts build_member_list unless @old_coll['member_ids_ssim'].nil?
-
+        unless(@old_coll['member_ids_ssim'].nil?)
+          work_list = build_member_list
+          @new_coll.add_member_objects(work_list)
+        end
 
         if(@new_coll.save)
           puts "\nSuccessfully migrated #{@old_coll['title_tesim']} (#{@old_coll['id']}) to #{@new_coll.id}."
-          true
         else
           error("Failed to migrate from save!")
-          byebug
-          false
+          return false
         end
 
-      # rescue StandardError => e
-      #   error("Failed to migrate with exception!")
-      #   byebug
-      #   return false
-      # end
+        puts "\nAdding work order to new collection."
+        Tufts::Curation::CollectionOrder.new(collection_id: @new_coll.id).save
+        @new_coll.update_work_order(work_list) unless work_list.nil?
+
+        true
+      rescue StandardError => e
+        error("Failed to migrate with exception: #{e}")
+        return false
+      end
     end
 
     private
