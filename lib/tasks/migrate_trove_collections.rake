@@ -1,102 +1,117 @@
+require File.join(Rails.root, 'lib', 'collection_migrator.rb')
+
 namespace :tufts do
   desc 'Migrates collections from Fedora3 to 4'
   task migrate_trove_collections: :environment do
-    collections_dir = 'tmp/trove_collections/*'
-    personal_gid = Hyrax::CollectionType.where(title: "Personal Collection").first.gid
-    course_gid = Hyrax::CollectionType.where(title: "Course Collection").first.gid
-
+    collections_dir = 'tmp/trove_collections'
+    migrated_collections = []
     max_collections = 1
     i = 0
-    skip = true
 
     puts "\n\nStarting Migration"
 
-    Dir[collections_dir].each do |file_path|
-      if skip
-        skip = false
-        next
-      end
-
-
+    Dir["#{collections_dir}/*"].each do |file_path|
       if(i >= max_collections)
         break
-      else
-        i = i + 1
       end
 
-      json = File.read(file_path)
-      old_coll = JSON.parse(json)
+      old_coll = mtc_load_file(file_path)
+      puts "\n\n\n-----------------------------------------"
+      puts "Working on #{old_coll['id']}"
 
-      if(old_coll['displays_ssi'] != 'trove')
-        puts "\n\n#{old_coll['id']}: #{old_coll['title_tesim']} isn't a Trove Collection"
-        byebug
-        next
-      else
-        puts "\nWorking on #{old_coll['title_tesim'].first} (#{old_coll['id']})"
+      # Skip if this collection has already been migrated.
+      next if mtc_already_migrated?(old_coll['id'], migrated_collections)
+
+      next unless old_coll['is_leaf'] && !old_coll['member_ids_ssim'].nil?
+
+      # is_leaf indicates that this collection has subcollections. Migrate all those first.
+      if(old_coll['is_leaf'] && !old_coll['member_ids_ssim'].nil?)
+        remove_from_members = [] # Ids to remove from the members array.
+        old_coll['child_collections'] = [] # Save all valid child_collections to a new array.
+
+        old_coll['member_ids_ssim'].each do |id|
+          next unless id.include?('tufts.uc:') # Don't change non-collection members.
+
+          remove_from_members << id # To remove collections from the member array.
+
+          # Get the file path from the id.
+          target_coll_file = File.join(
+            Rails.root,
+            collections_dir,
+            "#{URI.encode(id, URI::PATTERN::RESERVED)}.json"
+          )
+
+          next unless mtc_file_exists?(target_coll_file, id) # If there's no file, ignore.
+
+          old_coll['child_collections'] << id # Add id to new, child_collections array.
+
+          # Migrate unless already migrated.
+          unless(mtc_already_migrated?(id, migrated_collections))
+            mtc_log_and_migrate(mtc_load_file(target_coll_file), migrated_collections)
+          end
+        end
+
+        # Remove collections from the member array.
+        remove_from_members.each { |id| old_coll['member_ids_ssim'].delete(id) }
       end
 
-      new_coll = Collection.new
+      # Migrate the parent collection (or collection without children).
+      mtc_log_and_migrate(old_coll, migrated_collections)
 
-      mtc_transfer_metadata(old_coll, new_coll)
-
-      if(old_coll['active_fedora_model_ssi'] == 'PersonalCollection')
-         new_coll.collection_type_gid = personal_gid
-      elsif(old_coll['active_fedora_model_ssi'] == 'CourseCollection')
-         new_coll.collection_type_gid = course_gid
-      else
-        puts "#{old_coll['active_fedora_model_ssi']} is not a valid collection type."
-        byebug
-        next
-      end
-
-      #mtc_build_member_list(old_coll['member_ids_ssim'])
-      #new_coll.add_member_objects(mtc_build_member_list(old_coll['member_ids_ssim']))
-
-      puts new_coll.save!
-
-      #begin
-        # unless new_coll.save
-        #   puts "ERROR couldn't save collection!"
-        #   byebug
-        #   next
-        # end
-      #rescue
-      #  byebug
-      #  next
-      #end
-
-      #Tufts::Curation::CollectionOrder.new(collection_id: new_coll.id).save
-      #new_coll.update_work_order(old_coll['member_ids_ssim'])
-
+      i = i + 1
     end
   end
 
   ##
-  # @function
-  # Namespaced bcause this is in global scope.
-  # Sets metadata on new collection, some data from old collection and some by default.
-  def mtc_transfer_metadata(old_coll, new_coll)
-    new_coll.assign_attributes({
-      'displays_in' => ['trove'],
-      'legacy_pid' => old_coll['id']
-    })
-    new_coll.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-    new_coll.title = old_coll['title_tesim']
-    new_coll.description = old_coll['description_tesim'] unless old_coll['description_tesim'].nil?
-    new_coll.apply_depositor_metadata(old_coll['creator_tesim'].first)
+  # Namespaced because we're in global.
+  # Loads a collection json file.
+  # @param {str} file_path
+  #   The path to the file.
+  def mtc_load_file(file_path)
+    JSON.parse(File.read(file_path))
   end
 
   ##
-  # @function
-  # Namespaced bcause this is in global scope.
-  # Translates the list of F3 ids into F4 ids.
-  def mtc_build_member_list(f3_ids)
-    puts "Building Member List"
-    f4_ids = []
-    f3_ids.each do |id|
-      f4_ids << ActiveFedora::Base.where("legacy_pid_tesim:\"#{id}\"").first.id
+  # Namespaced because we're in global.
+  # Checks if an id is in the list and prints an error if so.
+  # @param {str} id
+  #   The id to check if it's already been migrated.
+  # @param {arr} list
+  #   The list of already migrated ids.
+  def mtc_already_migrated?(id, list)
+    if(list.include?(id))
+      puts "\n#{id} has already been migrated."
+      true
+    else
+      false
     end
+  end
 
-    f4_ids
+  ##
+  # Namespaced because we're in global.
+  # Checks if a collection json file exists and prints an error if not.
+  # @param {str} file_path
+  #   The path to the collection json file.
+  # @param {str} id
+  #   The id of the parent collection, for logging.
+  def mtc_file_exists?(file_path, id)
+    if(File.exist?(file_path))
+      true
+    else
+      puts "#{id} doesn't have a file (#{file_path})!"
+      false
+    end
+  end
+
+  ##
+  # Namespaced because we're in global.
+  # Runs the CollectionMigrator on the collection and saves the id to the migrated_collections list.
+  # @param {hash} coll
+  #   The collection to be migrated.
+  # @param {arr} migrated_coll_list
+  #   The list of collections already migrated.
+  def mtc_log_and_migrate(coll, migrated_coll_list)
+    Tufts::CollectionMigrator.migrate(coll)
+    migrated_coll_list << coll['id']
   end
 end
