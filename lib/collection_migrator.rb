@@ -60,6 +60,10 @@ module Tufts
         @new_coll.apply_depositor_metadata(@old_coll['creator_tesim'].first)
         # valid? has already checked that the old collection's model is one of these two.
         @new_coll.collection_type_gid = @old_coll['active_fedora_model_ssi'] == 'PersonalCollection' ? personal_gid : course_gid
+
+        # Substantially speeds up the migration.
+        # https://github.com/samvera/hyrax/commit/ce8f9eadbd1bbcd8ca6bdabff2785000d08981e5
+        @new_coll.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
       end
 
       ##

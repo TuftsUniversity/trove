@@ -37,7 +37,6 @@ module HyraxHelper
     return false if order.nil?
 
     if order.count != documents.count
-      byebug
       logger.error("ERROR: CollectionOrder count does not match actual work count in collection.")
       return false
     end
