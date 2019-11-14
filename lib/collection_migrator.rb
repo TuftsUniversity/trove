@@ -93,7 +93,7 @@ module Tufts
             next
           end
 
-          puts "Connecting child collection - #{child_collection.title} (#{child_collection.id})"
+          puts "Connecting child collection - #{child_collection} (#{child_collection.id})"
           Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(
             parent: @new_coll,
             child: child_collection

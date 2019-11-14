@@ -5,7 +5,7 @@ namespace :tufts do
   task migrate_trove_collections: :environment do
     collections_dir = 'tmp/trove_collections'
     migrated_collections = []
-    max_collections = 5
+    max_collections = 10000000000
     i = 0
 
     puts "\n\nStarting Migration"
@@ -21,8 +21,6 @@ namespace :tufts do
 
       # Skip if this collection has already been migrated.
       next if mtc_already_migrated?(old_coll['id'], migrated_collections)
-
-      next unless old_coll['is_leaf'] && !old_coll['member_ids_ssim'].nil?
 
       # is_leaf indicates that this collection has subcollections. Migrate all those first.
       if(old_coll['is_leaf'] && !old_coll['member_ids_ssim'].nil?)
