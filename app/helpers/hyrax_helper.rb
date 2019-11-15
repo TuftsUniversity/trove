@@ -10,9 +10,9 @@ module HyraxHelper
         return documents
       end
 
-      order = Collection.find(@presenter.id).work_order
+      order = JSON.parse(Collection.find(@presenter.id).work_order)
     else
-      order = @collection.work_order
+      order = JSON.parse(@collection.work_order)
     end
 
     if validate_matching_orders(order, documents)
@@ -43,7 +43,6 @@ module HyraxHelper
 
     document_ids = documents.map { |d| d.id }
     if order.sort != document_ids.sort
-      byebug
       logger.error("ERROR: CollectionOrder ids don't match actual work ids in collection.")
       logger.error("Order: #{order}")
       logger.error("Documents: #{document_ids}")
