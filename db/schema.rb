@@ -468,7 +468,7 @@ ActiveRecord::Schema.define(version: 20190917164831) do
   end
 
   create_table "tufts_collection_orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.json "work_order"
+    t.text "work_order"
     t.string "collection_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
