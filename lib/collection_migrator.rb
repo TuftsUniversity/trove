@@ -18,6 +18,7 @@ module Tufts
 
         @new_coll = Collection.new
         set_metadata
+        set_permissions
 
         set_child_collections unless @old_coll['child_collections'].nil?
 
@@ -65,6 +66,14 @@ module Tufts
         # https://github.com/samvera/hyrax/commit/ce8f9eadbd1bbcd8ca6bdabff2785000d08981e5
         @new_coll.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
       end
+
+    ##
+    # @function
+    # Sets the permissions and depositor info on new collection.
+    def self.set_permissions
+      user = User.find_or_create_system_user(@old_coll['creator_tesim'].first)
+      Hyrax::Collections::PermissionsCreateService.create_default(collection: @new_coll, creating_user: user)
+    end
 
       ##
       # @function
