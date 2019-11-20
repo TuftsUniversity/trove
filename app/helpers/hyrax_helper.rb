@@ -1,3 +1,5 @@
+require 'hyrax/name'
+
 module HyraxHelper
   include ::BlacklightHelper
   include Hyrax::BlacklightOverride
