@@ -141,6 +141,12 @@ module Tufts
           return false
         end
 
+        # Check if this collection already exists in the repo.
+        if(Collection.where("legacy_pid_tesim:\"#{@old_coll['id']}\"").count > 0)
+          error("This record already exists in the repository.")
+          return false
+        end
+
         # Decided, for now, to migrate empty collections.
         # if(@old_coll['member_ids_ssim'].nil?)
         #   error("This collection doesn't have any subcollections or images.")
