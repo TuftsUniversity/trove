@@ -1,7 +1,7 @@
 namespace :tufts do
   desc 'Creates all the users we need for the Trove migration'
   task migrate_trove_users: :environment do
-    users_file = 'tmp/usernames.txt'
+    users_file = 'tmp/trove_usernames.txt'
 
     puts "\nStarting User Migration"
 
