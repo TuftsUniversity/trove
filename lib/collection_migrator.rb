@@ -7,42 +7,37 @@ module Tufts
     # @param {hash} old_coll
     #   The old collection hash.
     def self.migrate(old_coll)
-      begin
-        @old_coll = old_coll
+      @old_coll = old_coll
 
-        puts "\n-----"
-        puts "Migrating #{old_coll['title_tesim'].first} (#{old_coll['id']})"
+      puts "\n-----"
+      puts "Migrating #{old_coll['title_tesim'].first} (#{old_coll['id']})"
 
-        # Validate the stuff.
-        return false unless valid?
+      # Validate the stuff.
+      return false unless valid?
 
-        @new_coll = Collection.new
-        set_metadata
-        set_permissions
+      @new_coll = Collection.new
+      set_metadata
+      set_permissions
 
-        set_child_collections unless @old_coll['child_collections'].nil?
+      set_child_collections unless @old_coll['child_collections'].nil?
 
-        unless(@old_coll['member_ids_ssim'].nil?)
-          work_list = build_member_list
-          @new_coll.add_member_objects(work_list)
-        end
+      unless(@old_coll['member_ids_ssim'].nil?)
+        work_list = build_member_list
+        @new_coll.add_member_objects(work_list)
+      end
 
-        if(@new_coll.save)
-          puts "\nSuccessfully migrated #{@old_coll['title_tesim']} (#{@old_coll['id']}) to #{@new_coll.id}."
-        else
-          error("Failed to migrate from save!")
-          return false
-        end
-
-        puts "\nAdding work order to new collection."
-        Tufts::Curation::CollectionOrder.new(collection_id: @new_coll.id).save
-        @new_coll.update_work_order(work_list) unless work_list.nil?
-
-        true
-      rescue StandardError => e
-        error("Failed to migrate with exception: #{e}")
+      if(@new_coll.save)
+        puts "\nSuccessfully migrated #{@old_coll['title_tesim']} (#{@old_coll['id']}) to #{@new_coll.id}."
+      else
+        error("Failed to migrate from save!")
         return false
       end
+
+      puts "\nAdding work order to new collection."
+      Tufts::Curation::CollectionOrder.new(collection_id: @new_coll.id).save
+      @new_coll.update_work_order(work_list) unless work_list.nil?
+
+      true
     end
 
     private

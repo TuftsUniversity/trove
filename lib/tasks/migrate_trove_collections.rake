@@ -109,7 +109,14 @@ namespace :tufts do
   # @param {arr} migrated_coll_list
   #   The list of collections already migrated.
   def mtc_log_and_migrate(coll, migrated_coll_list)
-    Tufts::CollectionMigrator.migrate(coll)
+    begin
+      Tufts::CollectionMigrator.migrate(coll)
+    rescue Ldp::Gone => e
+      puts "LDP went down, waiting 10 seconds."
+      sleep(10)
+
+      Tufts::CollectionMigrator.migrate(coll)
+    end
     migrated_coll_list << coll['id']
   end
 end
