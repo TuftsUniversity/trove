@@ -28,6 +28,8 @@ class CatalogController < ApplicationController
     # masonry is broken for now
     #config.view.masonry.partials = [:index]
 
+    config.per_page = [12, 24, 50, 100]
+    config.default_per_page = 24
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
