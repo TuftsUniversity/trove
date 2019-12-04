@@ -53,4 +53,24 @@ module HyraxHelper
 
     true
   end
+
+  ##
+  # @function
+  # Cuts a string down to size, unless the string is already short enough.
+  # @param {hash} item
+  #   Blacklight config passes an entire item hash to the function. Item[:value] should be the text we need.
+  # @param {int} max_length
+  #   The absolute max length a string can be. The function truncates to 15 characters less than this,
+  #   to avoid deleting a single word, or some other unnecessary truncation.
+  def limit_text_length(item, max_length = 150)
+    # ordered_descriptions_ssim?
+    return '' if item[:value].empty? || item[:value].first.empty?
+
+    descrip = item[:value].first
+    if (descrip.length <= max_length)
+      return descrip
+    end
+
+    descrip.truncate(max_length - 15, separator: ' ')
+  end
 end
