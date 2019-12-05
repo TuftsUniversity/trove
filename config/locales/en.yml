@@ -41,3 +41,7 @@ en:
       pdf: "Download PDF"
       upgrade: "Upgrade to Course Collection"
       downgrade: "Downgrade to Personal Collection"
+  homepage:
+    collections_nav:
+      course_collections: "Course Collections"
+      personal_collections: "Personal Collections"
