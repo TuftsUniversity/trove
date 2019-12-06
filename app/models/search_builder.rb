@@ -6,19 +6,23 @@ class SearchBuilder < Hyrax::CatalogSearchBuilder
   include Hydra::AccessControlsEnforcement
   include Hyrax::SearchFilters
 
-  self.default_processor_chain += [:add_trove_filter, :suppress_embargo_records]
+  self.default_processor_chain += [:add_trove_filter, :clean_query]
 
   def add_trove_filter(solr_parameters)
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << 'displays_in_tesim:trove'
   end
 
-  # Override default behavior so admin users can see unpublished works in the search results
-  def suppress_embargo_records(solr_parameters)
-    solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << '-suppressed_bsi:true'
-    solr_parameters[:fq] << '-embargo_release_date_dtsi:[NOW TO *]'
+  ##
+  # Removes duplicate and empty fq values.
+  def clean_query(solr_params)
+    solr_params[:fq] = solr_params[:fq].reject(&:blank?).uniq
   end
+
+  #def suppress_embargo_records(solr_parameters)
+  #  solr_parameters[:fq] ||= []
+  #  solr_parameters[:fq] << '-embargo_release_date_dtsi:[NOW TO *]'
+  #end
 
   ##
   # @example Adding a new step to the processor chain
