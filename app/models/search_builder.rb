@@ -8,9 +8,9 @@ class SearchBuilder < Hyrax::CatalogSearchBuilder
 
   self.default_processor_chain += [:add_trove_filter, :clean_query]
 
-  def add_trove_filter(solr_parameters)
-    solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << 'displays_in_tesim:trove'
+  def add_trove_filter(solr_params)
+    solr_params[:fq] ||= []
+    solr_params[:fq] << 'displays_in_tesim:trove'
   end
 
   ##
