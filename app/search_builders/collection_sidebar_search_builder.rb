@@ -2,7 +2,7 @@
 # Builds the nested collection list for the Collection sidebar on the homepage and search results.
 class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
 
-  self.default_processor_chain += [:no_facets_or_highlight, :limit_by_collection_id, :get_all_items]
+  self.default_processor_chain += [:no_facets_or_highlight, :limit_by_collection_id, :only_top_level, :get_all_items]
 
   ##
   # Sets the collection_id for the collection type needed. Removes a bunch of unnecessary querying.
@@ -49,9 +49,16 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
   end
 
   ##
+  # Returns only top level collections (no parents)
+  def only_top_level(solr_params)
+    solr_params[:fq] ||= []
+    solr_params[:fq] << "!(member_of_collection_ids_ssim:*)"
+  end
+
+  ##
   # Overrides the default per page, to retrieve everything.
   def get_all_items(solr_params)
-    solr_params['rows'] = 10
+    solr_params['rows'] = 100000
   end
 
 end

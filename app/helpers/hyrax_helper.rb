@@ -72,4 +72,41 @@ module HyraxHelper
 
     descrip.truncate(max_length - 15, separator: ' ')
   end
+
+  ##
+  # @function
+  # Retrieves a list of collections, limited by collection type, that don't have parents.
+  # @param {str} type
+  #   The type of collection, 'personal' sets it to Personal Collections, otherwise it's always Course Collections.
+  def get_top_level_collections(type = 'course')
+    if(type == 'personal')
+      collection_id = personal_gid
+    else
+      collection_id = course_gid
+    end
+    builder = CollectionSidebarSearchBuilder.new(controller, collection_id)
+    response = controller.repository.search(builder)
+    docs = {}
+    response.documents.each do |r|
+      docs[r.id.to_s] = r['title_tesim'].first
+    end
+
+    docs
+  end
+
+  private
+
+    ##
+    # @function
+    # Gets the Personal Collection gid from the db.
+    def personal_gid
+      Hyrax::CollectionType.where(title: "Personal Collection").first.gid
+    end
+
+    ##
+    # @function
+    # Gets the Course Collection gid from the db.
+    def course_gid
+      Hyrax::CollectionType.where(title: "Course Collection").first.gid
+    end
 end
