@@ -50,12 +50,19 @@ module Tufts
                                      'displays_in' => ['trove'],
                                      'legacy_pid' => @old_coll['id']
                                    })
-        @new_coll.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+
         @new_coll.title = @old_coll['title_tesim']
         @new_coll.description = @old_coll['description_tesim'] unless @old_coll['description_tesim'].nil?
         @new_coll.apply_depositor_metadata(@old_coll['creator_tesim'].first)
-        # valid? has already checked that the old collection's model is one of these two.
-        @new_coll.collection_type_gid = @old_coll['active_fedora_model_ssi'] == 'PersonalCollection' ? personal_gid : course_gid
+
+        # valid? has already checked that the old collection's model.
+        if(@old_coll['active_fedora_model_ssi'] == 'CourseCollection')
+          @new_coll.collection_type_gid = course_gid
+          @new_coll.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        else
+          @new_coll.collection_type_gid = personal_gid
+          @new_coll.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        end
 
         # Substantially speeds up the migration.
         # https://github.com/samvera/hyrax/commit/ce8f9eadbd1bbcd8ca6bdabff2785000d08981e5
