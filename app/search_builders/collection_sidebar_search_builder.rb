@@ -60,5 +60,4 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
   def get_all_items(solr_params)
     solr_params['rows'] = 100000
   end
-
 end

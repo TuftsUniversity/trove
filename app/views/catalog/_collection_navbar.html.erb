@@ -8,13 +8,17 @@
   </div>
 </div> -->
 
-<div class="panel-group">
+<div class="panel-group card">
   <div class="panel-heading">
     <h5 class="panel-title"><%= t('homepage.collections_nav.course_collections') %></h5>
   </div>
-  <ul>
-    <%= get_top_level_collections %>
-  </ul>
+  <div class="panel panel-default">
+    <ul class="">
+      <% get_top_level_collections.each do |coll_info| %>
+        <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: coll_info} %>
+      <% end %>
+    </ul>
+  </div>
 </div>
 
 <div class="panel-group">

@@ -86,12 +86,13 @@ module HyraxHelper
     end
     builder = CollectionSidebarSearchBuilder.new(controller, collection_id)
     response = controller.repository.search(builder)
-    docs = {}
+
+    docs = []
     response.documents.each do |r|
-      docs[r.id.to_s] = r['title_tesim'].first
+      docs << {id: r.id, title: r['title_tesim'].first}
     end
 
-    docs
+    docs.sort_by { |r| r[:title] }
   end
 
   private
