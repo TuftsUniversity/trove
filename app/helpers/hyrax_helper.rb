@@ -20,7 +20,6 @@ module HyraxHelper
       begin
         order = JSON.parse(@collection.work_order)
       rescue
-        @collection.update_work_order([])
         []
       end
     end
