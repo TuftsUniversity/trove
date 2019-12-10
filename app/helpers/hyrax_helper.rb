@@ -14,7 +14,12 @@ module HyraxHelper
 
       order = JSON.parse(Collection.find(@presenter.id).work_order)
     else
-      order = JSON.parse(@collection.work_order)
+      begin
+        order = JSON.parse(@collection.work_order)
+      rescue
+        @collection.update_work_order([])
+        []
+      end
     end
 
     if validate_matching_orders(order, documents)
