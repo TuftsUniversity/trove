@@ -11,8 +11,12 @@ module HyraxHelper
         logger.error("ERROR: Couldn't find collection or presenter.")
         return documents
       end
-
-      order = JSON.parse(Collection.find(@presenter.id).work_order)
+      begin
+        order = JSON.parse(Collection.find(@presenter.id).work_order)
+      rescue
+        @collection.update_work_order([])
+        []
+      end
     else
       begin
         order = JSON.parse(@collection.work_order)
