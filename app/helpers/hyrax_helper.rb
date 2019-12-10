@@ -14,7 +14,6 @@ module HyraxHelper
       begin
         order = JSON.parse(Collection.find(@presenter.id).work_order)
       rescue
-        @collection.update_work_order([])
         []
       end
     else
