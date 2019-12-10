@@ -22,7 +22,9 @@ module Hyrax
         @collection.assign_attributes({'displays_in' => ['trove']}) # Added for Trove
         @collection.apply_depositor_metadata(current_user.user_key)
         add_members_to_collection unless batch.empty?
-        @collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC # Changed for Trove
+        @collection.visibility = @collection.collection_type_gid == helpers.course_gid ?
+          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC :
+          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE # Changed for Trove
         if @collection.save
           after_create
         else
@@ -66,6 +68,7 @@ module Hyrax
 
       ##
       # Add permissions!
+      # Change visibility to public!
       def upgrade
         if(@collection.collection_type.title != "Personal Collection")
           redirect_to root_path, notice: t('trove_collections.notices.not_personal_collection')
@@ -80,6 +83,7 @@ module Hyrax
 
       ##
       # Add permissions!
+      # Change visibility to public!
       def downgrade
         if(@collection.collection_type.title != "Course Collection")
           redirect_to root_path, notice: t('trove_collections.notices.not_course_collection')
@@ -155,7 +159,6 @@ module Hyrax
             end
           end
         end
-
     end
   end
 end

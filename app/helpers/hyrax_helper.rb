@@ -63,25 +63,6 @@ module HyraxHelper
 
   ##
   # @function
-  # Cuts a string down to size, unless the string is already short enough.
-  # @param {hash} item
-  #   Blacklight config passes an entire item hash to the function. Item[:value] should be the text.
-  # @param {int} max_length
-  #   The absolute max length a string can be. The function truncates to 20 characters less than this,
-  #   to avoid deleting a single word, which would be a useless amount of truncation.
-  def limit_text_length(item, max_length = 170)
-    return '' if item[:value].empty? || item[:value].first.empty?
-
-    descrip = item[:value].first
-    if (descrip.length <= max_length)
-      return descrip
-    end
-
-    descrip.truncate(max_length - 15, separator: ' ')
-  end
-
-  ##
-  # @function
   # Retrieves a list of collections, limited by collection type, that don't have parents.
   # @param {str} type
   #   The type of collection, 'personal' sets it to Personal Collections, otherwise it's always Course Collections.
@@ -101,20 +82,4 @@ module HyraxHelper
 
     docs.sort_by { |r| r[:title] }
   end
-
-  private
-
-    ##
-    # @function
-    # Gets the Personal Collection gid from the db.
-    def personal_gid
-      Hyrax::CollectionType.where(title: "Personal Collection").first.gid
-    end
-
-    ##
-    # @function
-    # Gets the Course Collection gid from the db.
-    def course_gid
-      Hyrax::CollectionType.where(title: "Course Collection").first.gid
-    end
 end
