@@ -11,19 +11,22 @@ module HyraxHelper
         logger.error("ERROR: Couldn't find collection or presenter.")
         return documents
       end
-      begin
-        order = JSON.parse(Collection.find(@presenter.id).work_order)
-      rescue
-        []
-      end
+
+      collection = Collection.find(@presenter.id)
     else
-      begin
-        order = JSON.parse(@collection.work_order)
-      rescue
-        []
-      end
+      collection = @collection
     end
 
+    if(collection.work_order.nil?)
+      Tufts::Curation::CollectionOrder.new(collection_id: collection.id).save
+    end
+    order = JSON.parse(@collection.work_order)
+
+
+    ##
+    # TODO
+    # Work_order will not necessarily match documents, due to pagination
+    ##
     if validate_matching_orders(order, documents)
       ordered_docs = []
 
