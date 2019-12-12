@@ -8,26 +8,34 @@
       %>
       <header <%= header_stuff %>>
 
-      <div class="hyc-title">
-        <h1><%= @presenter.title.first %></h1>
-        <%= @presenter.collection_type_badge %>
-      </div>
+        <% if can? :edit, @presenter.solr_document %>
 
-      <% unless @presenter.logo_record.blank? %>
-          <div class="hyc-logos">
-            <% @presenter.logo_record.each_with_index  do |lr, i| %>
+          <%= link_to t('hyrax.collection.actions.edit.label'),
+                      hyrax.dashboard_collection_path(@presenter),
+                      title: t('hyrax.collection.actions.edit.desc'),
+                      class: 'btn btn-primary' %>
+        <% end %>
 
-                <% if lr[:linkurl].blank? %>
-                    <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
-                <% else %>
-                    <a href="<%= lr[:linkurl] %>">
+        <div class="hyc-title">
+          <h1><%= @presenter.title.first %></h1>
+          <%= @presenter.collection_type_badge %>
+        </div>
+
+        <% unless @presenter.logo_record.blank? %>
+            <div class="hyc-logos">
+              <% @presenter.logo_record.each_with_index  do |lr, i| %>
+
+                  <% if lr[:linkurl].blank? %>
                       <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
-                    </a>
-                <% end %>
+                  <% else %>
+                      <a href="<%= lr[:linkurl] %>">
+                        <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
+                      </a>
+                  <% end %>
 
-            <% end %>
-          </div>
-      <% end %>
+              <% end %>
+            </div>
+        <% end %>
 
       </header>
 
