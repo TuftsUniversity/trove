@@ -20,7 +20,7 @@ module HyraxHelper
     if(collection.work_order.nil?)
       Tufts::Curation::CollectionOrder.new(collection_id: collection.id).save
     end
-    order = JSON.parse(@collection.work_order)
+    order = JSON.parse(collection.work_order)
 
 
     ##
