@@ -4,7 +4,6 @@ namespace :tufts do
   desc 'Migrates collections from Fedora3 to 4'
   task migrate_trove_collections: :environment do
     collections_dir = 'tmp/trove_collections'
-    migrated_collections = []
     max_collections = 10000000000
     i = 0
 
@@ -18,9 +17,6 @@ namespace :tufts do
       old_coll = mtc_load_file(file_path)
       puts "\n\n\n-----------------------------------------"
       puts "Working on #{old_coll['id']}"
-
-      # Skip if this collection has already been migrated.
-      next if mtc_already_migrated?(old_coll['id'], migrated_collections)
 
       # is_leaf indicates that this collection has subcollections. Migrate all those first.
       if(old_coll['is_leaf'] && !old_coll['member_ids_ssim'].nil?)
@@ -43,10 +39,7 @@ namespace :tufts do
 
           old_coll['child_collections'] << id # Add id to new, child_collections array.
 
-          # Migrate unless already migrated.
-          unless(mtc_already_migrated?(id, migrated_collections))
-            mtc_log_and_migrate(mtc_load_file(target_coll_file), migrated_collections)
-          end
+          mtc_log_and_migrate(mtc_load_file(target_coll_file))
         end
 
         # Remove collections from the member array.
@@ -54,7 +47,7 @@ namespace :tufts do
       end
 
       # Migrate the parent collection (or collection without children).
-      mtc_log_and_migrate(old_coll, migrated_collections)
+      mtc_log_and_migrate(old_coll)
 
       i = i + 1
     end
@@ -67,22 +60,6 @@ namespace :tufts do
   #   The path to the file.
   def mtc_load_file(file_path)
     JSON.parse(File.read(file_path))
-  end
-
-  ##
-  # Namespaced because we're in global.
-  # Checks if an id is in the list and prints an error if so.
-  # @param {str} id
-  #   The id to check if it's already been migrated.
-  # @param {arr} list
-  #   The list of already migrated ids.
-  def mtc_already_migrated?(id, list)
-    if(list.include?(id))
-      puts "\n#{id} has already been migrated."
-      true
-    else
-      false
-    end
   end
 
   ##
@@ -103,12 +80,10 @@ namespace :tufts do
 
   ##
   # Namespaced because we're in global.
-  # Runs the CollectionMigrator on the collection and saves the id to the migrated_collections list.
+  # Runs the CollectionMigrator on the collection and rescues if LDP goes down.
   # @param {hash} coll
   #   The collection to be migrated.
-  # @param {arr} migrated_coll_list
-  #   The list of collections already migrated.
-  def mtc_log_and_migrate(coll, migrated_coll_list)
+  def mtc_log_and_migrate(coll)
     begin
       Tufts::CollectionMigrator.migrate(coll)
     rescue Ldp::Gone => e
@@ -117,6 +92,5 @@ namespace :tufts do
 
       Tufts::CollectionMigrator.migrate(coll)
     end
-    migrated_coll_list << coll['id']
   end
 end
