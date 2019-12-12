@@ -41,6 +41,9 @@ en:
       pdf: "Download PDF"
       upgrade: "Upgrade to Course Collection"
       downgrade: "Downgrade to Personal Collection"
+      edit_metadata:
+        label: "Edit Collection Info"
+        desc: "Edit this collection's title and description"
   homepage:
     collections_nav:
       course_collections: "Course Collections"

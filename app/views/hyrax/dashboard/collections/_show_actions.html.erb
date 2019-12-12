@@ -31,9 +31,9 @@
 </div>
 <% if can? :edit, presenter.solr_document %>
 
-    <%= link_to t('hyrax.collection.actions.edit.label'),
+    <%= link_to t('trove_collections.additional_actions.edit_metadata.label'), # Changed button text to be more precise
                 hyrax.edit_dashboard_collection_path(presenter),
-                title: t('hyrax.collection.actions.edit.desc'),
+                title: t('trove_collections.additional_actions.edit_metadata.desc'), # Changed button text to be more precise
                 class: 'btn btn-primary' %>
 <% end %>
 
