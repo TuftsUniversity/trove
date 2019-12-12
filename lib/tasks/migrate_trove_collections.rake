@@ -4,53 +4,74 @@ namespace :tufts do
   desc 'Migrates collections from Fedora3 to 4'
   task migrate_trove_collections: :environment do
     collections_dir = 'tmp/trove_collections'
-    max_collections = 10000000000
-    i = 0
 
     puts "\n\nStarting Migration"
 
     Dir["#{collections_dir}/*"].each do |file_path|
-      if(i >= max_collections)
-        break
-      end
-
-      old_coll = mtc_load_file(file_path)
-      puts "\n\n\n-----------------------------------------"
-      puts "Working on #{old_coll['id']}"
-
-      # is_leaf indicates that this collection has subcollections. Migrate all those first.
-      if(old_coll['is_leaf'] && !old_coll['member_ids_ssim'].nil?)
-        remove_from_members = [] # Ids to remove from the members array.
-        old_coll['child_collections'] = [] # Save all valid child_collections to a new array.
-
-        old_coll['member_ids_ssim'].each do |id|
-          next unless id.include?('tufts.uc:') # Don't change non-collection members.
-
-          remove_from_members << id # To remove collections from the member array.
-
-          # Get the file path from the id.
-          target_coll_file = File.join(
-            Rails.root,
-            collections_dir,
-            "#{URI.encode(id, URI::PATTERN::RESERVED)}.json"
-          )
-
-          next unless mtc_file_exists?(target_coll_file, id) # If there's no file, ignore.
-
-          old_coll['child_collections'] << id # Add id to new, child_collections array.
-
-          mtc_log_and_migrate(mtc_load_file(target_coll_file))
-        end
-
-        # Remove collections from the member array.
-        remove_from_members.each { |id| old_coll['member_ids_ssim'].delete(id) }
-      end
-
-      # Migrate the parent collection (or collection without children).
-      mtc_log_and_migrate(old_coll)
-
-      i = i + 1
+      coll = mtc_load_file(file_path)
+      mtc_process_collection(coll, collections_dir)
     end
+  end
+
+
+  ##
+  # Migrates a collection and recursively migrates any children it may have.
+  # @param {hash} coll
+  #  The collection hash from JSON.
+  # @param {str} collections_dir
+  #   The directory that all the collection json files are in.
+  def mtc_process_collection(coll, collections_dir)
+    puts "\n\n\n-----------------------------------------"
+    puts "Working on #{coll['id']}"
+
+    # is_leaf indicates that this collection has subcollections. Migrate all those first.
+    if(coll['is_leaf'] && !coll['member_ids_ssim'].nil?)
+      coll = mtc_process_subcollections(coll, collections_dir)
+    end
+
+    # Migrate the parent collection (or collection without children).
+    mtc_log_and_migrate(coll)
+  end
+
+  ##
+  # Migrates all the subcollections in a parent collection.
+  # @param {hash} parent_coll
+  #   The parent collection hash.
+  # @param {str} collections_dir
+  #   The directory that all the collection json files are in.
+  def mtc_process_subcollections(parent_coll, collections_dir)
+    puts "\n--------------"
+    puts "Processing subcollections\n\n"
+
+    remove_from_members = [] # Ids to remove from the members array.
+    parent_coll['child_collections'] = [] # Save all valid child_collections to a new array.
+
+    parent_coll['member_ids_ssim'].each do |id|
+      next unless id.include?('tufts.uc:') # Don't change non-collection members.
+
+      remove_from_members << id # To remove collections from the member array.
+
+      # Get the file path from the id.
+      target_coll_file = File.join(
+        Rails.root,
+        collections_dir,
+        "#{URI.encode(id, URI::PATTERN::RESERVED)}.json"
+      )
+
+      next unless mtc_file_exists?(target_coll_file, id) # If there's no file, ignore.
+
+      parent_coll['child_collections'] << id # Add id to new, child_collections array.
+
+      mtc_process_collection(mtc_load_file(target_coll_file), collections_dir)
+    end
+
+    # Remove collections from the member array.
+    remove_from_members.each { |id| parent_coll['member_ids_ssim'].delete(id) }
+
+    puts "\n\nFinished subcollections for #{parent_coll['id']}"
+    puts "--------------"
+
+    parent_coll
   end
 
   ##
