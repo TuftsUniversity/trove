@@ -18,7 +18,13 @@ Riiif::Image.file_resolver.id_to_uri = lambda do |id|
   end
 end
 
+#Riiif::Image.authorization_service = Hyrax::IIIFAuthorizationService
 Riiif::Image.authorization_service = Hyrax::IIIFAuthorizationService
+
+FEDORA_CONFIG = YAML.safe_load(File.open(Rails.root.join('config', 'fedora.yml'))).symbolize_keys
+conf = FEDORA_CONFIG[Rails.env.to_sym].symbolize_keys
+
+Riiif::Image.file_resolver.basic_auth_credentials = [conf[:user], conf[:password]]
 
 Riiif.not_found_image = Rails.root.join('app', 'assets', 'images', 'us_404.svg')
 Riiif.unauthorized_image = Rails.root.join('app', 'assets', 'images', 'us_404.svg')

@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/imageviewer/:id', to: 'hyrax/images#advanced', constraints: { id: /.*/ }, as: 'imageviewer'
+
   # Adding copy method to collections
   scope module: 'hyrax' do
     namespace :dashboard do

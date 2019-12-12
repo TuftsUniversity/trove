@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="<%= t("hyrax.document_language", default: '') %>" prefix="og:http://ogp.me/ns#">
+  <head>
+    <%= render partial: 'layouts/head_tag_content' %>
+		<%= content_for(:head) %>
+<style>
+html, body, iframe { 
+				height: 100%; 
+				background: #4e4e4e !important;
+				background-color: #4e4e4e;
+        margin-bottom: 0px;}
+     #content {
+			 background-color: #4e4e4e;
+			 height: 98%;
+			 width: 100%;
+				     
+		 }
+		 .viewer-wrapper {
+				height: 100%;
+		}
+a:link
+{
+    color:#FFFFFF;
+}
+
+a:visited
+{
+    color:#FFFFFF;
+}
+
+a:hover 
+{
+    color:#FFFFFF;
+}
+
+   </style>
+  </head>
+	<body>
+					<div id="content" class="container" role="main">
+									    <%= content_for?(:content) ? yield(:content) : yield %>
+					</div>
+  </body>
+</html>

@@ -4,6 +4,8 @@ development:
   admin:
     - tlille01@tufts.edu
     - tlille01
+    - mkorcy01
+    - mkorcy01@tufts.edu
 
 stage:
   archivist:

@@ -1,0 +1,16 @@
+<% 
+   file_set_id = document._source["hasRelatedImage_ssim"] 
+   file_set = FileSet.find(file_set_id).first unless file_set_id.nil?
+%>
+<div class="item<%= ' active' if document_counter == 0 %>">
+  <div class="frame">
+    <%= image_tag(Riiif::Engine.routes.url_helpers.image_url(file_set.files.first.id, host: request.base_url, size: "600,")) unless file_set_id.nil? %>
+    <%= render_slideshow_tag(document) if file_set_id.nil? %>
+      <div class="caption">
+        <%= index_presenter(document).label(document_show_link_field(document)) %>
+      </div>
+      <span class="counter">
+        <%= t :'blacklight_gallery.catalog.modal_slideshow.counter', counter: document_counter + 1, count: count %>
+      </span>
+  </div>
+</div>
