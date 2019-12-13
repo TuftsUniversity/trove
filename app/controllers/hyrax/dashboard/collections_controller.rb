@@ -50,6 +50,28 @@ module Hyrax
           format.json { render json: @collection, status: :created, location: dashboard_collection_path(@collection) }
         end
       end
+      
+      def dl_pdf
+        @curated_collection = ::Collection.find(params[:id])
+        respond_to do |format|
+          format.pdf do
+            exporter = PdfCollectionExporter.new(@curated_collection)
+            send_file(exporter.export, filename: exporter.pdf_file_name, type: "application/pdf")
+          end
+        end
+      end
+
+      def dl_powerpoint
+        @curated_collection = ::Collection.find(params[:id])
+        respond_to do |format|
+          format.pptx do
+            exporter = PowerPointCollectionExporter.new(@curated_collection)
+            send_file(exporter.export,
+                  filename: exporter.pptx_file_name,
+                  type: "application/vnd.openxmlformats-officedocument.presentationml.presentation")
+          end
+        end
+      end
 
       ##
       # @function
