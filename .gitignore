@@ -38,3 +38,4 @@ fits.log
 .idea
 
 java/build
+conf/java.yml
