@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  acts_as_token_authentication_handler_for User
+
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|
     render :text => exception, :status => 500
   end
