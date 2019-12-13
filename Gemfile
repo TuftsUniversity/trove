@@ -10,6 +10,7 @@ end
 gem 'rails', '~> 5.1.6'
 # Use sqlite3 as the database for Active Record
 gem 'mysql2'
+gem 'sqlite3', '~> 1.3.6'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
@@ -58,6 +59,7 @@ gem 'jquery-rails'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
 gem 'devise_ldap_authenticatable'
+gem 'simple_token_authentication', '~> 1.0'
 gem 'hydra-role-management'
 
 gem 'riiif', '~> 1.1'
