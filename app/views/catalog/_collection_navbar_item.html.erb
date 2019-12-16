@@ -1,3 +1,12 @@
+<% sub_colls = get_collections(coll_type, coll_info[:id]) %>
+
 <li class="">
   <%= link_to(coll_info[:title], collection_path(coll_info[:id])) %>
+  <% if(sub_colls.present?) %>
+    <ul>
+      <% sub_colls.each do |c| %>
+        <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: c, coll_type: coll_type} %>
+      <% end %>
+    </ul>
+  <% end %>
 </li>

@@ -70,12 +70,23 @@ module HyraxHelper
   # @param {str} type
   #   The type of collection, 'personal' sets it to Personal Collections, otherwise it's always Course Collections.
   def get_top_level_collections(type = 'course')
+    get_collections(type)
+  end
+
+  ##
+  # @function
+  # Retrieves a list of collections, limited by collection type and parent collection.
+  # @param {str} parent_id
+  #   The parent collection's ID, or nil if you want top-level collections.
+  # @param {str} type
+  #   The type of collection, 'personal' sets it to Personal Collections, otherwise it's always Course Collections.
+  def get_collections(type = 'course', parent_id=nil)
     if(type == 'personal')
-      collection_id = personal_gid
+      collection_type_id = personal_gid
     else
-      collection_id = course_gid
+      collection_type_id = course_gid
     end
-    builder = CollectionSidebarSearchBuilder.new(controller, collection_id)
+    builder = CollectionSidebarSearchBuilder.new(controller, collection_type_id, parent_id)
     response = controller.repository.search(builder)
 
     docs = []

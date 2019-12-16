@@ -2,16 +2,19 @@
 # Builds the nested collection list for the Collection sidebar on the homepage and search results.
 class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
 
-  self.default_processor_chain += [:no_facets_or_highlight, :limit_by_collection_id, :only_top_level, :get_all_items]
+  self.default_processor_chain += [:no_facets_or_highlight, :limit_by_collection_type, :limit_by_parent, :get_all_items]
 
   ##
-  # Sets the collection_id for the collection type needed. Removes a bunch of unnecessary querying.
+  # Sets the collection_type_id for the collection type needed. Removes a bunch of unnecessary querying.
   # @param {controller} scope
   #   The controller to use with the search builder.
-  # @param {str} collection_id
+  # @param {str} collection_type_id
   #   The collection gid of the type that we're looking for.
-  def initialize(scope, collection_id)
-    @collection_id = collection_id
+  # @param {str} parent_id
+  #   The Parent Collection id to search within. Defaults to nil to get top-level, parent-less Collections.
+  def initialize(scope, collection_type_id, parent_id=nil)
+    @collection_type_id = collection_type_id
+    @parent_id = parent_id
 
     # In an effort to make solr queries slightly less awful to debug, removing all faceting/range limit stuff from
     # this search builder, because we don't use facets or ranges in the collections sidebar.
@@ -43,16 +46,20 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
 
   ##
   # Returns only a single collection type, defined in initialize.
-  def limit_by_collection_id(solr_params)
+  def limit_by_collection_type(solr_params)
     solr_params[:fq] ||= []
-    solr_params[:fq] << "collection_type_gid_ssim:\"#{@collection_id}\""
+    solr_params[:fq] << "collection_type_gid_ssim:\"#{@collection_type_id}\""
   end
 
   ##
   # Returns only top level collections (no parents)
-  def only_top_level(solr_params)
+  def limit_by_parent(solr_params)
     solr_params[:fq] ||= []
-    solr_params[:fq] << "!(member_of_collection_ids_ssim:*)"
+    if(@parent_id.nil?)
+      solr_params[:fq] << "!(member_of_collection_ids_ssim:*)"
+    else
+      solr_params[:fq] << "member_of_collection_ids_ssim:#{@parent_id}"
+    end
   end
 
   ##
