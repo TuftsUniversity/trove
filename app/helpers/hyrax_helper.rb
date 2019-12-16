@@ -80,7 +80,7 @@ module HyraxHelper
   #   The parent collection's ID, or nil if you want top-level collections.
   # @param {str} type
   #   The type of collection, 'personal' sets it to Personal Collections, otherwise it's always Course Collections.
-  def get_collections(type = 'course', parent_id=nil)
+  def get_collections(type = 'course', parent_id = nil)
     if(type == 'personal')
       collection_type_id = personal_gid
     else

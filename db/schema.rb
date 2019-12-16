@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190917164831) do
+ActiveRecord::Schema.define(version: 20191212170636) do
 
   create_table "bookmarks", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "user_id", null: false
@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(version: 20190917164831) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "collection_type_participants", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "hyrax_collection_type_id"
+  create_table "collection_type_participants", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "hyrax_collection_type_id"
     t.string "agent_type"
     t.string "agent_id"
     t.string "access"
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 20190917164831) do
     t.index ["user_id"], name: "index_file_view_stats_on_user_id"
   end
 
-  create_table "hyrax_collection_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci" do |t|
+  create_table "hyrax_collection_types", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
     t.string "title"
     t.text "description"
     t.string "machine_id"
@@ -467,7 +467,7 @@ ActiveRecord::Schema.define(version: 20190917164831) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "tufts_collection_orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "tufts_collection_orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.text "work_order"
     t.string "collection_id", null: false
     t.datetime "created_at", null: false
@@ -530,6 +530,8 @@ ActiveRecord::Schema.define(version: 20190917164831) do
     t.string "zotero_userid"
     t.string "preferred_locale"
     t.string "username"
+    t.string "authentication_token", limit: 30
+    t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true

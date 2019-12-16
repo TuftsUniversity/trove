@@ -1,31 +1,24 @@
-<!--<div class="facets">
-  <div class="panel-group">
-    <div class="top-panel-heading panel-heading">
-      <h2 class="facets-heading"><%= t('homepage.collections_nav.course_collections') %></h2>
+<div id="collections-sidebar" class="panel-group col-md-7">
+  <div id="course_collections" class="panel panel-default dd">
+    <div class="panel-heading">
+      <h5 class="panel-title"><%= t('homepage.collections_nav.course_collections') %></h5>
     </div>
-    <div id="facet-panel-collapse" class="collapse panel-group">
+    <div class="panel panel-default">
+      <ul class="panel-body dd-list">
+        <% get_top_level_collections.each do |coll_info| %>
+          <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: coll_info, coll_type: 'course'} %>
+        <% end %>
+      </ul>
     </div>
   </div>
-</div> -->
 
-<div class="panel-group card">
-  <div class="panel-heading">
-    <h5 class="panel-title"><%= t('homepage.collections_nav.course_collections') %></h5>
+  <div id="personal_collections" class="panel panel-default dd">
+    <div class="panel-heading">
+      <h5 class="panel-title"><%= t('homepage.collections_nav.personal_collections') %></h5>
+    </div>
+    <div class="panel panel-default">
+      <ul class="panel-body dd-list">
+      </ul>
+    </div>
   </div>
-  <div class="panel panel-default">
-    <ul class="">
-      <% get_top_level_collections.each do |coll_info| %>
-        <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: coll_info, coll_type: 'course'} %>
-      <% end %>
-    </ul>
-  </div>
-</div>
-
-<div class="panel-group">
-  <div class="panel-heading">
-    <h5 class="panel-title"><%= t('homepage.collections_nav.personal_collections') %></h5>
-  </div>
-  <ul>
-    <%#= get_top_level_collections('personal') %>
-  </ul>
 </div>

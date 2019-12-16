@@ -1,7 +1,12 @@
 <% sub_colls = get_collections(coll_type, coll_info[:id]) %>
 
-<li class="">
-  <%= link_to(coll_info[:title], collection_path(coll_info[:id])) %>
+<li class="dd-item">
+  <% if(false) #sub_colls.present?) %>
+    <button data-action="expand" type="button"></button>
+  <% end %>
+  <div class="dd-handle">
+    <%= link_to(coll_info[:title], collection_path(coll_info[:id])) %>
+  </div>
   <% if(sub_colls.present?) %>
     <ul>
       <% sub_colls.each do |c| %>

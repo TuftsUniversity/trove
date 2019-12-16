@@ -12,7 +12,7 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
   #   The collection gid of the type that we're looking for.
   # @param {str} parent_id
   #   The Parent Collection id to search within. Defaults to nil to get top-level, parent-less Collections.
-  def initialize(scope, collection_type_id, parent_id=nil)
+  def initialize(scope, collection_type_id, parent_id = nil)
     @collection_type_id = collection_type_id
     @parent_id = parent_id
 
