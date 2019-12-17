@@ -19,11 +19,6 @@ class SearchBuilder < Hyrax::CatalogSearchBuilder
     solr_params[:fq] = solr_params[:fq].reject(&:blank?).uniq
   end
 
-  # This overrides the models in FilterByType
-  def models
-    [::Image]
-  end
-
   #def suppress_embargo_records(solr_parameters)
   #  solr_parameters[:fq] ||= []
   #  solr_parameters[:fq] << '-embargo_release_date_dtsi:[NOW TO *]'
