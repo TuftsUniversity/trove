@@ -1,14 +1,23 @@
-<% sub_colls = get_collections(coll_type, coll_info[:id]) %>
+<%
+  sub_colls = get_collections(coll_type, coll_info[:id])
+  sub_ul_id = "collapse-#{coll_info[:id]}"
+%>
 
 <li class="dd-item">
-  <% if(false) #sub_colls.present?) %>
-    <button data-action="expand" type="button"></button>
+  <% if (sub_colls.present?) %>
+    <button
+      type="button"
+      data-toggle="collapse"
+      data-target="#<%= sub_ul_id %>"
+      aria-expanded="false"
+      aria-controls="<%= sub_ul_id %>"
+    ></button>
   <% end %>
   <div class="dd-handle">
     <%= link_to(coll_info[:title], collection_path(coll_info[:id])) %>
   </div>
-  <% if(sub_colls.present?) %>
-    <ul>
+  <% if (sub_colls.present?) %>
+    <ul id="<%= sub_ul_id %>" class="collapse">
       <% sub_colls.each do |c| %>
         <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: c, coll_type: coll_type} %>
       <% end %>
