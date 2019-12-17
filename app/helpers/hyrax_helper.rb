@@ -17,32 +17,20 @@ module HyraxHelper
       collection = @collection
     end
 
-    if(collection.work_order.nil?)
-      Tufts::Curation::CollectionOrder.new(collection_id: collection.id).save
-    end
+    return documents if collection.work_order.nil?
+
     order = JSON.parse(collection.work_order)
-
-
-    ##
-    # TODO
-    # Work_order will not necessarily match documents, due to pagination
-    ##
-    if validate_matching_orders(order, documents)
-      ordered_docs = []
-
-      order.each do |id|
-        documents.each do |doc|
-          if doc.id == id
-            ordered_docs << doc
-            break
-          end
+    ordered_docs = []
+    order.each do |id|
+      documents.each do |doc|
+        if doc.id == id
+          ordered_docs << doc
+          break
         end
       end
-
-      ordered_docs
-    else
-      documents
     end
+
+    ordered_docs
   end
 
   def validate_matching_orders(order, documents)
