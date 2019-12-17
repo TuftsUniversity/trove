@@ -70,12 +70,7 @@ module HyraxHelper
   # @param {str} type
   #   The type of collection, 'personal' sets it to Personal Collections, otherwise it's always Course Collections.
   def get_collections(type = 'course', parent_id = nil)
-    if(type == 'personal')
-      collection_type_id = personal_gid
-    else
-      collection_type_id = course_gid
-    end
-    builder = CollectionSidebarSearchBuilder.new(controller, collection_type_id, parent_id)
+    builder = CollectionSidebarSearchBuilder.new(controller, type, parent_id)
     response = controller.repository.search(builder)
 
     docs = []

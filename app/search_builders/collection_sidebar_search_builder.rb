@@ -1,8 +1,15 @@
+include CollectionTypeHelpers
+
 ##
 # Builds the nested collection list for the Collection sidebar on the homepage and search results.
 class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
 
-  self.default_processor_chain += [:no_facets_or_highlight, :limit_by_collection_type, :limit_by_parent, :get_all_items]
+  self.default_processor_chain += [
+    :no_facets_or_highlight,
+    :limit_by_collection_type,
+    :limit_by_parent,
+    :limit_by_user_if_personal,
+    :get_all_items]
 
   ##
   # Sets the collection_type_id for the collection type needed. Removes a bunch of unnecessary querying.
@@ -12,8 +19,8 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
   #   The collection gid of the type that we're looking for.
   # @param {str} parent_id
   #   The Parent Collection id to search within. Defaults to nil to get top-level, parent-less Collections.
-  def initialize(scope, collection_type_id, parent_id = nil)
-    @collection_type_id = collection_type_id
+  def initialize(scope, type, parent_id = nil)
+    @type = type
     @parent_id = parent_id
 
     # In an effort to make solr queries slightly less awful to debug, removing all faceting/range limit stuff from
@@ -47,8 +54,9 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
   ##
   # Returns only a single collection type, defined in initialize.
   def limit_by_collection_type(solr_params)
+    collection_type_gid = @type == "personal" ? personal_gid : course_gid
     solr_params[:fq] ||= []
-    solr_params[:fq] << "collection_type_gid_ssim:\"#{@collection_type_id}\""
+    solr_params[:fq] << "collection_type_gid_ssim:\"#{collection_type_gid}\""
   end
 
   ##
@@ -63,8 +71,17 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
   end
 
   ##
+  # Returns only collections owned by the current user.
+  def limit_by_user_if_personal(solr_params)
+    if(@type == 'personal')
+      solr_params[:fq] ||= []
+      solr_params[:fq] << "depositor_tesim:\"#{current_user.username}\""
+    end
+  end
+
+  ##
   # Overrides the default per page, to retrieve everything.
   def get_all_items(solr_params)
-    solr_params['rows'] = 100000
+    solr_params['rows'] = 1000000
   end
 end

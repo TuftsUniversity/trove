@@ -18,6 +18,9 @@
     </div>
     <div class="panel panel-default">
       <ul class="panel-body dd-list">
+        <% get_top_level_collections('personal').each do |coll_info| %>
+          <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: coll_info, coll_type: 'personal'} %>
+        <% end %>
       </ul>
     </div>
   </div>
