@@ -69,7 +69,7 @@ class PptExportWriter
       work_order.flatten.map { |member|
         member_image = Image.find(member)
         file_set = member_image.file_sets[0]
-        url = Riiif::Engine.routes.url_helpers.image_url(file_set.files.first.id, host: "localhost", port: "3001", size: "2000,")        
+        url = Riiif::Engine.routes.url_helpers.image_url(file_set.files.first.id, host: Rails.configuration.host, port: Rails.configuration.port, size: "2000,")        
         params = { :user_username => Rails.application.secrets.riiif_user, :user_token => Rails.application.secrets.riiif_token }
         uri = URI.parse(url)
         uri.query = URI.encode_www_form( params )        
