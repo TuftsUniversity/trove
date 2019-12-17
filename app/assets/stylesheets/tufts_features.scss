@@ -4,6 +4,14 @@
   float: right;
 }
 
-#collections-sidebar ul ul{
-  padding-left: 15px;
+#collections-sidebar {
+  ul ul {
+    padding-left: 15px;
+  }
+
+  .panel-title {
+    display: inline-block;
+    margin-right: 1rem;
+  }
 }
+
