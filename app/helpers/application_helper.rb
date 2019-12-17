@@ -5,28 +5,6 @@ module ApplicationHelper
 
   ##
   # @function
-  # Gets the Personal Collection gid from the db.
-  def personal_gid
-    @personal_gid ||= Hyrax::CollectionType.where(title: "Personal Collection").first.gid
-  end
-
-  ##
-  # @function
-  # Gets the Course Collection gid from the db.
-  def course_gid
-    @course_gid ||= Hyrax::CollectionType.where(title: "Course Collection").first.gid
-  end
-
-  def is_course_collection?(collection)
-    collection.collection_type.title == "Course Collection"
-  end
-
-  def is_personal_collection?(collection)
-    collection.collection_type.title == "Personal Collection"
-  end
-
-  ##
-  # @function
   # Cuts a string down to size, unless the string is already short enough.
   # @param {hash} item
   #   Blacklight config passes an entire item hash to the function. Item[:value] should be the text.

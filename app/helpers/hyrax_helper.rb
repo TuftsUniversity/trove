@@ -4,6 +4,7 @@ module HyraxHelper
   include ::BlacklightHelper
   include Hyrax::BlacklightOverride
   include Hyrax::HyraxHelperBehavior
+  include CollectionTypeHelpers
 
   def sort_works(documents)
     if @collection.nil?
@@ -32,25 +33,25 @@ module HyraxHelper
 
     ordered_docs
   end
-
-  def validate_matching_orders(order, documents)
-    return false if order.nil?
-
-    if order.count != documents.count
-      logger.error("ERROR: CollectionOrder count does not match actual work count in collection.")
-      return false
-    end
-
-    document_ids = documents.map { |d| d.id }
-    if order.sort != document_ids.sort
-      logger.error("ERROR: CollectionOrder ids don't match actual work ids in collection.")
-      logger.error("Order: #{order}")
-      logger.error("Documents: #{document_ids}")
-      return false
-    end
-
-    true
-  end
+  #
+  # def validate_matching_orders(order, documents)
+  #   return false if order.nil?
+  #
+  #   if order.count != documents.count
+  #     logger.error("ERROR: CollectionOrder count does not match actual work count in collection.")
+  #     return false
+  #   end
+  #
+  #   document_ids = documents.map { |d| d.id }
+  #   if order.sort != document_ids.sort
+  #     logger.error("ERROR: CollectionOrder ids don't match actual work ids in collection.")
+  #     logger.error("Order: #{order}")
+  #     logger.error("Documents: #{document_ids}")
+  #     return false
+  #   end
+  #
+  #   true
+  # end
 
   ##
   # @function
