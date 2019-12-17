@@ -17,7 +17,7 @@ class PptExportWriter
   end
 
   def write
-    transmit_collection    
+    transmit_collection
     transmit_slides
   end
 
@@ -43,8 +43,8 @@ class PptExportWriter
 
     def transmit_slide(pid, path)
       # Send the metadata and file path for each individual image slide
-      coords = coordinates(path)      
-      
+      coords = coordinates(path)
+
       image = Image.find(pid)
 
       image_slide = {
@@ -69,19 +69,21 @@ class PptExportWriter
       work_order.flatten.map { |member|
         member_image = Image.find(member)
         file_set = member_image.file_sets[0]
-        url = Riiif::Engine.routes.url_helpers.image_url(file_set.files.first.id, host: Rails.configuration.host, port: Rails.configuration.port, size: "2000,")        
+        url = Riiif::Engine.routes.url_helpers.image_url(file_set.files.first.id, host: Rails.configuration.host, port: Rails.configuration.port, size: "2000,")
         params = { :user_username => Rails.application.secrets.riiif_user, :user_token => Rails.application.secrets.riiif_token }
         uri = URI.parse(url)
-        uri.query = URI.encode_www_form( params )        
-        uri_s = uri.to_s    
+        uri.query = URI.encode_www_form( params )
+        uri_s = uri.to_s
         base_name = File.basename(uri.path)
-        temp_file = Rails.root.join('tmp', 'images', member).to_s        
-        
-        File.open(temp_file, "wb") do |file|
-          file.write uri.open.read
-        end      
+        temp_file = Rails.root.join('tmp', 'images', member).to_s
 
-        [member,temp_file]        
+        unless File.file?(temp_file)
+          File.open(temp_file, "wb") do |file|
+            file.write uri.open.read
+          end
+        end
+
+        [member,temp_file]
 
       }.compact
     end
