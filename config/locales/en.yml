@@ -44,6 +44,7 @@ en:
       edit_metadata:
         label: "Edit Collection Info"
         desc: "Edit this collection's title and description"
+    editor-warning: "You are editing this Collection"
   homepage:
     collections_nav:
       course_collections: "Course Collections"
