@@ -14,7 +14,7 @@
     ></button>
   <% end %>
   <div class="dd-handle">
-    <%= link_to(coll_info[:title], collection_path(coll_info[:id])) %>
+    <%= link_to(coll_info[:title], hyrax.collection_path(coll_info[:id])) %>
   </div>
   <% if (sub_colls.present?) %>
     <ul id="<%= sub_ul_id %>" class="collapse">
