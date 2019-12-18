@@ -67,26 +67,27 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
     config.add_index_field solr_name("title", :stored_searchable), label: "Title", itemprop: 'name', if: false
     config.add_index_field solr_name("description", :stored_searchable), itemprop: 'description', helper_method: :limit_text_length
+    config.add_index_field solr_name('creator', :stored_searchable)
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field solr_name("title", :stored_searchable)
     config.add_show_field solr_name("description", :stored_searchable)
-    config.add_show_field solr_name("keyword", :stored_searchable)
-    config.add_show_field solr_name("subject", :stored_searchable)
     config.add_show_field solr_name("creator", :stored_searchable)
     config.add_show_field solr_name("contributor", :stored_searchable)
-    config.add_show_field solr_name("publisher", :stored_searchable)
-    config.add_show_field solr_name("based_near_label", :stored_searchable)
-    config.add_show_field solr_name("language", :stored_searchable)
-    config.add_show_field solr_name("date_uploaded", :stored_searchable)
-    config.add_show_field solr_name("date_modified", :stored_searchable)
-    config.add_show_field solr_name("date_created", :stored_searchable)
-    config.add_show_field solr_name("rights_statement", :stored_searchable)
-    config.add_show_field solr_name("license", :stored_searchable)
-    config.add_show_field solr_name("resource_type", :stored_searchable), label: "Resource Type"
-    config.add_show_field solr_name("format", :stored_searchable)
-    config.add_show_field solr_name("identifier", :stored_searchable)
+    config.add_show_field solr_name("genre", :stored_searchable)
+    config.add_show_field solr_name("subject", :stored_searchable)
+    # config.add_show_field solr_name("publisher", :stored_searchable)
+    # config.add_show_field solr_name("based_near_label", :stored_searchable)
+    # config.add_show_field solr_name("language", :stored_searchable)
+    # config.add_show_field solr_name("date_uploaded", :stored_searchable)
+    # config.add_show_field solr_name("date_modified", :stored_searchable)
+    # config.add_show_field solr_name("date_created", :stored_searchable)
+    # config.add_show_field solr_name("rights_statement", :stored_searchable)
+    # config.add_show_field solr_name("license", :stored_searchable)
+    # config.add_show_field solr_name("resource_type", :stored_searchable), label: "Resource Type"
+    # config.add_show_field solr_name("format", :stored_searchable)
+    # config.add_show_field solr_name("identifier", :stored_searchable)
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
