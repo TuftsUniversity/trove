@@ -1,0 +1,32 @@
+<% #@file  Copying the view for actions in dashboard views
+ collection = Collection.find(@presenter.id)%>
+<h2 class="sr-only"><%= t('hyrax.collection.actions.header') %></h2>
+
+<div class="dropdown tufts-action-button">
+  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+    <span class="sr-only" data-search-element="label"><%= t("trove_collections.additional_actions.label") %></span>
+    <span aria-hidden="true"><%= t("trove_collections.additional_actions.label") %></span>
+    <span class="caret"></span>
+  </button>
+
+  <ul class="dropdown-menu pull-right">
+    <li>
+      <%= link_to t("trove_collections.additional_actions.copy"), "copy/#{collection.id}" %>
+    </li>
+    <li>
+      <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{collection.id}" %>
+    </li>
+    <li>
+      <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{collection.id}" %>
+    </li>
+  </ul>
+</div>
+
+<% if can? :edit, presenter.solr_document %>
+  <div class="tufts-action-button">
+    <%= link_to t('hyrax.collection.actions.edit.label'),
+                hyrax.dashboard_collection_path(@presenter),
+                title: t('hyrax.collection.actions.edit.desc'),
+                class: 'btn btn-primary' %>
+  </div>
+<% end %>

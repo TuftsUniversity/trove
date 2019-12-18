@@ -1,7 +1,11 @@
 /* Contains the CSS for the Tufts-added features */
 
-.collection.public-view .btn {
+.show-collection-buttons {
   float: right;
+
+  .tufts-action-button {
+    display: inline-block;
+  }
 }
 
 #collections-sidebar {
