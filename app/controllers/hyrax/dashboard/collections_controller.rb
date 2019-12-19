@@ -4,6 +4,7 @@ module Hyrax
   module Dashboard
     ## Shows a list of all collections to the admins
     class CollectionsController < Hyrax::My::CollectionsController
+      include CollectionTypeHelpers
       with_themed_layout '1_column'
 
       ##
@@ -78,11 +79,17 @@ module Hyrax
       # Copies collections, along with their child/parent collections, works, and work order.
       def copy
         new_collection = create_copy
-
+        new_collection.collection_type_gid = personal_gid
+        new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        new_collection.save
         ActiveFedora::SolrService.instance.conn.commit
 
-        copy_children(new_collection)
-        copy_parents(new_collection)
+        Tufts::Curation::CollectionOrder.new(collection_id: new_collection.id).save
+        new_collection.update_work_order(@collection.work_order)
+
+        # I don't think we want to do this, as it would mix personal and course collections in the hierarchy.
+        # copy_children(new_collection)
+        # copy_parents(new_collection)
 
         ActiveFedora::SolrService.instance.conn.commit
         redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
@@ -90,32 +97,42 @@ module Hyrax
 
       ##
       # Add permissions!
-      # Change visibility to public!
       def upgrade
-        if(@collection.collection_type.title != "Personal Collection")
-          redirect_to root_path, notice: t('trove_collections.notices.not_personal_collection')
+        unless(is_personal_collection?(@collection))
+          redirect_to root_path, notice: t('trove_collections.additional_actions.notices.not_personal_collection')
         end
 
-        course_collection_type = Hyrax::CollectionType.where(title: "Course Collection").first
-        @collection.collection_type = course_collection_type
-        @collection.save
+        new_collection = create_copy
+        new_collection.collection_type_gid = course_gid
+        new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        new_collection.save
+        ActiveFedora::SolrService.instance.conn.commit
 
-        redirect_to :back, notice: t('trove_collections.additional_actions.notices.upgrade_success')
+        Tufts::Curation::CollectionOrder.new(collection_id: new_collection.id).save
+        new_collection.update_work_order(@collection.work_order)
+
+        redirect_to root_path, notice: t('trove_collections.additional_actions.notices.upgrade_success')
       end
 
       ##
       # Add permissions!
-      # Change visibility to public!
       def downgrade
-        if(@collection.collection_type.title != "Course Collection")
-          redirect_to root_path, notice: t('trove_collections.notices.not_course_collection')
+        if(is_course_collection?(@collection))
+          redirect_to root_path, notice: t('trove_collections.additional_actions.notices.not_course_collection')
         end
 
-        personal_collection_type = Hyrax::CollectionType.where(title: "Personal Collection").first
-        @collection.collection_type = personal_collection_type
-        @collection.save
+        new_collection = create_copy
+        new_collection.collection_type_gid = personal_gid
+        new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        new_collection.save
+        ActiveFedora::SolrService.instance.conn.commit
 
-        redirect_to :back, notice: t('trove_collections.additional_actions.notices.downgrade_success')
+        Tufts::Curation::CollectionOrder.new(collection_id: new_collection.id).save
+        new_collection.update_work_order(@collection.work_order)
+
+        @collection.destroy!
+
+        # redirect_to root_path, notice: t('trove_collections.additional_actions.notices.downgrade_success')
       end
 
       ##
@@ -125,7 +142,7 @@ module Hyrax
       end
 
 
-        private
+      private
 
         ##
         # @function
@@ -139,8 +156,7 @@ module Hyrax
         # Creates a copy of a collection, with all its attributes.
         def create_copy
           new_collection = ::Collection.new(@collection.attributes.except('id'))
-          new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-          new_collection.save
+          new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
           new_collection
         end
 
