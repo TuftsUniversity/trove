@@ -1,0 +1,26 @@
+<% colls = presenter.associated_collections %>
+<% if(colls[:course].present?) %>
+  <dt><%= t('metadata.course_collections_dt') %></dt>
+  <dd>
+    <ul class="tabular">
+      <% colls[:course].each do |id, title| %>
+        <li class="attribute">
+          <%= link_to(title, hyrax.collection_path(id)) %>
+        </li>
+      <% end %>
+    </ul>
+  </dd>
+<% end %>
+
+<% if(colls[:personal].present?) %>
+  <dt><%= t('metadata.personal_collections_dt') %></dt>
+  <dd>
+    <ul class="tabular">
+      <% colls[:personal].each do |id, title| %>
+        <li class="attribute">
+          <%= link_to(title, hyrax.collection_path(id)) %>
+        </li>
+      <% end %>
+    </ul>
+  </dd>
+<% end %>
