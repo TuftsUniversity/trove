@@ -10,8 +10,8 @@ class Hyrax::BootstrapBreadcrumbsBuilder < BreadcrumbsOnRails::Breadcrumbs::Buil
   include ActionView::Helpers::OutputSafetyHelper
   def render
     return "" if @elements.blank?
-    @elements =  @elements.uniq.select do |e| 
-      ((compute_name(e) != "Dashboard") && (compute_name(e) != "Collections")) 
+    @elements =  @elements.uniq.select do |e|
+      ((compute_name(e) != "Dashboard") && (compute_name(e) != "Collections") && (compute_name(e) != "Works"))
     end
     @context.content_tag(:nav, breadcrumbs_options) do
       @context.content_tag(:ol) do
