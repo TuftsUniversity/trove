@@ -467,12 +467,13 @@ ActiveRecord::Schema.define(version: 20191212170636) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "tufts_collection_orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.text "work_order"
+  create_table "tufts_collection_orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.text "order"
     t.string "collection_id", null: false
+    t.integer "item_type", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["collection_id"], name: "index_tufts_collection_orders_on_collection_id", unique: true
+    t.index ["collection_id", "item_type"], name: "index_tufts_collection_orders_on_collection_id_and_item_type", unique: true
   end
 
   create_table "uploaded_files", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
