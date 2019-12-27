@@ -43,7 +43,6 @@ module Hyrax
         # if we are creating the new collection as a subcollection (via the nested collections controller),
         # we pass the parent_id through a hidden field in the form and link the two after the create.
         link_parent_collection(params[:parent_id]) unless params[:parent_id].nil?
-        create_collection_order
 
         respond_to do |format|
           ActiveFedora::SolrService.instance.conn.commit
@@ -51,7 +50,7 @@ module Hyrax
           format.json { render json: @collection, status: :created, location: dashboard_collection_path(@collection) }
         end
       end
-      
+
       def dl_pdf
         @curated_collection = ::Collection.find(params[:id])
         respond_to do |format|
@@ -143,13 +142,6 @@ module Hyrax
 
 
       private
-
-        ##
-        # @function
-        # Creates a collection order object for this collection.
-        def create_collection_order
-          Tufts::Curation::CollectionOrder.new(collection_id: @collection.id).save
-        end
 
         ##
         # @function
