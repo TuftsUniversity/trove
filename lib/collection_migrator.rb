@@ -1,5 +1,8 @@
+require File.join(Rails.root, 'app', 'helpers', 'collection_type_helpers.rb')
+
 module Tufts
   class CollectionMigrator
+    extend CollectionTypeHelpers
 
     ##
     # @function
@@ -8,6 +11,8 @@ module Tufts
     #   The old collection hash.
     def self.migrate(old_coll)
       @old_coll = old_coll
+      work_list = translate_list(@old_coll['member_ids_ssim']) unless @old_coll['member_ids_ssim'].nil?
+      subcollection_list = translate_list(@old_coll['child_collections']) unless @old_coll['child_collections'].nil?
 
       puts "\n-----"
       puts "Migrating #{old_coll['title_tesim'].first} (#{old_coll['id']})"
@@ -19,12 +24,9 @@ module Tufts
       set_metadata
       set_permissions
 
-      set_child_collections unless @old_coll['child_collections'].nil?
+      set_child_collections(subcollection_list) if subcollection_list.present?
 
-      unless(@old_coll['member_ids_ssim'].nil?)
-        work_list = build_member_list
-        @new_coll.add_member_objects(work_list)
-      end
+      @new_coll.add_member_objects(work_list) if work_list.present?
 
       if(@new_coll.save)
         puts "\nSuccessfully migrated #{@old_coll['title_tesim']} (#{@old_coll['id']}) to #{@new_coll.id}."
@@ -33,9 +35,16 @@ module Tufts
         return false
       end
 
-      puts "\nAdding work order to new collection."
-      Tufts::Curation::CollectionOrder.new(collection_id: @new_coll.id).save
-      @new_coll.update_work_order(work_list) unless work_list.nil?
+
+      if(work_list.present?)
+        puts "\nAdding work order to new collection."
+        @new_coll.update_order(work_list, :work)
+      end
+
+      if(subcollection_list.present?)
+        puts "\nAdding subcollection order to new collection."
+        @new_coll.update_order(subcollection_list, :subcollection)
+      end
 
       true
     end
@@ -69,25 +78,24 @@ module Tufts
         @new_coll.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
       end
 
-    ##
-    # @function
-    # Sets the permissions and depositor info on new collection.
-    def self.set_permissions
-      user = User.find_or_create_system_user(@old_coll['creator_tesim'].first)
-      Hyrax::Collections::PermissionsCreateService.create_default(collection: @new_coll, creating_user: user)
-    end
+      ##
+      # @function
+      # Sets the permissions and depositor info on new collection.
+      def self.set_permissions
+        user = User.find_or_create_system_user(@old_coll['creator_tesim'].first)
+        Hyrax::Collections::PermissionsCreateService.create_default(collection: @new_coll, creating_user: user)
+      end
 
       ##
       # @function
       # Translates the list of F3 member ids into F4 ids.
-      def self.build_member_list
-        puts "Building Member List"
+      def self.translate_list(f3_ids)
         f4_ids = []
 
-        @old_coll['member_ids_ssim'].each do |id|
+        f3_ids.each do |id|
           new_record = translate_id(id)
           if(new_record.nil?)
-            puts "Couldn't find #{id}!"
+            puts "Couldn't find #{id} - Removing from members."
             next
           else
             f4_ids << new_record.id
@@ -100,20 +108,14 @@ module Tufts
       ##
       # @function
       # Sets the child collections on parent collection.
-      def self.set_child_collections
-        @old_coll['child_collections'].each do |id|
-          child_collection = translate_id(id)
-          if(child_collection.nil?)
-            puts "Couldn't find child collection: #{new_id}"
-            next
-          end
-
-          puts "Connecting child collection - #{child_collection} (#{child_collection.id})"
+      def self.set_child_collections(subcollection_ids)
+        subcollection_ids.each do |id|
+          subcollection = Collection.find(id)
+          puts "Connecting child collection - #{subcollection} (#{subcollection.id})"
           Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(
             parent: @new_coll,
-            child: child_collection
+            child: subcollection
           )
-
         end
       end
 
@@ -169,19 +171,5 @@ module Tufts
         puts msg
         puts '##############################'
       end
-
-      ##
-      # @function
-      # Gets the Personal Collection gid from the db.
-      def self.personal_gid
-        @personal_gid ||= Hyrax::CollectionType.where(title: "Personal Collection").first.gid
-      end
-
-      ##
-      # @function
-      # Gets the Course Collection gid from the db.
-      def self.course_gid
-        @course_gid ||= Hyrax::CollectionType.where(title: "Course Collection").first.gid
-      end
-    end
+  end
 end

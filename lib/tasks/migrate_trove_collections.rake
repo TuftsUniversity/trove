@@ -108,8 +108,8 @@ namespace :tufts do
     begin
       Tufts::CollectionMigrator.migrate(coll)
     rescue Ldp::Gone => e
-      puts "LDP went down, waiting 10 seconds. (#{Time.new.inspect})"
-      sleep(10)
+      puts "LDP went down, waiting 15 seconds. (#{Time.new.inspect})"
+      sleep(15)
 
       Tufts::CollectionMigrator.migrate(coll)
     end
