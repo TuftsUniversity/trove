@@ -39,6 +39,8 @@ Rails.application.routes.draw do
   # Adding copy method to collections
   scope module: 'hyrax' do
     get '/collections/copy/:id', controller: 'collections', action: :copy
+    get '/collections/dl_powerpoint/:id', controller: 'collections', action: :dl_powerpoint, :defaults => { :format => 'pptx' }
+    get '/collections/dl_pdf/:id', controller: 'collections', action: :dl_pdf, :defaults => { :format => 'pdf' }
 
     namespace :dashboard do
       get '/collections/copy/:id', controller: 'collections', action: :copy
