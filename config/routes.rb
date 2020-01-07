@@ -45,7 +45,6 @@ Rails.application.routes.draw do
     namespace :dashboard do
       get '/collections/copy/:id', controller: 'collections', action: :copy
       get '/collections/upgrade/:id', controller: 'collections', action: :upgrade
-      get '/collections/downgrade/:id', controller: 'collections', action: :downgrade
       get '/collections/dl_powerpoint/:id', controller: 'collections', action: :dl_powerpoint, :defaults => { :format => 'pptx' }
       get '/collections/dl_pdf/:id', controller: 'collections', action: :dl_pdf, :defaults => { :format => 'pdf' }
       get '/collections/update_work_order/:id', controller: 'collections', action: :update_work_order

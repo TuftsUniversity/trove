@@ -71,30 +71,9 @@ module Hyrax
       end
 
       ##
-      # Add permissions!
-      def downgrade
-        if(is_course_collection?(@collection))
-          redirect_to root_path, notice: t('trove_collections.additional_actions.notices.not_course_collection')
-        end
-
-        new_collection = create_copy
-        new_collection.collection_type_gid = personal_gid
-        new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        new_collection.save
-        ActiveFedora::SolrService.instance.conn.commit
-
-        Tufts::Curation::CollectionOrder.new(collection_id: new_collection.id).save
-        new_collection.update_work_order(@collection.work_order)
-
-        @collection.destroy!
-
-        # redirect_to root_path, notice: t('trove_collections.additional_actions.notices.downgrade_success')
-      end
-
-      ##
       # @function
       def update_work_order
-        @collection.update_work_order(JSON.parse(params[:order]))
+        #@collection.update_order(JSON.parse(params[:order]), :work)
       end
 
     end
