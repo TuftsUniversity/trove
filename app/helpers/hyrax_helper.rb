@@ -6,52 +6,49 @@ module HyraxHelper
   include Hyrax::HyraxHelperBehavior
   include CollectionTypeHelpers
 
-  def sort_works(documents)
+
+  ##
+  # Gets the work or subcollection order for the current collection.
+  # @param (:sym) type
+  #   :work or :subcollection.
+  def get_collection_order(type)
     if @collection.nil?
       if @presenter.nil?
         logger.error("ERROR: Couldn't find collection or presenter.")
-        return documents
+        return []
       end
-
       collection = Collection.find(@presenter.id)
     else
       collection = @collection
     end
 
-    return documents if collection.work_order.nil?
-
-    order = JSON.parse(collection.work_order)
-    ordered_docs = []
-    order.each do |id|
-      documents.each do |doc|
-        if doc.id == id
-          ordered_docs << doc
-          break
-        end
-      end
+    case type
+    when :work
+      order = collection.work_order
+    when :subcollection
+      order = collection.subcollection_order
+    else
+      return []
     end
 
-    ordered_docs
+    order
   end
-  #
-  # def validate_matching_orders(order, documents)
-  #   return false if order.nil?
-  #
-  #   if order.count != documents.count
-  #     logger.error("ERROR: CollectionOrder count does not match actual work count in collection.")
-  #     return false
-  #   end
-  #
-  #   document_ids = documents.map { |d| d.id }
-  #   if order.sort != document_ids.sort
-  #     logger.error("ERROR: CollectionOrder ids don't match actual work ids in collection.")
-  #     logger.error("Order: #{order}")
-  #     logger.error("Documents: #{document_ids}")
-  #     return false
-  #   end
-  #
-  #   true
-  # end
+
+  ##
+  # Sorts works for display inside collections.
+  # @param (arr) documents
+  #   The works inside the collection.
+  def sort_works(documents)
+    order = get_collection_order(:work)
+    return documents if order.empty?
+
+
+    new_order = order.select do |id|
+      documents.any? { |doc| doc.id == id }
+    end
+
+    documents
+  end
 
   ##
   # @function

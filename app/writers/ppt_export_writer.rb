@@ -63,12 +63,8 @@ class PptExportWriter
     end
 
     def images_with_paths
+      work_order = collection.work_order.empty? ? collection.member_object_ids : collection.work_order
 
-      if collection.work_order.nil? || collection.work_order.empty?
-        work_order = collection.member_object_ids
-      else
-        work_order = JSON.parse(collection.work_order)
-      end
       work_order.flatten.map { |member|
         member_image = Image.find(member)
         file_set = member_image.file_sets[0]

@@ -7,12 +7,13 @@ module TuftsCollectionControllerBehavior
   ##
   # Copies collections, along with their child/parent collections, works, and work order.
   def copy
-    new_collection = create_copy
+    new_collection = ::Collection.new(@collection.attributes.except('id'))
+    new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     new_collection.collection_type_gid = personal_gid
     new_collection.save
     ActiveFedora::SolrService.instance.conn.commit
 
-#    new_collection.update_order(@collection.work_order)
+    new_collection.update_order(@collection.work_order, :work) unless @collection.work_order.empty?
 
     ActiveFedora::SolrService.instance.conn.commit
     redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
@@ -43,15 +44,4 @@ module TuftsCollectionControllerBehavior
       end
     end
   end
-
-  private
-
-    ##
-    # @function
-    # Creates a copy of a collection, with all its attributes.
-    def create_copy
-      new_collection = ::Collection.new(@collection.attributes.except('id'))
-      new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-      new_collection
-    end
 end

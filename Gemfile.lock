@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/TuftsUniversity/tufts-curation
-  revision: 06ec64918fcc7873d8066e79b7baa8673c27d1cb
+  revision: 330993892c59128aedad862303be5f9f355da421
   branch: update
   specs:
     tufts-curation (0.1.0)
