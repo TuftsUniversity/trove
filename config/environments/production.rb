@@ -1,6 +1,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  config.port = '80'
+  config.host = 'tdil-prod-02.lib.tufts.edu'
+
   # Don't need deprecation warnings on prod
   Deprecation.default_deprecation_behavior = :silence
 
