@@ -4,7 +4,7 @@ module Hyrax
   module Dashboard
     ## Shows a list of all collections to the admins
     class CollectionsController < Hyrax::My::CollectionsController
-      include CollectionTypeHelpers
+      include TuftsCollectionControllerBehavior
       with_themed_layout '1_column'
 
       ##
@@ -49,49 +49,6 @@ module Hyrax
           format.html { redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success') } #Changed for trove
           format.json { render json: @collection, status: :created, location: dashboard_collection_path(@collection) }
         end
-      end
-
-      def dl_pdf
-        @curated_collection = ::Collection.find(params[:id])
-        respond_to do |format|
-          format.pdf do
-            exporter = PdfCollectionExporter.new(@curated_collection)
-            send_file(exporter.export, filename: exporter.pdf_file_name, type: "application/pdf")
-          end
-        end
-      end
-
-      def dl_powerpoint
-        @curated_collection = ::Collection.find(params[:id])
-        respond_to do |format|
-          format.pptx do
-            exporter = PowerPointCollectionExporter.new(@curated_collection)
-            send_file(exporter.export,
-                  filename: exporter.pptx_file_name,
-                  type: "application/vnd.openxmlformats-officedocument.presentationml.presentation")
-          end
-        end
-      end
-
-      ##
-      # @function
-      # Copies collections, along with their child/parent collections, works, and work order.
-      def copy
-        new_collection = create_copy
-        new_collection.collection_type_gid = personal_gid
-        new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-        new_collection.save
-        ActiveFedora::SolrService.instance.conn.commit
-
-        Tufts::Curation::CollectionOrder.new(collection_id: new_collection.id).save
-        new_collection.update_work_order(@collection.work_order)
-
-        # I don't think we want to do this, as it would mix personal and course collections in the hierarchy.
-        # copy_children(new_collection)
-        # copy_parents(new_collection)
-
-        ActiveFedora::SolrService.instance.conn.commit
-        redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
       end
 
       ##
@@ -140,55 +97,6 @@ module Hyrax
         @collection.update_work_order(JSON.parse(params[:order]))
       end
 
-
-      private
-
-        ##
-        # @function
-        # Creates a copy of a collection, with all its attributes.
-        def create_copy
-          new_collection = ::Collection.new(@collection.attributes.except('id'))
-          new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-          new_collection
-        end
-
-        ##
-        # @function
-        # Copies child collections and child works from @collection to a new collection.
-        # @param {::Collection} collection_copy
-        #   The collection to copy the children to.
-        def copy_children(collection_copy)
-          work_ids = []
-
-          @collection.member_objects.each do |m|
-            if m.collection?
-              Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(
-                parent: collection_copy,
-                child: m
-              )
-            else
-              work_ids << m.id
-            end
-          end
-
-          collection_copy.add_member_objects(work_ids) unless work_ids.empty?
-        end
-
-        ##
-        # @function
-        # Copies parent collections from @collection to a new collection.
-        # @param {::Collection} collection_copy
-        #   The collection to copy the parents to.
-        def copy_parents(collection_copy)
-          unless @collection.parent_collections.empty?
-            @collection.parent_collections.each do |parent|
-              Hyrax::Collections::NestedCollectionPersistenceService.persist_nested_collection_for(
-                parent: parent,
-                child: collection_copy
-              )
-            end
-          end
-        end
     end
   end
 end
