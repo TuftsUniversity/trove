@@ -6,6 +6,9 @@ Riiif::Image.info_service = lambda do |id, _file|
 
   # Capture everything before the first slash
   fs_id = id.sub(/\A([^\/]*)\/.*/, '\1')
+  if id.include? '%'
+    fs_id = id.split('%').first
+  end
   resp = ActiveFedora::SolrService.get("id:#{fs_id}")
   doc = resp['response']['docs'].first
   raise "Unable to find solr document with id:#{fs_id}" unless doc
