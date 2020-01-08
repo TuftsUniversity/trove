@@ -12,10 +12,10 @@
       <%= link_to t("trove_collections.additional_actions.copy"), "copy/#{@collection.id}" %>
     </li>
     <li>
-      <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{@collection.id}" %>
+      <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{@collection.id}", data: { turbolinks: false } %>
     </li>
     <li>
-      <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{@collection.id}" %>
+      <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{@collection.id}", data: { turbolinks: false } %>
     </li>
     <% if is_personal_collection?(@collection) %>
       <li>
