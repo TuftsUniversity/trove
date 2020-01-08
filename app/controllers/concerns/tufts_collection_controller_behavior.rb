@@ -8,19 +8,18 @@ module TuftsCollectionControllerBehavior
   # Copies collections, along with their works, and work order.
   # Copies are always private collections that belong to the copier.
   def copy
-    @new_collection = create_copy
+    new_collection = create_copy
     ActiveFedora::SolrService.instance.conn.commit
 
-    copy_works if @collection.member_objects.present?
-    set_permissions
-    copy_work_order if @collection.work_order.present?
-    ActiveFedora::SolrService.instance.conn.commit
+    copy_works(new_collection) if @collection.member_objects.present?
+    set_permissions(new_collection)
+    copy_work_order(new_collection) if @collection.work_order.present?
 
     redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
   end
 
   ##
-  # Generates a PDF of all the images in the collection for user to donwload.
+  # Generates a PDF of all the images in the collection for user to download.
   def dl_pdf
     @curated_collection = ::Collection.find(params[:id])
     respond_to do |format|
@@ -62,23 +61,23 @@ module TuftsCollectionControllerBehavior
     # Copies works from @collection to new_collection.
     # @param {Collection} new_collection
     #   The collection to copy the works into.
-    def copy_works
+    def copy_works(new_collection)
       work_ids = []
       @collection.member_objects.each do |m|
         work_ids << m.id unless m.collection?
       end
-      @new_collection.add_member_objects(work_ids) unless work_ids.empty?
+      new_collection.add_member_objects(work_ids) unless work_ids.empty?
     end
 
     ##
     # Sets permissions on @new_collection
-    def set_permissions
-      Hyrax::Collections::PermissionsCreateService.create_default(collection: @new_collection, creating_user: current_user)
+    def set_permissions(new_collection)
+      Hyrax::Collections::PermissionsCreateService.create_default(collection: new_collection, creating_user: current_user)
     end
 
     ##
     # Copies the work order from @collection to @new_collection.
-    def copy_work_order
-      @new_collection.update_order(@collection.work_order, :work)
+    def copy_work_order(new_collection)
+      new_collection.update_order(@collection.work_order, :work)
     end
 end
