@@ -25,7 +25,7 @@ module TuftsCollectionControllerBehavior
     respond_to do |format|
       format.pdf do
         exporter = PdfCollectionExporter.new(@curated_collection)
-        send_file(exporter.export, filename: exporter.pdf_file_name, type: "application/pdf")
+        send_file(exporter.export, filename: exporter.pdf_file_name, type: "application/pdf", :disposition => 'attachment')
       end
     end
   end
@@ -39,7 +39,7 @@ module TuftsCollectionControllerBehavior
         exporter = PowerPointCollectionExporter.new(@curated_collection)
         send_file(exporter.export,
                   filename: exporter.pptx_file_name,
-                  type: "application/vnd.openxmlformats-officedocument.presentationml.presentation")
+                  type: "application/vnd.openxmlformats-officedocument.presentationml.presentation", :disposition => 'attachment')
       end
     end
   end
