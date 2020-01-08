@@ -66,7 +66,14 @@ module TuftsCollectionControllerBehavior
       @collection.member_objects.each do |m|
         work_ids << m.id unless m.collection?
       end
-      new_collection.add_member_objects(work_ids) unless work_ids.empty?
+
+      if(work_ids.present?)
+        work_ids.each do |id|
+          work = ActiveFedora::Base.find(id)
+          work.member_of_collections << new_collection
+          work.save!
+        end
+      end
     end
 
     ##
