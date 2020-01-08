@@ -7,12 +7,14 @@ module TuftsCollectionControllerBehavior
   ##
   # Copies collections, along with their child/parent collections, works, and work order.
   def copy
-    new_collection = ::Collection.new(@collection.attributes.except('id'))
+    new_collection = ::Collection.new(@collection.attributes.except('id', 'collection_type_gid', 'depositor', 'legacy_pid'))
     new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     new_collection.collection_type_gid = personal_gid
+    new_collection.apply_depositor_metadata(current_user.user_key)
     new_collection.save
     ActiveFedora::SolrService.instance.conn.commit
 
+    Hyrax::Collections::PermissionsCreateService.create_default(collection: new_collection, creating_user: current_user)
     new_collection.update_order(@collection.work_order, :work) unless @collection.work_order.empty?
 
     ActiveFedora::SolrService.instance.conn.commit
