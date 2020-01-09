@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  impersonates :user
   acts_as_token_authentication_handler_for User
 
   rescue_from DeviseLdapAuthenticatable::LdapException do |exception|

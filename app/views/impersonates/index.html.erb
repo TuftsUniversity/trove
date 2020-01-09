@@ -1,0 +1,26 @@
+<h1>Impersonation</h1>
+
+<p>Search for a user to impersonate:</p>
+
+<%= form_tag root_url, :method => 'get' do %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+<% end %>
+
+<% if @users %>
+<% if @users.empty? %>
+<p>No users found</p>
+<% else %>
+<ul>
+  <% @users.each do |user| %>
+  <% next if user.username == current_user.username %>
+  <li>
+    <%= user %>
+    <%= link_to "Impersonate", "/impersonate/#{user.id}" %>
+  </li>
+  <% end %>
+</ul>
+<% end %>
+<% end %>

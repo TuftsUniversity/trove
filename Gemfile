@@ -62,6 +62,8 @@ gem 'devise_ldap_authenticatable'
 gem 'simple_token_authentication', '~> 1.0'
 gem 'hydra-role-management'
 
+gem 'pretender'
+
 gem 'riiif', '~> 1.1'
 
 group :development, :test do

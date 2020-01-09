@@ -35,6 +35,9 @@ Rails.application.routes.draw do
   end
 
   get '/imageviewer/:id', to: 'hyrax/images#advanced', constraints: { id: /.*/ }, as: 'imageviewer'
+  get '/impersonate_user', to: 'impersonates#index'
+  get '/impersonate/:id', to: 'impersonates#impersonate', constraints: { id: /.*/ }, as: :impersonate
+  get '/stop_impersonating', to: 'impersonates#stop_impersonating', as: :stop_impersonating
 
   # Adding copy method to collections
   scope module: 'hyrax' do
