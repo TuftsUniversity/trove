@@ -18,5 +18,7 @@ class Ability
     #   can [:create], ActiveFedora::Base
     # end
     can [:advanced], Image
+    can [:dl_powerpoint], Collection
+    can [:dl_pdf], Collection
   end
 end
