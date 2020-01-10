@@ -11,10 +11,10 @@
 
   <ul class="dropdown-menu pull-right">
     <li>
-      <%= link_to t("trove_collections.additional_actions.copy"), "copy/#{collection.id}", data: { turbolinks: false } %>
+      <%= link_to t("trove_collections.additional_actions.copy"), "copy/#{collection.id}", data: { turbolinks: false, confirm: t('copyright_acknowledgement') } %>
     </li>
     <li>
-      <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{collection.id}", data: { turbolinks: false } %>
+      <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{collection.id}", data: { turbolinks: false, confirm: t('copyright_acknowledgement') } %>
     </li>
     <li>
       <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{collection.id}", data: { turbolinks: false } %>
