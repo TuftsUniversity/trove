@@ -48,10 +48,18 @@ module TuftsCollectionControllerBehavior
 
     ##
     # Creates a copy of @collection. Transfers metadata. Sets defaults. Commits to Solr so we can move forward.
-    def create_copy
+    def create_copy(type = 'personal')
       new_collection = ::Collection.new(@collection.attributes.except('id', 'collection_type_gid', 'depositor', 'legacy_pid'))
-      new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-      new_collection.collection_type_gid = personal_gid
+
+      # Default to making personal collections. Only make a course collection if 'course' is passed as type.
+      if(type == 'course')
+        new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        new_collection.collection_type_gid = course_gid
+      else
+        new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        new_collection.collection_type_gid = personal_gid
+      end
+
       new_collection.apply_depositor_metadata(current_user.user_key)
       new_collection.save
       new_collection

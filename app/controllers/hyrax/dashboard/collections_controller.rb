@@ -46,7 +46,7 @@ module Hyrax
         respond_to do |format|
           ActiveFedora::SolrService.instance.conn.commit
           format.html { redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success') } #Changed for trove
-          format.json { render json: @collection, status: :created, location: dashboard_collection_path(@collection) }
+          format.json { render json: @collection, status: :created, location: root_path(@collection) }
         end
       end
 
@@ -57,14 +57,12 @@ module Hyrax
           redirect_to root_path, notice: t('trove_collections.additional_actions.notices.not_personal_collection')
         end
 
-        new_collection = create_copy
-        new_collection.collection_type_gid = course_gid
-        new_collection.visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-        new_collection.save
+        new_collection = create_copy('course')
         ActiveFedora::SolrService.instance.conn.commit
 
-        Tufts::Curation::CollectionOrder.new(collection_id: new_collection.id).save
-        new_collection.update_work_order(@collection.work_order)
+        copy_works(new_collection) if @collection.member_objects.present?
+        set_permissions(new_collection)
+        copy_work_order(new_collection) if @collection.work_order.present?
 
         redirect_to root_path, notice: t('trove_collections.additional_actions.notices.upgrade_success')
       end
