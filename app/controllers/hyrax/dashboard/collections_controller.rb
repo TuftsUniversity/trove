@@ -8,7 +8,6 @@ module Hyrax
       with_themed_layout '1_column'
 
       ##
-      # @function
       # Overwrites collection create method to add various customizations for trove.
       def create
         # Manual load and authorize necessary because Cancan will pass in all
@@ -52,7 +51,7 @@ module Hyrax
       end
 
       ##
-      # Add permissions!
+      # Creates a Course Collection copy of a Personal Collection. Only for admin use.
       def upgrade
         unless(is_personal_collection?(@collection))
           redirect_to root_path, notice: t('trove_collections.additional_actions.notices.not_personal_collection')
@@ -68,6 +67,19 @@ module Hyrax
         new_collection.update_work_order(@collection.work_order)
 
         redirect_to root_path, notice: t('trove_collections.additional_actions.notices.upgrade_success')
+      end
+
+      ##
+      # Overwriting to redirect to home page, instead of dashboard.
+      def after_destroy(_id)
+        # leaving id to avoid changing the method's parameters prior to release
+        respond_to do |format|
+          format.html do
+            redirect_to root_path, # Changed for Trove
+                        notice: t('hyrax.dashboard.my.action.collection_delete_success')
+          end
+          format.json { head :no_content, location: root_path }
+        end
       end
 
       ##
