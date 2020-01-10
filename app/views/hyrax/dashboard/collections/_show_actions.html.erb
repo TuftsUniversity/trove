@@ -40,4 +40,4 @@
                 data: { confirm: t('hyrax.collection.actions.delete.confirmation'),
                         method: :delete } %>
 <% end %>
-<%= link_to 'Cancel', collection_path(@collection), class: 'margin-left', data: { turbolinks: false } %>
+<%= link_to t('cancel'), collection_path(@collection), class: 'margin-left', data: { turbolinks: false } %>
