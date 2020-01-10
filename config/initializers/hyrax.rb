@@ -23,7 +23,8 @@ Hyrax.config do |config|
   # config.rendering_predicate = ::RDF::DC.hasFormat
 
   # Email recipient of messages sent via the contact form
-  # config.contact_email = "repo-admin@example.org"
+   config.contact_email = "mike.korcynski@tufts.edu" if Rails.env == "stage"
+   config.contact_email = "mike.korcynski@tufts.edu" if Rails.env == "production"
 
   # Text prefacing the subject entered in the contact form
   # config.subject_prefix = "Contact form:"

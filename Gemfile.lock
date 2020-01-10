@@ -535,6 +535,8 @@ GEM
     os (1.0.0)
     posix-spawn (0.3.13)
     power_converter (0.1.2)
+    pretender (0.3.4)
+      actionpack (>= 4.2)
     public_suffix (3.0.3)
     pul_uv_rails (2.0.1)
     puma (3.12.0)
@@ -815,6 +817,7 @@ DEPENDENCIES
   launchy
   listen (>= 3.0.5, < 3.2)
   mysql2
+  pretender
   puma (~> 3.7)
   rails (~> 5.1.6)
   riiif (~> 1.1)
