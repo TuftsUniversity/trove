@@ -77,9 +77,6 @@
       <!-- Works -->
       <section class="works-wrapper">
         <h4><%= t('.item_count') %> (<%= @members_count %>)</h4>
-        <% unless has_collection_search_parameters? %>
-          <%= render 'show_add_items_actions', presenter: @presenter %>
-        <% end %>
 
         <%= render 'sort_and_per_page', collection: @presenter %>
         <%= render_document_index @member_docs %>
