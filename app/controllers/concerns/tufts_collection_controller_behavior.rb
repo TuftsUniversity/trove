@@ -11,7 +11,7 @@ module TuftsCollectionControllerBehavior
     new_collection = create_copy
     ActiveFedora::SolrService.instance.conn.commit
 
-    copy_works(new_collection) if @collection.member_objects.present?
+    AddWorksToCollectionJob.perform_later(only_work_ids, new_collection) if only_work_ids.present?
     set_permissions(new_collection)
     copy_work_order(new_collection) if @collection.work_order.present?
 
@@ -66,22 +66,9 @@ module TuftsCollectionControllerBehavior
     end
 
     ##
-    # Copies works from @collection to new_collection.
-    # @param {Collection} new_collection
-    #   The collection to copy the works into.
-    def copy_works(new_collection)
-      work_ids = []
-      @collection.member_objects.each do |m|
-        work_ids << m.id unless m.collection?
-      end
-
-      if(work_ids.present?)
-        work_ids.each do |id|
-          work = ActiveFedora::Base.find(id)
-          work.member_of_collections << new_collection
-          work.save!
-        end
-      end
+    # Filters out collections from member_objects and returns an array of just work ids.
+    def only_work_ids
+      @only_works ||= @collection.member_objects.select { |m| !m.collection? }.collect(&:id)
     end
 
     ##
