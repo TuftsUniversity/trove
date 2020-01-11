@@ -61,7 +61,7 @@ gem 'pretender'
 
 gem 'riiif', '~> 1.1'
 
-gem 'sidekiq'
+gem 'sidekiq', '~> 5.2'
 
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
