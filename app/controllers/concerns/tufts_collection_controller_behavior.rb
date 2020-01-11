@@ -11,9 +11,9 @@ module TuftsCollectionControllerBehavior
     new_collection = create_copy
     ActiveFedora::SolrService.instance.conn.commit
 
-    AddWorksToCollectionJob.perform_later(only_work_ids, new_collection) if only_work_ids.present?
     set_permissions(new_collection)
     copy_work_order(new_collection) if @collection.work_order.present?
+    AddWorksToCollectionJob.perform_later(only_work_ids, new_collection.id) if only_work_ids.present?
 
     redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
   end
