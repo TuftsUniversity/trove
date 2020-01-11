@@ -1,0 +1,14 @@
+:queues:
+  - trove
+
+test:
+  :concurrency: 5
+
+development:
+  :concurrency: 5
+
+stage:
+  :concurrency: 3
+
+production:
+  :concurrency: 3
