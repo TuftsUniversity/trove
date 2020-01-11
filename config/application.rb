@@ -10,6 +10,8 @@ module Trove
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
+
+    config.active_job.queue_adapter = :sidekiq
     
     config.autoload_paths << Rails.root.join('app', 'exporters')
     config.autoload_paths << Rails.root.join('app', 'writers')
