@@ -10,12 +10,13 @@ class OrderedCollectionMemberSearchBuilder < Hyrax::CollectionMemberSearchBuilde
 
     if(order.present?)
       solr_parameters[:bq] ||= ''
-      boost = order.count
+      boost = (order.count * 2)
       order.each do |id|
         solr_parameters[:bq] << "id:#{id}^#{boost} "
-        boost -= 1
+        boost -= 2
       end
       solr_parameters[:bq].strip!
+      solr_parameters.delete('sort')
     end
   end
 
