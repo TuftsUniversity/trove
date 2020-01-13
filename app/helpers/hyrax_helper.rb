@@ -6,7 +6,6 @@ module HyraxHelper
   include Hyrax::HyraxHelperBehavior
   include CollectionTypeHelpers
 
-
   ##
   # Gets the work or subcollection order for the current collection.
   # @param (:sym) type
@@ -32,6 +31,16 @@ module HyraxHelper
     end
 
     order
+  end
+
+  ##
+  # Sorts subcollections for display
+  # @param {arr} colls
+  #   The collections from solr to sort.
+  def sort_subcollections(colls)
+    order = get_collection_order(:subcollection)
+    return colls if order.blank?
+    colls.sort_by { |e| order.index(e.id) || 1000 }
   end
 
   ##
