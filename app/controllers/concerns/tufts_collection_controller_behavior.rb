@@ -4,6 +4,11 @@ module TuftsCollectionControllerBehavior
   extend ActiveSupport::Concern
   include CollectionTypeHelpers
 
+  included do
+    # The search builder to find the collections' members
+    self.membership_service_class = Tufts::CollectionMemberService
+  end
+
   ##
   # Copies collections, along with their works, and work order.
   # Copies are always private collections that belong to the copier.
