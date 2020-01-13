@@ -34,7 +34,7 @@ module Hyrax
     # @return {hash}
     #   { course: {id: title, id title}, personal: {id: title, id: title} }
     def associated_collections
-      [] if member_of_collection_ids.empty?
+      [] if member_of_collection_ids.nil? || member_of_collection_ids.empty?
 
       collections = {
         course: {},
