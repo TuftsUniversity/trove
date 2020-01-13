@@ -13,9 +13,13 @@ https://github.com/samvera/hyrax/pull/3913/commits/d6d4ac7792522c6fabec4e1fbf3b8
 }
 
 .featured-item img {
-    width: 200px;
+    width: 400px;
     float: left;
     padding-right: 1em;
+}
+
+.clearfloat {
+  clear: both
 }
 
 .searchbar-right label {
