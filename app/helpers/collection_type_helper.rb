@@ -1,4 +1,4 @@
-module CollectionTypeHelpers
+module CollectionTypeHelper
   ##
   # @function
   # Gets the Personal Collection gid from the db.

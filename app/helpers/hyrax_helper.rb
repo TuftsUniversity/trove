@@ -4,7 +4,7 @@ module HyraxHelper
   include ::BlacklightHelper
   include Hyrax::BlacklightOverride
   include Hyrax::HyraxHelperBehavior
-  include CollectionTypeHelpers
+  include CollectionTypeHelper
 
   ##
   # Gets the work or subcollection order for the current collection.
@@ -27,7 +27,7 @@ module HyraxHelper
     when :subcollection
       order = collection.subcollection_order
     else
-      return []
+      order = []
     end
 
     order

@@ -2,7 +2,7 @@ require File.join(Rails.root, 'app', 'helpers', 'collection_type_helpers.rb')
 
 module Tufts
   class CollectionMigrator
-    extend CollectionTypeHelpers
+    extend CollectionTypeHelper
 
     ##
     # @function

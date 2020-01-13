@@ -1,5 +1,5 @@
 require 'byebug'
-include CollectionTypeHelpers
+include CollectionTypeHelper
 
 # Generated via
 #  `rails generate hyrax:work Image`

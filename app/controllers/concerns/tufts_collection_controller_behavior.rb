@@ -2,7 +2,7 @@
 # Functionality for both the dashboard and the non-dashboard CollectionsControllers
 module TuftsCollectionControllerBehavior
   extend ActiveSupport::Concern
-  include CollectionTypeHelpers
+  include CollectionTypeHelper
 
   included do
     # The search builder to find the collections' members

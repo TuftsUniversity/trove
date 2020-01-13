@@ -1,4 +1,4 @@
-include CollectionTypeHelpers
+include CollectionTypeHelper
 
 ##
 # Builds the nested collection list for the Collection sidebar on the homepage and search results.
