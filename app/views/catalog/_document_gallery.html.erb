@@ -3,5 +3,5 @@
 <% dash_or_public = request.path.include?('dashboard') ? 'dashboard' : 'public' %>
 
 <div id="documents" class="row gallery <%= dash_or_public %>">
-  <%= render_gallery_collection sort_works(documents) %>
+  <%= render_gallery_collection documents %>
 </div>

@@ -35,22 +35,6 @@ module HyraxHelper
   end
 
   ##
-  # Sorts works for display inside collections.
-  # @param (arr) documents
-  #   The works inside the collection.
-  def sort_works(documents)
-    order = get_collection_order(:work)
-    return documents if order.empty?
-
-
-    new_order = order.select do |id|
-      documents.any? { |doc| doc.id == id }
-    end
-
-    documents
-  end
-
-  ##
   # @function
   # Retrieves a list of collections, limited by collection type, that don't have parents.
   # @param {str} type

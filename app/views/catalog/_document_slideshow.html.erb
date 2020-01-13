@@ -1,17 +1,16 @@
 <% # container for all documents in slideshow view -%>
 <% # @tufts - Added our manual sorting to the slideshow %>
 
-<% sorted_documents = sort_works(documents) %>
 <div id="documents" class="row slideshow-documents">
   <div class="info">
     <h3><%= t(:'blacklight_gallery.catalog.document_slideshow.header') %></h3>
   </div>
 
   <div class="grid">
-    <%= render collection: sorted_documents, as: :document, partial: 'grid_slideshow' %>
+    <%= render collection: documents, as: :document, partial: 'grid_slideshow' %>
   </div>
 
-  <%= render layout: 'slideshow_modal', locals: {documents: sorted_documents} do %>
-    <%= render partial: 'slideshow', locals: {documents: sorted_documents} %>
+  <%= render layout: 'slideshow_modal', locals: {documents: documents} do %>
+    <%= render partial: 'slideshow', locals: {documents: documents} %>
   <% end %>
 </div>
