@@ -2,7 +2,9 @@
   <div id="course_collections" class="panel panel-default dd">
     <div class="panel-heading">
       <h5 class="panel-title"><%= t('homepage.collections_nav.course_collections') %></h5>
-      <%= link_to('+', hyrax.new_dashboard_collection_path(collection_type_id: course_id), class: "btn btn-primary") %>
+      <% if current_user.admin? %>
+        <%= link_to('+', hyrax.new_dashboard_collection_path(collection_type_id: course_id), class: "btn btn-primary") %>
+      <% end %>
     </div>
     <div class="panel panel-default dd">
       <ul class="panel-body dd-list">
