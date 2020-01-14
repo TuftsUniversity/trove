@@ -16,7 +16,6 @@ class OrderedCollectionMemberSearchBuilder < Hyrax::CollectionMemberSearchBuilde
         boost -= 2
       end
       solr_parameters[:bq].strip!
-      solr_parameters.delete('sort')
     end
   end
 
