@@ -1,0 +1,2 @@
+1. HyraxHelper#get_collections and TopLevelCollectionOrder#get_all_top_level_course_collection_ids do largely the same thing.
+   Find a way to use CollectionSidebarSearchBuilder in TopLevelCollectionOrder?
