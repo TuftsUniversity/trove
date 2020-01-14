@@ -26,7 +26,7 @@ class TopLevelCollectionOrder < ::ActiveRecord::Base
     o = order_obj(user_id)
 
     if(o.nil?)
-      if(User.exists?(user_id))
+      if(user_id == course_collection_id || User.exists?(user_id))
         create!(user_id: user_id, order: clean(order, user_id))
       else
         Rails.logger.warn("Tried to set TopLevelCollectionOrder for non-user: #{user_id}")
