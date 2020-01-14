@@ -1,4 +1,4 @@
-require File.join(Rails.root, 'app', 'helpers', 'collection_type_helpers.rb')
+require File.join(Rails.root, 'app', 'helpers', 'collection_type_helper.rb')
 
 module Tufts
   class CollectionMigrator
