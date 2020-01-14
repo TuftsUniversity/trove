@@ -18,7 +18,7 @@
   </div>
   <% if (sub_colls.present?) %>
     <ul id="<%= sub_ul_id %>" class="collapse">
-      <% sub_colls.each do |c| %>
+      <% sort_subcollections(sub_colls, coll_info[:id]).each do |c| %>
         <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: c, coll_type: coll_type} %>
       <% end %>
     </ul>
