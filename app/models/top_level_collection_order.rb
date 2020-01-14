@@ -13,7 +13,7 @@ class TopLevelCollectionOrder < ::ActiveRecord::Base
   #   The user's id
   def self.search_by_user(user_id)
     o = order_obj(user_id)
-    o.nil? ? [] : o.order
+    o.nil? ? [] : JSON.parse(o.order)
   end
 
   ##
@@ -33,6 +33,7 @@ class TopLevelCollectionOrder < ::ActiveRecord::Base
       end
     else
       o.order = clean(order, user_id)
+      o.save
     end
   end
 

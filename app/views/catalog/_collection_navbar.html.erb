@@ -6,7 +6,7 @@
     </div>
     <div class="panel panel-default dd">
       <ul class="panel-body dd-list">
-        <% get_top_level_collections.each do |coll_info| %>
+        <% sort_top_level_collections(get_top_level_collections).each do |coll_info| %>
           <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: coll_info, coll_type: 'course'} %>
         <% end %>
       </ul>
@@ -20,7 +20,7 @@
     </div>
     <div class="panel panel-default">
       <ul class="panel-body dd-list">
-        <% get_top_level_collections('personal').each do |coll_info| %>
+        <% sort_top_level_collections(get_top_level_collections('personal'), current_user.id).each do |coll_info| %>
           <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: coll_info, coll_type: 'personal'} %>
         <% end %>
       </ul>
