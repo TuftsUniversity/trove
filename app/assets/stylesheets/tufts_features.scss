@@ -9,6 +9,10 @@
 }
 
 #collections-sidebar {
+    .dd-item button {
+      margin: 0;
+    }
+
   ul ul {
     padding-left: 15px;
   }
@@ -16,6 +20,21 @@
   .panel-title {
     display: inline-block;
     margin-right: 1rem;
+  }
+
+  .dragging {
+    border: 1px dashed #777;
+    font-weight: bold;
+    height: 50px;
+    text-align: center;
+
+    a {
+      color: #000;
+    }
+  }
+
+  .drag-hover {
+    background: #FFF;
   }
 }
 

@@ -1,6 +1,8 @@
 <%
   sub_colls = get_collections(coll_type, coll_info[:id])
   sub_ul_id = "collapse-#{coll_info[:id]}"
+
+  dropzone = (coll_type == 'personal' || current_user.admin?) ? ' tufts-dropzone' : ''
 %>
 
 <li class="dd-item">
@@ -13,7 +15,7 @@
       aria-controls="<%= sub_ul_id %>"
     ></button>
   <% end %>
-  <div class="dd-handle">
+  <div id="<%= coll_info[:id] %>" class="dd-handle<%= dropzone %>">
     <%= link_to(coll_info[:title], hyrax.collection_path(coll_info[:id])) %>
   </div>
   <% if (sub_colls.present?) %>
