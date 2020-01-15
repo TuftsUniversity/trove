@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       get '/collections/dl_powerpoint/:id', controller: 'collections', action: :dl_powerpoint, :defaults => { :format => 'pptx' }
       get '/collections/dl_pdf/:id', controller: 'collections', action: :dl_pdf, :defaults => { :format => 'pdf' }
       get '/collections/update_work_order/:id', controller: 'collections', action: :update_work_order
+      post '/collections/add_item_to_collection/:id', controller: 'collections', action: :add_item_to_collection
     end
   end
 

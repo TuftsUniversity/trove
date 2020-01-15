@@ -3,9 +3,9 @@
   // Manages the drag and drop functionality in the search results.
   let tuftsDragAndDrop = function tuftsDragAndDrop() {
     let valid_dzs, dropzone_class = 'tufts-dropzone', dragging_class = 'dragging', hover_class = "drag-hover",
-      init, highlight_dropzones, unhighlight_dropzones, add_hover, remove_hover,
-      allow_drop, save_doc_id, strip_doc_prefix,
-      add_image_to_collection;
+      init, get_username, strip_doc_prefix, store_doc_id,
+      highlight_dropzones, unhighlight_dropzones, add_hover, remove_hover, allow_drop,
+      add_image_to_collection, send_update;
 
     init = function() {
       valid_dzs = document.querySelectorAll('#collections-sidebar .tufts-dropzone');
@@ -13,13 +13,47 @@
         return;
       }
       document.addEventListener('dragstart', highlight_dropzones);
-      document.addEventListener('dragstart', save_doc_id);
+      document.addEventListener('dragstart', store_doc_id);
       document.addEventListener('dragend', unhighlight_dropzones);
+      document.addEventListener('dragenter', add_hover);
+      document.addEventListener('dragleave', remove_hover);
       document.addEventListener('dragover', allow_drop);
       document.addEventListener('drop', add_image_to_collection);
       document.addEventListener('drop', remove_hover);
-      document.addEventListener('dragenter', add_hover);
-      document.addEventListener('dragleave', remove_hover);
+    };
+
+    // Fires the ajax event that saves the image to the collection
+    add_image_to_collection = function(ev) {
+      let el = ev.target;
+
+      if(el.classList.contains(dropzone_class)) {
+        ev.preventDefault();
+
+        let collection_id = el.id,
+          image_id = ev.dataTransfer.getData('text/plain');
+
+        console.log("Saving " + image_id + " to " + collection_id);
+
+        send_update(collection_id, image_id);
+      }
+    };
+
+    /* Sends the ajax request to add the image to the collection
+     * @param {str} collection
+     *   The collection id to save the image in
+     * @param {str} image
+     *   The image id */
+    send_update = function(collection, image) {
+      $.ajax({
+        url: '/dashboard/collections/add_item_to_collection/' + collection,
+        data: { image: image, username: get_username() },
+        method: 'POST'
+      })
+        .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+          window.console.error('Failed to save work order!');
+          window.console.error(textStatus);
+          window.console.error(errorThrown);
+        });
     };
 
     // Changes the sidebar collections to display like valid dropzones.
@@ -60,23 +94,15 @@
       }
     };
 
-    // Fires the ajax event that saves the image to the collection
-    add_image_to_collection = function(ev) {
-      let el = ev.target;
-
-      if(el.classList.contains(dropzone_class)) {
-        ev.preventDefault();
-        let collection_id = el.id,
-          image_id = ev.dataTransfer.getData('text/plain');
-        console.log("Saving " + image_id + " to " + collection_id);
-        ev.stopPropagation();
-      }
-    };
-
     // Saves the doc id to the event
-    save_doc_id = function(ev) {
+    store_doc_id = function(ev) {
       ev.dataTransfer.dropEffect = "copy";
       ev.dataTransfer.setData('text/plain', strip_doc_prefix(ev.target.id));
+    };
+
+    // Nabs the username from the body element
+    get_username = function() {
+      return document.body.dataset.username
     };
 
     /* Removes the document_ from the item ids
