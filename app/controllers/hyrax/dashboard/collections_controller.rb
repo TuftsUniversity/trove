@@ -1,5 +1,5 @@
 require_dependency Hyrax::Engine.root.join('app', 'controllers', 'hyrax', 'dashboard', 'collections_controller').to_s
-
+require 'sipity/entity' # Required for add_item_to_collection to work
 
 module Hyrax
   module Dashboard
