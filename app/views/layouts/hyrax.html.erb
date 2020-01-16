@@ -5,7 +5,7 @@
     <%= content_for(:head) %>
   </head>
 
-  <body data-username="<%= current_user.username %>">
+  <body data-username="<%= current_user.username unless current_user.nil? %>">
     <div class="skip-to-content">
       <%= link_to "Skip to Content", "#skip-to-content" %>
     </div>
