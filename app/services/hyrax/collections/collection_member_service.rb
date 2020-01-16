@@ -69,36 +69,36 @@ module Hyrax
 
         # @api private
         #
-        def query_solr(query_builder:, query_params:)                    
+        def query_solr(query_builder:, query_params:)
           #Rails.logger.warn "PRERESPONSE : #{query_builder}"
           #Rails.logger.warn "PRERESPONSE : #{query_params}"
           per_page = query_params["per_page"].to_i
-          
+
           #set when there is no default
           if per_page == 0
             per_page = 24
           end
 
-          
+
           collection_id = query_params['id']
-          
+
           # slow
           #collection = Collection.find(collection_id)
-          
+
           # faster
           collection = Tufts::Curation::CollectionOrder.where(collection_id: collection_id, item_type: :work).first
 
           #byebug
-          work_order = collection.order
-          if query_builder.class.to_s.include? 'OrderedCollectionMemberSearchBuilder'
+          if ((!collection.nil?) && (query_builder.class.to_s.include? 'OrderedCollectionMemberSearchBuilder'))
+            work_order = collection.order
             response = repository.search(query_builder.with(query_params).merge(rows: 1000).query)
           #  byebug
             docs = response["response"]["docs"]
             docs = docs.sort_by do |e|
-              id = e["id"] 
-              
+              id = e["id"]
+
               tag_to_end = 0
-              if id.nil?                
+              if id.nil?
                 sort = work_order.length + tag_to_end
                 tag_to_end +=1
               else
@@ -106,11 +106,11 @@ module Hyrax
                   sort = work_order.length + tag_to_end
                   tag_to_end +=1
                  else
-                  sort = work_order.index(id) 
+                  sort = work_order.index(id)
                  end
               end
               sort
-            end          
+            end
             #byebug
             docs = docs[0..(per_page-1)]
             response["responseHeader"]["params"]["rows"] = per_page
@@ -123,15 +123,15 @@ module Hyrax
           #Rails.logger.warn "RESPONSE : #{response}"
           #byebug
           response
-          
-          
+
+
         end
 
         # @api private
         #
         def query_solr_with_field_selection(query_builder:, fl:)
           repository.search(query_builder.merge(fl: fl).query)
-          
+
 
         end
 
