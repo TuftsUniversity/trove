@@ -23,8 +23,10 @@
    *   The jQuery.ui interface.
    */
   sortable_update = function(event, ui) {
+    var url = '/dashboard/collections/update_work_order/' + collection_id() + '/' + page() + '/' + per_page();
     $.ajax({
-      url: '/dashboard/collections/update_work_order/' + collection_id(),
+      type: "POST",
+      url: url,
       data: { order: list_to_json }
     })
       .fail(function(XMLHttpRequest, textStatus, errorThrown) {
@@ -33,7 +35,20 @@
         window.console.error(errorThrown);
       });
   };
+  
+  page = function() {
+    var url = new URL(window.location.href);
+    var c = url.searchParams.get("page");
+    return c;
 
+  };
+
+  per_page = function() {
+    var url = new URL(window.location.href);
+    var c = url.searchParams.get("per_page");
+    return c;
+
+  }
   /*
    * @function
    * Gets the collection id from the url.

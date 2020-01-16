@@ -84,7 +84,56 @@ module Hyrax
       ##
       # Responds to an ajax call and updates the work order
       def update_work_order
-        #@collection.update_order(JSON.parse(params[:order]), :work)
+        #byebug
+        per_page = params[:per_page]
+        page = params[:page]
+        
+        #null checks for defaults
+        if page == "null"
+          page = 1
+        else
+          page = page.to_i
+        end
+
+        if per_page == "null"
+          per_page = 24
+        else
+          per_page = per_page.to_i
+        end
+
+        # TODO: There should be a faster way to figure out the length of the collection        
+        #byebug
+        #resp = ActiveFedora::SolrService.get("id:#{fs_id}")
+
+        # slow
+        # number_of_works = @collection.member_works.length
+
+        # fast?
+        number_of_works = ActiveFedora::Base.where("member_of_collection_ids_ssim:#{@collection.id} AND has_model_ssim:Image").count
+        # we're only updating a page at time in theory so get the subset of the array we're updating
+        items_to_update = JSON.parse(params[:order])
+
+        # get the whole work order, although, this is misleading as there isn't necessarily a work order for the 
+        # the whole collection there could be none or just 1 or a page of a collection, so this is kinda shit
+        # TODO: if you had 3 pages and set a work order on page 1 and 3 and never set an order on page 2 i think you'd have 
+        # an issue here
+        full_collection_order = @collection.work_order
+
+        # number of items in this update
+        number_to_update = items_to_update.length
+
+        # the starting offset of the page to merge this is into the overall array
+        initial_offset = page == 1 ? 0 : (page - 1) * per_page
+
+        # the ending offset of the page to merge this into the array corrected for the end of the collection
+        ending_offset = page * per_page > number_of_works ? number_of_works : page * per_page
+        #byebug
+
+        #update the overall collection
+        full_collection_order[initial_offset,ending_offset] = items_to_update
+        
+        #persist
+        @collection.update_order(full_collection_order, :work)
       end
 
       ##
