@@ -1,5 +1,6 @@
 <% # @file - Add document ids to the gallery objects %>
-<div id="document_<%= document.id %>" class="document col-xs-6 col-md-3" draggable="true" >
+<% draggable = request.env['PATH_INFO'] == "/catalog" ? ' draggable="true"' : ''%>
+<div id="document_<%= document.id %>" class="document col-xs-6 col-md-3"<%= draggable %>>
   <div class="thumbnail">
     <%= render_thumbnail_tag(document, {}, counter: document_counter_with_offset(document_counter)) %>
     <div class="caption">
