@@ -89,8 +89,9 @@ module Hyrax
           collection = Tufts::Curation::CollectionOrder.where(collection_id: collection_id, item_type: :work).first
 
           #byebug
-          work_order = collection.order
-          if query_builder.class.to_s.include? 'OrderedCollectionMemberSearchBuilder'
+          
+          if !collection.nil? && query_builder.class.to_s.include? 'OrderedCollectionMemberSearchBuilder'
+            work_order = collection.order
             response = repository.search(query_builder.with(query_params).merge(rows: 1000).query)
           #  byebug
             docs = response["response"]["docs"]
