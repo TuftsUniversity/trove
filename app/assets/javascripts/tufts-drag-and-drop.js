@@ -45,8 +45,9 @@
      *   The image id */
     send_update = function(collection, image) {
       $.ajax({
-        url: '/dashboard/collections/add_item_to_collection/' + collection,
-        data: { image: image, username: get_username() },
+        url: '/dashboard/collections/' + collection,
+        //collection['members'] is necessary for CollectionMembersController#validate
+        data: { batch_document_ids: [image], origin: 'dragndrop', collection: { members: 'add' } },
         method: 'POST'
       })
         .fail(function(XMLHttpRequest, textStatus, errorThrown) {

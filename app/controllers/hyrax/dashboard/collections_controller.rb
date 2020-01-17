@@ -1,5 +1,4 @@
 require_dependency Hyrax::Engine.root.join('app', 'controllers', 'hyrax', 'dashboard', 'collections_controller').to_s
-require 'sipity/entity' # Required for add_item_to_collection to work
 
 module Hyrax
   module Dashboard
@@ -134,44 +133,6 @@ module Hyrax
         
         #persist
         @collection.update_order(full_collection_order, :work)
-      end
-
-      ##
-      # Responds to an ajax call to add an item to a collection
-      def add_item_to_collection
-        return false unless(validate_collection_and_user(params[:username]))
-        @collection.add_member_objects(params[:image])
-      rescue StandardError => e
-        Rails.logger.debug("\n\n\n\n\n\n")
-        logger.error e.message
-        logger.error e.backtrace.join("\n")
-        Rails.logger.debug("\n\n\n\n\n\n")
-      end
-
-      private
-
-      ##
-      # Validates that this user can change this collection
-      # TODO replace with cancan ideally
-      def validate_collection_and_user(username)
-        user = ::User.where(username: username).first!
-
-        # Admins can do it all
-        if(user.admin?)
-          return true
-        end
-        # Non-admin means no course collections
-        if(is_course_collection?(@collection))
-          return false
-        end
-        # Gotta own the personal collection
-        if(@collection.depositor != username)
-          return false
-        end
-
-        true
-      rescue StandardError
-        false
       end
     end
   end
