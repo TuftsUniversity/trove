@@ -6,10 +6,17 @@
 # You can use it with the :builder option on render_breadcrumbs:
 #     <%= render_breadcrumbs builder: Hyrax::BootstrapBreadcrumbsBuilder %>
 #
+require 'byebug'
+
 class Hyrax::BootstrapBreadcrumbsBuilder < BreadcrumbsOnRails::Breadcrumbs::Builder
   include ActionView::Helpers::OutputSafetyHelper
   def render
     return "" if @elements.blank?
+
+    if @elements.last.path.include? '/collections/'
+      @elements.insert(@elements.length-2,@elements.delete_at(@elements.length-1))
+    end
+
     @elements =  @elements.uniq.select do |e|
       ((compute_name(e) != "Dashboard") && (compute_name(e) != "Collections") && (compute_name(e) != "Works"))
     end

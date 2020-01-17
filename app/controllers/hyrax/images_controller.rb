@@ -1,5 +1,6 @@
 # Generated via
 #  `rails generate hyrax:work Image`
+require 'byebug'
 module Hyrax
   # Generated controller for Image
   class ImagesController < ApplicationController
@@ -11,8 +12,25 @@ module Hyrax
     # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::ImagePresenter
 
+    def show
+      referer = request.referer
+      unless referer.nil?
+        match_data = referer.match /(trove\-\w{9})/
+        
+        unless match_data.nil?
+          id = match_data[0]
+          resp = ActiveFedora::SolrService.get("id:#{id}")
+          doc = resp['response']['docs'].first          
+          collection_title = doc["title_tesim"].first          
+          add_breadcrumb "#{collection_title}", "/collections/#{id}", :title => "#{collection_title}"
+        end
+      end
+
+      super     
+      
+    end
     # Finds a solr document matching the id and sets @presenter
-    # @raise CanCan::AccessDenied if the document is not found or the user doesn't have access to it.
+    # @raise CanCan::AccessDenied if the document is not found or the user doesn't have access to it.  
     def advanced
       @user_collections = user_collections
 
