@@ -1,0 +1,27 @@
+require_dependency Hyrax::Engine.root.join('app', 'controllers', 'hyrax', 'dashboard', 'collection_members_controller').to_s
+
+# Patching to include updating the work order after items are added to a collection
+module Hyrax
+  module Dashboard
+    ## Shows a list of all collections to the admins
+    class CollectionMembersController < Hyrax::My::CollectionsController
+
+      # Overwrite to add the new images to the collection's work order
+      def after_update
+        collection.update_order(collection.work_order | batch_ids, :work)
+
+        respond_to do |format|
+          format.html { redirect_to success_return_path, notice: t('hyrax.dashboard.my.action.collection_update_success') }
+          format.json { render json: @collection, status: :updated, location: dashboard_collection_path(@collection) }
+        end
+      end
+
+      private
+
+        # Overwrite to send errors to home page instead of dashboard
+        def err_return_path
+          root_path
+        end
+    end
+  end
+end
