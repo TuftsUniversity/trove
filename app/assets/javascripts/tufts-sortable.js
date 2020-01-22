@@ -1,7 +1,7 @@
 (function() {
   // Initialize the sortable library on the lists we need.
-  var sortable_elements = [ 'div#documents.gallery.dashboard', 'table.collection-works-table > tbody' ], active_list,
-    initialize_sorting, sortable_update, list_to_json, collection_id;
+  let sortable_elements = [ 'div#documents.gallery.dashboard', 'table.collection-works-table > tbody' ], active_list,
+    initialize_sorting, sortable_update, list_to_json, collection_id, page, per_page;
 
   /*
    * @function
@@ -10,7 +10,7 @@
    *   The element to initialize the sorting on.
    */
   initialize_sorting = function(element) {
-    element.sortable({ update: sortable_update });
+    element.sortable({ update: sortable_update, helper: "clone" });
     active_list = element;
   };
 
@@ -23,7 +23,7 @@
    *   The jQuery.ui interface.
    */
   sortable_update = function(event, ui) {
-    var url = '/dashboard/collections/update_work_order/' + collection_id() + '/' + page() + '/' + per_page();
+    let url = '/dashboard/collections/update_work_order/' + collection_id() + '/' + page() + '/' + per_page();
     $.ajax({
       type: "POST",
       url: url,
@@ -35,20 +35,25 @@
         window.console.error(errorThrown);
       });
   };
-  
-  page = function() {
-    var url = new URL(window.location.href);
-    var c = url.searchParams.get("page");
-    return c;
 
+  /*
+   * @function
+   * Gets the page from the url.
+   */
+  page = function() {
+    let url = new URL(window.location.href);
+    return url.searchParams.get("page");
   };
 
+  /*
+   * @function
+   * Gets the per_page from the url.
+   */
   per_page = function() {
-    var url = new URL(window.location.href);
-    var c = url.searchParams.get("per_page");
-    return c;
+    let url = new URL(window.location.href);
+    return url.searchParams.get("per_page");
+  };
 
-  }
   /*
    * @function
    * Gets the collection id from the url.
@@ -76,8 +81,6 @@
 
     return JSON.stringify(just_ids);
   };
-
-
 
   /*
    * DomReady stuff.
