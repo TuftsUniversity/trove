@@ -1,0 +1,4 @@
+<% not_draggable = request.env['PATH_INFO'] == "/catalog" ? {draggable:false} : {}%>
+<div class="search-results-title-row">
+  <h4 class="search-result-title"><%= link_to document.title_or_label, document, not_draggable %></h4>
+</div>

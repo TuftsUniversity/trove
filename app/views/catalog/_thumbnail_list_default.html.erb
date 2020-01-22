@@ -1,0 +1,6 @@
+<% not_draggable = request.env['PATH_INFO'] == "/catalog" ? {draggable:false} : {}%>
+<div class="col-md-2">
+  <div class="list-thumbnail">
+    <%= render_thumbnail_tag(document, not_draggable, not_draggable) %>
+  </div>
+</div>
