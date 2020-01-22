@@ -8,6 +8,11 @@
   }
 }
 
+.search-results > div {
+  height: 100vh;
+  overflow: auto;
+}
+
 #collections-sidebar {
     .dd-item button {
       margin: 0;
