@@ -1,3 +1,5 @@
+require 'sipity/entity' # Required for add_item_to_collection, and add/remove subcollection to work for some reason
+
 class ApplicationController < ActionController::Base
   impersonates :user
   acts_as_token_authentication_handler_for User

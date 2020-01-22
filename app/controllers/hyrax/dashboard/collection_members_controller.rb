@@ -1,5 +1,4 @@
 require_dependency Hyrax::Engine.root.join('app', 'controllers', 'hyrax', 'dashboard', 'collection_members_controller').to_s
-require 'sipity/entity' # Required for add_item_to_collection to work
 
 # Patching to include updating the work order after items are added to a collection
 module Hyrax
