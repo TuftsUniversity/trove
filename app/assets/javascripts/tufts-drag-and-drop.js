@@ -3,7 +3,7 @@
   // Manages the drag and drop functionality in the search results.
   let tuftsDragAndDrop = function tuftsDragAndDrop() {
     let valid_dzs, dropzone_class = 'tufts-dropzone', dragging_class = 'dragging', hover_class = "drag-hover",
-      init, get_username, strip_doc_prefix, store_doc_id,
+      init, get_username, strip_doc_prefix, store_doc_id, exists,
       highlight_dropzones, unhighlight_dropzones, add_hover, remove_hover, allow_drop,
       add_image_to_collection, send_update;
 
@@ -74,7 +74,7 @@
     // Adds a hover class to the hovered element, if it's a dropzone
     add_hover = function(ev) {
       let el = ev.target;
-      if(el.classList.contains(dropzone_class)) {
+      if(exists(el.classList) && el.classList.contains(dropzone_class)) {
         el.classList.add(hover_class);
       }
     };
@@ -82,7 +82,7 @@
     // Removes the hover class from an element
     remove_hover = function(ev) {
       let el = ev.target;
-      if(el.classList.contains(hover_class)) {
+      if(exists(el.classList) && el.classList.contains(hover_class)) {
         el.classList.remove(hover_class);
       }
     };
@@ -112,6 +112,15 @@
     strip_doc_prefix = function(id) {
       return id.replace('document_', '');
     };
+
+    /*
+     * Shorthand to check if something is defined.
+     * Mainly used to prevent firefox from throwing 'el.classList is undefined' a billion times.
+     */
+    exists = function(variable) {
+      return typeof variable !== 'undefined'
+    };
+
     return { init: init };
   };
 
