@@ -2,7 +2,7 @@
   collection = Collection.find id
   colls = Hyrax::Collections::NestedCollectionQueryService.available_child_collections(parent: collection, scope: controller, limit_to_id: nil)
   type_for_label = is_course_collection?(collection) ? 'Course': 'Personal'
-  sorted_colls = colls.sort_by { |c| c.title }
+  sorted_colls = colls.sort_by { |c| c.title.first.strip.downcase }
 %>
 
 <div class="modal fade disable-unless-selected" id="add-subcollection-modal-<%= id %>" tabindex="-1" role="dialog" aria-labelledby="add-subcollection-label">
