@@ -27,13 +27,26 @@ module Tufts
       end
 
       per_page = query_params["per_page"].to_i
+      
       #set when there is no default
       if per_page == 0
         per_page = 24
       end
 
+      page_number = query_params["page"]
+      
+      if page_number.nil?
+        page_number = 1
+      else
+        page_number = page_number.to_i
+      end
+
       work_order = order_obj.order
+
+      query_params["start"] = "0"
+      query_params["page"] = 1
       response = repository.search(query_builder.with(query_params).merge(rows: 1000).query)
+      
       docs = response["response"]["docs"]
       docs = docs.sort_by do |e|
         id = e["id"]
@@ -52,9 +65,20 @@ module Tufts
         end
         sort
       end
+      
+      if page_number == 1
+        offset_start = 0
+      else
+        offset_start = (page_number * per_page) - per_page
+      end
 
-      docs = docs[0..(per_page-1)]
+      offset_end = offset_start + (per_page-1)
+
+      docs = docs[offset_start..offset_end]
+      
       response["responseHeader"]["params"]["rows"] = per_page
+      response["responseHeader"]["params"]["page"] = page_number
+      response["responseHeader"]["params"]["start"] = offset_start
       response["response"]["docs"] = docs
 
       response
