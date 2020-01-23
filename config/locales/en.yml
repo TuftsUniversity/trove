@@ -36,6 +36,9 @@ en:
   trove_collections:
     new:
       header: "New %{type_title}"
+    edit-button:
+      label: "Manage collection"
+      desc: "Manage this collection"
     additional_actions:
       label: "Additional Actions"
       copy: "Copy Collection"

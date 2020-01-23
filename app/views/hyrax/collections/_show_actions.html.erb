@@ -24,9 +24,9 @@
 
 <% if can? :edit, presenter.solr_document %>
   <div class="tufts-action-button">
-    <%= link_to t('hyrax.collection.actions.edit.label'),
+    <%= link_to t('trove_collections.edit-button.label'),
                 hyrax.dashboard_collection_path(@presenter),
-                title: t('hyrax.collection.actions.edit.desc'),
+                title: t('trove_collections.edit-button.desc'),
                 class: 'btn btn-primary' %>
   </div>
 <% end %>
