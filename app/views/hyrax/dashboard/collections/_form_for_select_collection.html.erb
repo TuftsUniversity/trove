@@ -16,7 +16,7 @@
               <fieldset>
                 <legend><%= t("hyrax.collection.select_form.select_heading") %></legend>
               <ul id="select">
-                <% user_collections.sort { |c1,c2| c1['title_tesim'].first.upcase.gsub(/\A\p{Space}*/, '') <=> c2['title_tesim'].first.upcase.gsub(/\A\p{Space}*/, '') }.each_with_ind
+                 <% user_collections.sort { |c1,c2| c1['title_tesim'].first.upcase.gsub(/\A\p{Space}*/, '') <=> c2['title_tesim'].first.upcase.gsub(/\A\p{Space}*/, '') }.each_with_index  do |collection,index| %>
                   <li class="col-name" style="<%= current_user.admin? ? 'display:none' : 'display:list-item' %>">
                     <% selected = (collection.id == @add_works_to_collection) || (@add_works_to_collection.blank? && index == 0) %>
                     <%= radio_button_tag(:id, collection.id, selected, class: "collection-selector") %>
