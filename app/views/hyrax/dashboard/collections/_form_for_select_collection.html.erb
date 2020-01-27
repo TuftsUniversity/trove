@@ -9,15 +9,19 @@
           <% if user_collections.blank? %>
             <em> <%= t("hyrax.collection.select_form.no_collections") %></em><br /><br /><br /><br />
           <% else %>
+          <div>
+            <input placeholder="<%= current_user.admin? ? 'Search for collection by title' : 'Filter list of collections' %>" type="text" id="search" name="search" style="margin: 10p
+          </div>
             <div class="collection-list">
               <fieldset>
                 <legend><%= t("hyrax.collection.select_form.select_heading") %></legend>
-              <ul>
-                <% user_collections.sort { |c1,c2| c2[CatalogController.uploaded_field] <=> c1[CatalogController.uploaded_field] }.each_with_index do |collection,index| %>
-                  <li>
+              <ul id="select">
+                <% user_collections.sort { |c1,c2| c1['title_tesim'].first.upcase.gsub(/\A\p{Space}*/, '') <=> c2['title_tesim'].first.upcase.gsub(/\A\p{Space}*/, '') }.each_with_ind
+                  <li class="col-name" style="<%= current_user.admin? ? 'display:none' : 'display:list-item' %>">
                     <% selected = (collection.id == @add_works_to_collection) || (@add_works_to_collection.blank? && index == 0) %>
                     <%= radio_button_tag(:id, collection.id, selected, class: "collection-selector") %>
-                    <%= label_tag(:collection, collection.title_or_label, for: "id_#{collection.id}") %>
+                    <% depositor = current_user.admin? ? (" - " + collection.depositor) : "" %>
+                    <%= label_tag(:collection, "#{collection.title_or_label} (#{collection_type_label(collection.collection_type_gid)}#{depositor})", for: "id_#{collection.id}") %>
                   </li>
                 <% end %>
               </ul>
