@@ -49,7 +49,8 @@ class PowerPointCollectionExporter < CollectionExporter
       # code.
       # error_flag = /\AERROR:/
     end
-
+    
+    File.chmod(0777,export_file_name)
     export_file_name
   end
 
