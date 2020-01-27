@@ -10,7 +10,7 @@
             <em> <%= t("hyrax.collection.select_form.no_collections") %></em><br /><br /><br /><br />
           <% else %>
           <div>
-            <input placeholder="<%= current_user.admin? ? 'Search for collection by title' : 'Filter list of collections' %>" type="text" id="search" name="search" style="margin: 10p
+            <input placeholder="<%= current_user.admin? ? 'Search for collection by title' : 'Filter list of collections' %>" type="text" id="search" name="search" style="margin: 20p; width: 400px;" onkeyup="filter_options(this.value);"/>
           </div>
             <div class="collection-list">
               <fieldset>
