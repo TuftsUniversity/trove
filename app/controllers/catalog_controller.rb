@@ -16,6 +16,7 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+    config.http_method = :post
     config.view.gallery.partials = [:index_header, :index]
 
     # Move list view behind grid view
