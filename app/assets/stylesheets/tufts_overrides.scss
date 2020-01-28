@@ -34,3 +34,14 @@ https://github.com/samvera/hyrax/pull/3913/commits/d6d4ac7792522c6fabec4e1fbf3b8
   color: #777;
   font-style: italic;
 }
+
+#collection-list-container > div > div {
+  width: 800px;
+}
+
+@media (min-width: 768px) {
+  .modal-dialog {
+    width: 800px;
+    margin: 30px auto;
+  }
+}
