@@ -3,7 +3,7 @@
   // Manages the drag and drop functionality in the search results.
   let tuftsDragAndDrop = function tuftsDragAndDrop() {
     let valid_dzs, dropzone_class = 'tufts-dropzone', dragging_class = 'dragging', hover_class = "drag-hover",
-      init, get_username, strip_doc_prefix, store_doc_id, exists,
+      init, strip_doc_prefix, store_doc_id, exists,
       highlight_dropzones, unhighlight_dropzones, add_hover, remove_hover, allow_drop,
       add_image_to_collection, send_update;
 
@@ -31,8 +31,6 @@
 
         let collection_id = el.id,
           image_id = ev.dataTransfer.getData('text/plain');
-
-        console.log("Saving " + image_id + " to " + collection_id);
 
         send_update(collection_id, image_id);
       }
@@ -101,21 +99,15 @@
       ev.dataTransfer.setData('text/plain', strip_doc_prefix(ev.target.id));
     };
 
-    // Nabs the username from the body element
-    get_username = function() {
-      return document.body.dataset.username
-    };
-
     /* Removes the document_ from the item ids
      * @param {str} id
      *   The text from the id attribute of the item */
     strip_doc_prefix = function(id) {
       return id.replace('document_', '');
     };
-
-    /*
-     * Shorthand to check if something is defined.
-     * Mainly used to prevent firefox from throwing 'el.classList is undefined' a billion times.
+    
+    /* Shorthand to check if something is defined.
+     * Prevents firefox from throwing 'el.classList is undefined' a billion times.
      */
     exists = function(variable) {
       return typeof variable !== 'undefined'
