@@ -17,7 +17,7 @@
     <li>
       <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{@collection.id}", data: { turbolinks: false, confirm: t('copyright_acknowledgement') } %>
     </li>
-    <% if is_personal_collection?(@collection) %>
+    <% if is_personal_collection?(@collection) && current_user.admin? %>
       <li>
         <%= link_to t("trove_collections.additional_actions.upgrade"), "upgrade/#{@collection.id}", data: { turbolinks: false } %>
       </li>
