@@ -8,6 +8,7 @@ https://github.com/samvera/hyrax/pull/3913/commits/d6d4ac7792522c6fabec4e1fbf3b8
   margin: 5em 0 2em;
 }
 
+// Featured items on homepage
 .featured-item {
   img {
     width: 400px;
@@ -25,6 +26,7 @@ https://github.com/samvera/hyrax/pull/3913/commits/d6d4ac7792522c6fabec4e1fbf3b8
   clear: both
 }
 
+// Navbar search
 .searchbar-right label {
   color: #777;
 }
@@ -53,6 +55,7 @@ https://github.com/samvera/hyrax/pull/3913/commits/d6d4ac7792522c6fabec4e1fbf3b8
   }
 }
 
+// Login page
 .new_user {
   input {
     margin-bottom: 0.5em;
@@ -60,5 +63,17 @@ https://github.com/samvera/hyrax/pull/3913/commits/d6d4ac7792522c6fabec4e1fbf3b8
 
   label {
     margin-bottom: 0;
+  }
+}
+
+// Announcement
+div#announcement {
+  background-color: #286090;
+  margin-bottom: 1em;
+  padding-top: 0;
+
+  p {
+    font-weight: normal;
+    font-size: 0.9em;
   }
 }
