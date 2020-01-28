@@ -2,7 +2,7 @@ class Ability
   include Hydra::Ability
 
   include Hyrax::Ability
-  self.ability_logic += [:everyone_can_create_curation_concerns, :trove_admin_permissions] 
+  self.ability_logic += [:everyone_can_create_curation_concerns, :trove_admin_permissions]
   self.ability_logic -= [:admin_permissions]
   # Add this to your ability_logic if you want all logged in users to be able
   # to submit content
@@ -10,7 +10,7 @@ class Ability
     return unless registered_user?
     can :create, [Collection]
   end
-  
+
   # Define any customized permissions here.
   def custom_permissions
     # Limits deleting objects to a the admin user
@@ -27,7 +27,8 @@ class Ability
     can [:advanced], Image
     can [:dl_powerpoint], Collection
     can [:dl_pdf], Collection
-    
+    can [:copy], Collection
+
   end
   def trove_admin_permissions
     return unless admin?
@@ -39,7 +40,7 @@ class Ability
     can :update, :appearance
     can :manage, String # The identifier of a work or FileSet
     can :manage, curation_concerns_models
-    
+
     can :manage, :collection_types
   end
 
