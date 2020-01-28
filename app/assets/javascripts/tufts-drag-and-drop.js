@@ -105,7 +105,7 @@
     strip_doc_prefix = function(id) {
       return id.replace('document_', '');
     };
-    
+
     /* Shorthand to check if something is defined.
      * Prevents firefox from throwing 'el.classList is undefined' a billion times.
      */
