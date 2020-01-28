@@ -27,6 +27,7 @@ module Hyrax
       def after_update_nested_collection_relationship_indices
         @during_save = false
         reindex_nested_relationships_for(id: id, extent: reindex_extent)
+        Rails.cache.delete 'views/collections-sidebar-courses'
       end
 
       def update_nested_collection_relationship_indices

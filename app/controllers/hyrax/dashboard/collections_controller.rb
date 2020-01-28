@@ -32,17 +32,30 @@ module Hyrax
         end
       end
 
+      def destroy
+        unless(is_personal_collection?(@collection))
+          Rails.cache.delete 'views/collections-sidebar-courses'
+        end
+        if @collection.destroy
+          after_destroy(params[:id])
+        else
+          after_destroy_error(params[:id])
+        end
+      end
+
       ##
       # @function
       # Overwrites collection after_create callback to redirect to root, instead of dashboard.
       def after_create
         form
         set_default_permissions
-
+        unless(is_personal_collection?(@collection)) 
+          Rails.cache.delete 'views/collections-sidebar-courses'
+        end
         # if we are creating the new collection as a subcollection (via the nested collections controller),
         # we pass the parent_id through a hidden field in the form and link the two after the create.
         link_parent_collection(params[:parent_id]) unless params[:parent_id].nil?
-
+      
         respond_to do |format|
           ActiveFedora::SolrService.instance.conn.commit
           format.html { redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success') } #Changed for trove
@@ -56,7 +69,7 @@ module Hyrax
         unless(is_personal_collection?(@collection))
           redirect_to root_path, notice: t('trove_collections.additional_actions.notices.not_personal_collection')
         end
-
+        Rails.cache.delete 'views/collections-sidebar-courses'
         new_collection = create_copy('course')
         ActiveFedora::SolrService.instance.conn.commit
 
