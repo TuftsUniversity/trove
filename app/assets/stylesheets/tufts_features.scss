@@ -55,3 +55,16 @@
 .margin-left {
   margin-left: 10px;
 }
+
+// Remove buttons on gallery view in collection dashboard
+.gallery.dashboard {
+  .thumbnail {
+    position: relative;
+  }
+
+  .edit_collection {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+  }
+}

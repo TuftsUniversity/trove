@@ -21,4 +21,14 @@ module ApplicationHelper
 
     descrip.truncate(max_length - 15, separator: ' ')
   end
+
+  # Tells the gallery view if it's on the search page or not.
+  def on_search_page?
+    params['controller'] == 'catalog' && params['action'] == 'index'
+  end
+
+  # Tells the gallery view if it's in the collection dashboard or not.
+  def on_edit_page?
+    params['controller'] == 'hyrax/dashboard/collections'
+  end
 end

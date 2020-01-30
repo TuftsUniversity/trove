@@ -1,9 +1,12 @@
-<% # @file - Add document ids to the gallery objects %>
-<% draggable = request.env['PATH_INFO'] == "/catalog" ? ' draggable=true' : ''%>
-<% not_draggable = request.env['PATH_INFO'] == "/catalog" ? {draggable:false} : {}%>
-<div id="document_<%= document.id %>" class="document col-xs-6 col-md-3"<%= draggable %>>
+<% # @file - Add document ids to the gallery objects and draggable attributes for drag-n-drop and remove buttons for dashboard %>
+<% drag_boxes = on_search_page? ? ' draggable=true' : ''%>
+<% dont_drag_thumbs = on_search_page? ? { draggable:false } : {}%>
+<% add_remove_button = on_edit_page? ? button_for_remove_from_collection(@collection, document, label: "Remove", btn_class: "btn-danger btn-xs") : '' %>
+
+<div id="document_<%= document.id %>" class="document col-xs-6 col-md-3"<%= drag_boxes %>>
   <div class="thumbnail">
-    <%= render_thumbnail_tag(document, not_draggable, counter: document_counter_with_offset(document_counter)) %>
+    <%= add_remove_button %>
+    <%= render_thumbnail_tag(document, dont_drag_thumbs, counter: document_counter_with_offset(document_counter)) %>
     <div class="caption">
       <%= render_document_partials document, blacklight_config.view_config(:gallery).partials, document_counter: document_counter %>
     </div>
