@@ -83,11 +83,10 @@ module Hyrax
       ##
       # Overwriting to redirect to home page, instead of dashboard.
       def after_destroy(_id)
-        # leaving id to avoid changing the method's parameters prior to release
         respond_to do |format|
           format.html do
-            redirect_to root_path, # Changed for Trove
-                        notice: t('hyrax.dashboard.my.action.collection_delete_success')
+            # Changed for Trove
+            redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_delete_success')
           end
           format.json { head :no_content, location: root_path }
         end
@@ -118,6 +117,31 @@ module Hyrax
         full_collection_order[initial_offset,ending_offset] = items_to_update
 
         @collection.update_order(full_collection_order, :work)
+      end
+
+      private
+
+      ##
+      # Overwritten to remove ids from CollectionOrder as well.
+      def remove_members_from_collection
+        batch.each do |pid|
+          work = ActiveFedora::Base.find(pid)
+          work.member_of_collections.delete @collection
+          work.save!
+
+          remove_id_from_work_order(pid)
+        end
+      end
+
+      ##
+      # Removes an id from the collection's work order
+      # @param {str} id
+      #   The id to remove from the order
+      def remove_id_from_work_order(id)
+        order = @collection.work_order
+        return if order.blank?
+        new_order = order - [id]
+        @collection.update_order(new_order, :work) unless new_order == order
       end
     end
   end
