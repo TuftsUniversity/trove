@@ -3,8 +3,6 @@
 module Tufts
   module Forms
     module Dashboard
-      # Responsible for validating that both the parent and child are valid for nesting; If so, then
-      # also responsible for persisting those changes.
       class NestCollectionForm < Hyrax::Forms::Dashboard::NestCollectionForm
         def remove
           if context.can? :edit, parent
@@ -18,14 +16,17 @@ module Tufts
 
         private
 
-        ##
-        # Remove child from parent's subcollection order
-        # @param
-        def remove_child_from_order(parent, child)
-          order = parent.subcollection_order
-          return if order.blank?
-          parent.update_order(order - [child.id], :subcollection)
-        end
+          ##
+          # Remove child from parent's subcollection order
+          # @param {Collection} parent
+          #   The parent collection which owns the subcollection order that we're altering
+          # @param {Collection} child
+          #   The child collection whose id will be removed from the parent's order
+          def remove_child_from_order(parent, child)
+            order = parent.subcollection_order
+            return if order.blank?
+            parent.update_order(order - [child.id], :subcollection)
+          end
       end
     end
   end
