@@ -56,7 +56,7 @@
   margin-left: 10px;
 }
 
-// Remove buttons on gallery view in collection dashboard
+// 'remove' buttons on gallery view in collection dashboard
 .gallery.dashboard {
   .thumbnail {
     position: relative;
@@ -67,4 +67,30 @@
     right: 2px;
     top: 2px;
   }
+}
+
+// Placeholder when ordering subcollections
+.subcollection-placeholder {
+  border: 1px dashed #777;
+  height: 22px;
+}
+
+// Dots in front of draggable subcollections
+.collections-list.ui-sortable {
+  list-style-type: none;
+}
+.ui-sortable-handle::before {
+  content: '.. .. .. ..';
+  float:left;
+  margin-right: 0.75em;
+  width: 10px;
+  height: 20px;
+  line-height: 5px;
+  margin-top: -0.2em;
+  cursor: move;
+
+  font-size: 12px;
+  font-family: sans-serif;
+  letter-spacing: 2px;
+  text-shadow: 1px 0 1px black;
 }

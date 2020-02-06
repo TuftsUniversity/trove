@@ -1,4 +1,4 @@
-(function() {
+(function tuftsSortableWorks() {
   // Initialize the sortable library on the lists we need.
   let sortable_elements = [ 'div#documents.gallery.dashboard', 'table.collection-works-table > tbody' ], active_list,
     initialize_sorting, sortable_update, list_to_json, collection_id, page, per_page;

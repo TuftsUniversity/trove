@@ -119,6 +119,13 @@ module Hyrax
         @collection.update_order(full_collection_order, :work)
       end
 
+      ##
+      # Responds to an ajax call and updates the subcollection order
+      def update_subcollection_order
+        new_order = JSON.parse(params[:order])
+        @collection.update_order(new_order, :subcollection) unless new_order.blank?
+      end
+
       private
 
       ##
