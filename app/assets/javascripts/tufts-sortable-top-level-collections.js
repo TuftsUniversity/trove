@@ -4,10 +4,11 @@
     { button: '.reorder-personal', list: '.top-level-personal-collections' }
   ];
 
-  // Sets up a single pair of button and sortable list.
+  // Sets up a single pair of a button and sortable list.
   let sortableTopLevelCollection = function(xpaths) {
     let button, list, currently_sorting = false, original_list, type = "personal", user_id,
       init, list_to_json, collapse_all,
+      button_to_sorting_mode, button_to_normal_mode, button_text, prev_button, icon_classes = 'glyphicon glyphicon-sort',
       enable_sorting, disable_sorting, toggle_sorting,
       sortable_update;
 
@@ -22,16 +23,18 @@
       }
 
       // This may be a slightly verbose way of doing this, but we shouldn't default to altering course collections.
-      if(button.data('user') === "courses") {
-        type = "course";
+      if(button.data('user') === 'courses') {
+        type = 'course';
       } else {
         user_id = button.data('user');
       }
+      button_text = button.find('span');
+      prev_button = button.prev('.btn');
 
       button.on('click', toggle_sorting);
     };
 
-    // Initializes the sorting library on 'list'.
+    // Initializes the sorting library on 'list'. Saves the original order for evaluation.
     enable_sorting = function() {
       list.sortable({
         placeholder: 'collection-placeholder',
@@ -39,7 +42,7 @@
       });
     };
 
-    // Removes sorting library functionality from 'list'.
+    // Removes sorting library functionality from 'list'. Runs sortable_update ajax call if lists have changed.
     disable_sorting = function() {
       let new_list = list_to_json();
       if(new_list !== original_list) {
@@ -56,14 +59,17 @@
 
       if(currently_sorting) {
         disable_sorting();
+        button_to_normal_mode();
         currently_sorting = false;
       } else {
         currently_sorting = true;
         collapse_all();
         enable_sorting();
+        button_to_sorting_mode();
       }
     };
 
+    // Ajax call that actually sends the new list to be saved.
     sortable_update = function(list) {
       let url = type === 'course' ?
         '/update_top_level_course_collection' :
@@ -99,10 +105,24 @@
       list.find('.collapse.in').collapse('hide');
     };
 
+    // Changes the button to say 'Save' and removes + button for space.
+    button_to_sorting_mode = function() {
+      prev_button.addClass('hidden');
+      button_text.removeClass(icon_classes);
+      button_text.text('Save');
+    };
+
+    // Reverts buttons after sorting.
+    button_to_normal_mode = function() {
+      prev_button.removeClass('hidden');
+      button_text.text('');
+      button_text.addClass(icon_classes);
+    };
+
     return { init: init };
   };
 
-  // DomReady stuff.
+  // DomReady stuff. Initialize the prior cod onto all 'target_xpaths'.
   Blacklight.onLoad(function() {
     target_xpaths.forEach(function initSortableTopLevelColls(hash) {
       sortableTopLevelCollection().init(hash);

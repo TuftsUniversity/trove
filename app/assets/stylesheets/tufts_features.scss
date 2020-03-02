@@ -1,5 +1,13 @@
 /* Contains the CSS for the Tufts-added features */
 
+.hidden {
+  display: none;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
 .editor-warning {
   background-color: #286090;
   color: #FFF;
@@ -7,10 +15,7 @@
   font-weight: bold;
 }
 
-.margin-left {
-  margin-left: 10px;
-}
-
+// Action buttons on collections pages.
 .show-collection-buttons {
   float: right;
 
@@ -25,14 +30,23 @@
   overflow: auto;
 }
 
-
+// The collections sidebar on the homepage and search results
 #collections-sidebar {
-    .dd-item button {
-      margin: 0;
-    }
+  .btn {
+    padding: 3px 8px;
+    margin-right: 2px;
+  }
+
+  .dd-item button {
+    margin: 0;
+  }
 
   ul ul {
     padding-left: 15px;
+  }
+
+  .panel-heading {
+    padding: 10px;
   }
 
   .panel-title {
