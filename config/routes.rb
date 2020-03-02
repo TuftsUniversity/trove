@@ -9,7 +9,6 @@ Rails.application.routes.draw do
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
     concerns :range_searchable
-
   end
 
   devise_for :users
@@ -55,6 +54,9 @@ Rails.application.routes.draw do
       post '/collections/update_subcollection_order/:id', controller: 'collections', action: :update_subcollection_order
     end
   end
+
+  post '/update_top_level_course_collection', controller: 'top_level_collection_orders', action: :set_course_order
+  post '/update_top_level_personal_collection/:id', controller: 'top_level_collection_orders', action: :set_personal_order
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

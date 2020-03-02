@@ -10,9 +10,12 @@
     let sub_list = $(sortable_element);
 
     if(sub_list.length > 0) {
-      sub_list.sortable({ update: sortable_update,  placeholder: 'subcollection-placeholder'});
+      sub_list.sortable({ update: sortable_update,  placeholder: 'collection-placeholder'});
       active_list = sub_list;
     }
+
+
+
   };
 
  /*

@@ -4,33 +4,32 @@
       <h5 class="panel-title"><%= t('homepage.collections_nav.course_collections') %></h5>
       <% if current_user.admin? %>
         <%= link_to('+', hyrax.new_dashboard_collection_path(collection_type_id: course_id), class: "btn btn-primary") %>
+        <button type='button' class='btn btn-primary reorder-course' data-user='courses' aria-label='Reorder Course Collections'>
+          <span class='glyphicon glyphicon-sort' aria-hidden='true'></span>
+        </button>
       <% end %>
     </div>
-    <%
-       # "has_model_ssim:Collection AND displays_in_tesim:trove AND collection_type_gid_ssim:\"gid://trove/hyrax-collectiontype/3\""
-       # Course is 3, personal is 4
-
-      #resp = ActiveFedora::SolrService.query("has_model_ssim:Collection AND displays_in_tesim:trove AND collection_type_gid_ssim:\"gid://trove/hyrax-collectiontype/3\"", fl: 'system_modified_dtsi', sort: 'system_modified_dtsi desc', rows: '1')
-      #last_updated = resp[0]["system_modified_dtsi"]
-    %>
     <% cache("collections-sidebar-courses", skip_digest: true) do %>
       <div class="panel panel-default dd">
-        <ul class="panel-body dd-list">
+        <ul class="panel-body dd-list top-level-course-collections">
           <% sort_top_level_collections(get_top_level_collections).each do |coll_info| %>
             <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: coll_info, coll_type: 'course'} %>
           <% end %>
         </ul>
       </div>
-      <% end %>
+    <% end %>
   </div>
 
   <div id="personal_collections" class="panel panel-default dd">
     <div class="panel-heading">
       <h5 class="panel-title"><%= t('homepage.collections_nav.personal_collections') %></h5>
       <%= link_to('+', hyrax.new_dashboard_collection_path(collection_type_id: personal_id), class: "btn btn-primary") %>
+      <button type='button' class='btn btn-primary reorder-personal' data-user='<%= current_user.id %>' aria-label='Reorder Personal Collections'>
+        <span class='glyphicon glyphicon-sort' aria-hidden='true'></span>
+      </button>
     </div>
     <div class="panel panel-default">
-      <ul class="panel-body dd-list">
+      <ul class="panel-body dd-list top-level-personal-collections">
         <% sort_top_level_collections(get_top_level_collections('personal'), current_user.id).each do |coll_info| %>
           <%= render partial: 'catalog/collection_navbar_item', locals: {coll_info: coll_info, coll_type: 'personal'} %>
         <% end %>

@@ -5,7 +5,7 @@
   dropzone = (coll_type == 'personal' || current_user.admin?) ? ' tufts-dropzone' : ''
 %>
 
-<li class="dd-item">
+<li class="dd-item" data-id="<%=coll_info[:id]%>">
   <% if (sub_colls.present?) %>
     <button
       type="button"

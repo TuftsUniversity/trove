@@ -1,5 +1,16 @@
 /* Contains the CSS for the Tufts-added features */
 
+.editor-warning {
+  background-color: #286090;
+  color: #FFF;
+  padding: 1em 2em;
+  font-weight: bold;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
 .show-collection-buttons {
   float: right;
 
@@ -8,10 +19,12 @@
   }
 }
 
+// Makes the two scrollable boxes in seach results
 .search-results > div {
   height: 100vh;
   overflow: auto;
 }
+
 
 #collections-sidebar {
     .dd-item button {
@@ -24,9 +37,10 @@
 
   .panel-title {
     display: inline-block;
-    margin-right: 1rem;
+    margin-right: 0.25em;
   }
 
+  // DragNDrop in search
   .dragging {
     border: 1px dashed #777;
     font-weight: bold;
@@ -36,24 +50,24 @@
       color: #000;
     }
   }
-
   .drag-hover {
     background: #286090;
     a {
       color: #fff;
     }
   }
-}
 
-.editor-warning {
-  background-color: #286090;
-  color: #FFF;
-  padding: 1em 2em;
-  font-weight: bold;
-}
+  // Sidebar sorting top level collections
+  .ui-sortable-handle {
+    &::before {
+      padding-top: 5px;
+      margin-left: 5px;
+    }
 
-.margin-left {
-  margin-left: 10px;
+    button {
+      display: none;
+    }
+  }
 }
 
 // 'remove' buttons on gallery view in collection dashboard
@@ -69,13 +83,11 @@
   }
 }
 
-// Placeholder when ordering subcollections
-.subcollection-placeholder {
+// Draggable, sortable collections
+.collection-placeholder {
   border: 1px dashed #777;
   height: 22px;
 }
-
-// Dots in front of draggable subcollections
 .collections-list.ui-sortable {
   list-style-type: none;
 }
@@ -86,6 +98,7 @@
   width: 10px;
   height: 20px;
   line-height: 5px;
+
   margin-top: -0.2em;
   cursor: move;
 
