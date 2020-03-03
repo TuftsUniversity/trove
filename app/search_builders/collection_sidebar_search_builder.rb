@@ -9,7 +9,8 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
     :limit_by_collection_type,
     :limit_by_parent,
     :limit_by_user_if_personal,
-    :get_all_items]
+    :get_all_items
+  ]
 
   ##
   # Sets the collection_type_id for the collection type needed. Removes a bunch of unnecessary querying.

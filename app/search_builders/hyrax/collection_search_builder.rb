@@ -11,8 +11,7 @@ module Hyrax
     include FilterByType
 
     attr_reader :access
-    self.default_processor_chain += [
-     :get_all_items]
+    self.default_processor_chain += [:get_all_items]
 
     # Overrides Hydra::AccessControlsEnforcement
     def discovery_permissions
