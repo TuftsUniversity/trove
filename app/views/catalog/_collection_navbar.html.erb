@@ -2,12 +2,14 @@
   <div id="course_collections" class="panel panel-default dd">
     <div class="panel-heading">
       <h5 class="panel-title"><%= t('homepage.collections_nav.course_collections') %></h5>
-      <% if current_user.admin? %>
-        <%= link_to('+', hyrax.new_dashboard_collection_path(collection_type_id: course_id), class: "btn btn-primary") %>
-        <button type='button' class='btn btn-primary reorder-course' data-user='courses' aria-label='Reorder Course Collections'>
-          <span class='glyphicon glyphicon-sort' aria-hidden='true'></span>
-        </button>
-      <% end %>
+      <div class="sidebar-buttons">
+        <% if current_user.admin? %>
+          <%= link_to('+', hyrax.new_dashboard_collection_path(collection_type_id: course_id), class: "btn btn-primary") %>
+          <button type='button' class='btn btn-primary reorder-course' data-user='courses' aria-label='Reorder Course Collections'>
+            <span class='glyphicon glyphicon-sort' aria-hidden='true'></span>
+          </button>
+        <% end %>
+      </div>
     </div>
     <% cache("collections-sidebar-courses", skip_digest: true) do %>
       <div class="panel panel-default dd">
@@ -23,10 +25,12 @@
   <div id="personal_collections" class="panel panel-default dd">
     <div class="panel-heading">
       <h5 class="panel-title"><%= t('homepage.collections_nav.personal_collections') %></h5>
-      <%= link_to('+', hyrax.new_dashboard_collection_path(collection_type_id: personal_id), class: "btn btn-primary") %>
-      <button type='button' class='btn btn-primary reorder-personal' data-user='<%= current_user.id %>' aria-label='Reorder Personal Collections'>
-        <span class='glyphicon glyphicon-sort' aria-hidden='true'></span>
-      </button>
+      <div class="sidebar-buttons">
+        <%= link_to('+', hyrax.new_dashboard_collection_path(collection_type_id: personal_id), class: "btn btn-primary") %>
+        <button type='button' class='btn btn-primary reorder-personal' data-user='<%= current_user.id %>' aria-label='Reorder Personal Collections'>
+          <span class='glyphicon glyphicon-sort' aria-hidden='true'></span>
+        </button>
+      </div>
     </div>
     <div class="panel panel-default">
       <ul class="panel-body dd-list top-level-personal-collections">
