@@ -1,0 +1,11 @@
+<% # If there's no thumbnail for the collection and there are images, this automatically sets the collection thumbnail
+   #    to the first image's thumb. %>
+<% thumb = set_default_thumb_if_needed(@collection, @member_docs) %>
+<% if(thumb == 'use default') %>
+  <%= render 'hyrax/collections/media_display', presenter: presenter %>
+<% else %>
+  <%= image_tag thumb,
+                class: "representative-media",
+                alt: "",
+                role: "presentation" %>
+<% end %>
