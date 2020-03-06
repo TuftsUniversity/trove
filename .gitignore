@@ -40,3 +40,7 @@ fits.log
 
 java/build
 config/java.yml
+
+# Spring stuff
+bin/rspec
+bin/spring
