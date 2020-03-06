@@ -26,7 +26,7 @@ unless Rails.env.production?
       solr.with_collection(
         name: "hydra-test",
         persist: false,
-        dir: Rails.root.join("solr", "conf")
+        dir: Rails.root.join("solr", "config")
       ) do
         FcrepoWrapper.wrap(fcrepo_params) do
           Rake::Task["hyrax:default_admin_set:create"].invoke
