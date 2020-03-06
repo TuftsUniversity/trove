@@ -14,8 +14,8 @@ jdk:
   - oraclejdk8
 
 before_install:
-  - gem update --system
-  - gem install bundler
+#- gem update --system
+- gem install bundler
 
 before_script:
   - cp config/redis.yml.sample config/redis.yml
@@ -31,7 +31,7 @@ before_script:
 script:
   #- bundle exec rubocop
   - bundle exec rake db:migrate
-    #- bundle exec rake travis
+  - bundle exec rake travis
 
 addons:
   apt:
