@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe User do
-  subject(:user) { build(:user) }
+RSpec.describe User, type: :model do
+  let(:user) { build(:user) }
   let(:plain_user) { create(:user) }
 
 
@@ -19,8 +19,8 @@ RSpec.describe User do
   end
 
   describe '#name' do
-    subject(:user) { build(:user, display_name: name) }
     let(:name)     { 'MoominMama' }
+    let(:user) { build(:user, display_name: name) }
 
     it 'does not try to normalize names' do
       expect(user.name).to eq name
