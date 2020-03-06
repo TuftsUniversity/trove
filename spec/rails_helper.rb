@@ -1,11 +1,9 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-require 'spec_helper'
-
 ENV['RAILS_ENV'] ||= 'test'
-
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+require 'spec_helper'
 require 'rspec/rails'
 require 'active_fedora/cleaner'
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -48,7 +46,9 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = false
+
+  # Documentation claims this defaults to 'true', but I had to set it to get it to work.
+  config.use_transactional_fixtures = true
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -71,24 +71,9 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   #
   config.include FactoryBot::Syntax::Methods
+  config.include Devise::Test::IntegrationHelpers, type: :system
 
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.before do |example|
-    # Pass `:clean' to destroy objects in fedora/solr and start from scratch
-    ActiveFedora::Cleaner.clean! if example.metadata[:clean]
-
-    if example.metadata[:type] == :feature && Capybara.current_driver != :rack_test
-      DatabaseCleaner.strategy = :truncation
-    else
-      DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.start
-    end
-  end
-
-  config.after do
-    DatabaseCleaner.clean
+  config.after(:each) do
+    ActiveFedora::Cleaner.clean!
   end
 end

@@ -70,7 +70,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'ffaker'
-  gem 'database_cleaner'
 
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
