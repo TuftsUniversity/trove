@@ -3,10 +3,11 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+
 require 'spec_helper'
 require 'rspec/rails'
-require 'active_fedora/cleaner'
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'active_fedora/cleaner'
 
 # Adding chromedriver for js testing.
 Capybara.server = :webrick
@@ -72,6 +73,15 @@ RSpec.configure do |config|
   #
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::IntegrationHelpers, type: :system
+
+  #Trove is based off these collection types existing, so might as well create them once, here.
+  config.before(:all) do
+    create(:personal_collection_type)
+    create(:course_collection_type)
+  end
+  config.after(:all) do
+    Hyrax::CollectionType.destroy_all
+  end
 
   config.after(:each) do
     ActiveFedora::Cleaner.clean!
