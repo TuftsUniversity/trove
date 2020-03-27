@@ -9,7 +9,7 @@ module ApplicationHelper
   # @param {hash} item
   #   Blacklight config passes an entire item hash to the function. Item[:value] should be the text.
   # @param {int} max_length
-  #   The absolute max length a string can be. The function truncates to 20 characters less than this,
+  #   The absolute max length a string can be. The function truncates to 15 characters less than this,
   #   to avoid deleting a single word, which would be a useless amount of truncation.
   def limit_text_length(item, max_length = 170)
     return '' if item[:value].empty? || item[:value].first.empty?

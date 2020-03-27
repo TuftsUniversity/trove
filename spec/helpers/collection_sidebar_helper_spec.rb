@@ -1,0 +1,1 @@
+# Gonna test this functionality in feature tests, so I don't have to stub out a controller.
