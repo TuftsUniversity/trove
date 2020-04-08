@@ -1,29 +1,29 @@
 require 'rails_helper'
 
 describe PdfCollectionExporter do
-  # This lets us set the export_dir, by setting what `now` will be.
-  before do
-    xmas = Time.new(2012, 12, 25, 5, 15, 45, '+00:00')
-    allow(Time).to receive(:now) { xmas }
-  end
+  include FileManager
 
-  let(:collection) { build(:course_collection) }
-  let(:exporter) { PdfCollectionExporter.new(collection) }
+  before(:all) { Tufts::ExportManagerService.export_base_path = Rails.root.join('tmp', 'exports') }
+
+  let(:target_dir) { Tufts::ExportManagerService.pdf_path }
+  let(:collection) { build_stubbed(:course_collection) }
+  let(:exporter) { PdfCollectionExporter.new(collection, target_dir) }
+  let(:pptx_file) { "#{target_dir}/#{collection.id}.pptx" }
 
   it 'has a name for the export file', :exporter => 'true'  do
-    collection.title = ['Student Research in the 1960s']
-    expect(exporter.pdf_file_name).to eq 'student_research_in_the_1960s.pdf'
+    expect(exporter.pdf_file_name).to eq("#{collection.id}.pdf")
   end
 
-  context 'when generating the file' do
-    before { collection.update(title: ['Student Research in the 1960s']) }
-    after { FileUtils.rm_rf(exporter.pptx_exporter.export_dir, secure: true) }
+  context '#export' do
+    before(:all) { create_export_dirs }
+    after(:all) { destroy_export_dirs }
 
-    it 'generates the file and returns the file path', :exporter => 'true' do
+    # Ideally you don't test 3 things at once, but I don't want to run this 3 times.
+    it 'generates the file, returns the file path, deletes the leftover pptx file', :exporter => 'true' do
       export_file_path = exporter.export
-
-      expect(export_file_path.match(/student_research_in_the_1960s.*.pdf/)).to_not be_nil
-      expect(File.exist?(export_file_path)).to eq true
+      expect(export_file_path).to eq("#{target_dir}/#{exporter.pdf_file_name}")
+      expect(File.exist?(export_file_path)).to eq(true)
+      expect(File.exist?(pptx_file)).to eq(false)
     end
   end
 end
