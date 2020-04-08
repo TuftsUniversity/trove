@@ -13,7 +13,7 @@ class PptExportWriter
   def initialize(collection, out, tmpfile)
     @collection = collection
     @out = out
-    @tmpfile = tmpfile
+    @tmpfile = tmpfile # This is no longer a tmpfile, but a regular file.
   end
 
   def write

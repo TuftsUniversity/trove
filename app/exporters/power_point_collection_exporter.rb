@@ -1,21 +1,6 @@
-require 'tempfile'
 require 'open3'
 
 class PowerPointCollectionExporter < CollectionExporter
-
-  PPTX_DIR = File.join(Rails.root, 'tmp', 'exports')
-
-  def export_dir
-    timestamp = Time.now.strftime("%Y_%m_%d_%H%M%S")
-    dir = File.join(PPTX_DIR, timestamp)
-    FileUtils.mkdir_p(dir)
-    dir
-  end
-
-  def pptx_file_name
-    export_base_file_name + '.pptx'
-  end
-
   # TODO: Can/should this be moved to an initializer so that
   # we can parse the config file just once instead of every
   # time we want to generate a powerpoint file?
@@ -25,9 +10,14 @@ class PowerPointCollectionExporter < CollectionExporter
     Psych.load(config_erb)[Rails.env]
   end
 
+  def pptx_file_name
+    export_base_file_name + '.pptx'
+  end
+
   # TODO: Handle the case where there is no data for a field
   def export
-    export_file_name = Tempfile.new([export_base_file_name, '.pptx'], export_dir).path
+    export_file_name = "#{@export_dir}/#{pptx_file_name}"
+    f = File.new(export_file_name, 'w').close
 
     # Open a bi-directional connection to a Java process that
     # will generate the powerpoint file.  Send data to the Java
