@@ -1,9 +1,9 @@
 ##
-# Saves, Deletes, and Retrives PDFs and PPTs that are being exported.
+# Saves, Deletes, and Retrieves PDFs and PPTs that are being exported.
 module Tufts
   class ExportManagerService
-    # Set paths in which to save the files - saving these on the class so the exporter can get them and we don't have
-    #   to reinitialize every export.
+    # Set paths in which to save the files - saving these on the class so exporters and
+    #   controllers can access them and we don't have to reinitialize every export.
     class << self
       # Set in initializers/tufts_export.rb
       def export_base_path=(path)
@@ -30,52 +30,81 @@ module Tufts
     # @param {str} type
     #   The type of asset: pdf or ppt.
     def initialize(collection, type)
-      @paths_working = initialize_directories
+      # Set export_valid to false and quit if the type's no good.
+      return unless(type_valid?(type))
 
-      if(@paths_working)
-        @collection = collection
-        @type = type
+      # Export is invalid if we can't initialize directories.
+      @export_valid = initialize_directories
+      return unless @export_valid
+
+      case(type)
+      when 'ppt'
+        @target_path = ppt_path
+        @exporter = PowerPointCollectionExporter.new(collection, @target_path)
+        @file_name = @exporter.pptx_file_name
+      when 'pdf'
+        @target_path = pdf_path
+        @exporter = PdfCollectionExporter.new(collection, @target_path)
+        @file_name = @exporter.pdf_file_name
+      end
+
+      @full_path = "#{@target_path}/#{@file_name}"
+    end
+
+    # Retrieves asset if it exists, or creates it if it doesn't.
+    def retrieve_asset
+      return unless(@export_valid)
+
+      if(asset_exists?)
+        @full_path
       else
-        Rails.logger.warn('Export directories not initialized in Tufts::ExportManagerService!')
+        @exporter.export
       end
     end
 
-    # Sets up the pdf and ppt directories and the base directory, if necessary.
-    def initialize_directories
-      if(base_path.present?)
-        [base_path, pdf_path, ppt_path].each { |path| Dir.mkdir(path) unless File.exist?(path) }
-        true
-      else
+    def delete_asset
+      File.unlink(@full_path) if(@export_valid)
+    end
+
+    def asset_exists?
+      File.exists?(@full_path)
+    end
+
+    private
+
+      def type_valid?(type)
+        if(type == 'pdf' || type == 'ppt')
+          true
+        else
+          Rails.logger.warn("#{type} is not a valid export type, use 'pdf' or 'ppt'.")
+          @export_valid = false
+          false
+        end
+      end
+
+      # Sets up the pdf and ppt directories and the base directory, if necessary.
+      def initialize_directories
+        if(base_path.present?)
+          [base_path, pdf_path, ppt_path].each { |path| Dir.mkdir(path) unless File.exist?(path) }
+          true
+        else
+          Rails.logger.warn('Export directories not initialized in Tufts::ExportManagerService!')
+          false
+        end
+      rescue
+        Rails.logger.warn('Export directories not initialized in Tufts::ExportManagerService!')
         false
       end
-    rescue
-      false
-    end
 
-    # Creates and saves the asset.
-    def create_asset
-      return unless(@paths_working)
-    end
-
-    # Deletes the asset.
-    def delete_asset
-      return unless(@paths_working)
-    end
-
-    # Retrieves asset if it exists. Returns nil if it's not there.
-    def retrieve_asset
-      return unless(@paths_working)
-    end
-
-    # Shortcuts
-    def base_path
-      self.class.export_base_path
-    end
-    def pdf_path
-      self.class.pdf_path
-    end
-    def ppt_path
-      self.class.ppt_path
-    end
+      # Shortcuts
+      def base_path
+        self.class.export_base_path
+      end
+      def pdf_path
+        self.class.pdf_path
+      end
+      def ppt_path
+        self.class.ppt_path
+      end
   end
 end
