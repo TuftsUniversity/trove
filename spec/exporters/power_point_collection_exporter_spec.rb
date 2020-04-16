@@ -3,9 +3,9 @@ require 'rails_helper'
 describe PowerPointCollectionExporter do
   include FileManager
 
-  before(:all) { Tufts::ExportManagerService.export_base_path = Rails.root.join('tmp', 'exports') }
+  before(:all) { Tufts::ExportManagerService.export_base_path = Rails.root.join('tmp', 'exports').to_s }
 
-  let(:target_dir) { Tufts::ExportManagerService.ppt_path }
+  let(:target_dir) { Tufts::ExportManagerService.export_base_path + '/ppts' }
   let(:collection) { build_stubbed(:course_collection) }
   let(:exporter) { PowerPointCollectionExporter.new(collection, target_dir) }
 

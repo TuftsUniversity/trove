@@ -3,9 +3,9 @@ require 'rails_helper'
 describe PdfCollectionExporter do
   include FileManager
 
-  before(:all) { Tufts::ExportManagerService.export_base_path = Rails.root.join('tmp', 'exports') }
+  before(:all) { Tufts::ExportManagerService.export_base_path = Rails.root.join('tmp', 'exports').to_s }
 
-  let(:target_dir) { Tufts::ExportManagerService.pdf_path }
+  let(:target_dir) { Tufts::ExportManagerService.export_base_path + '/pdfs' }
   let(:collection) { build_stubbed(:course_collection) }
   let(:exporter) { PdfCollectionExporter.new(collection, target_dir) }
   let(:pptx_file) { "#{target_dir}/#{collection.id}.pptx" }
