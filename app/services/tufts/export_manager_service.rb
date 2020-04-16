@@ -4,42 +4,21 @@ module Tufts
   class ExportManagerService
     # Set paths in which to save the files - saving these on the class so exporters and
     #   controllers can access them and we don't have to reinitialize every export.
-    class << self
-      # Set in initializers/tufts_export.rb
-      def export_base_path=(path)
-        @export_base_path = path
-      end
-
-      def export_base_path
-        @export_base_path
-      rescue
-        ''
-      end
-
-      def ppt_path
-        "#{@export_base_path}/ppts"
-      end
-
-      def pdf_path
-        "#{@export_base_path}/pdfs"
-      end
-    end
+    class_attribute :export_base_path
 
     # @param {Collection} collection
     #   The Collection that's being exported
     # @param {str} type
-    #   The type of asset: pdf or ppt.
+    #   The type of asset: pdf or pptx.
     def initialize(collection, type)
-      # Set export_valid to false and quit if the type's no good.
-      return unless(type_valid?(type))
+      @export_valid = false
 
-      # Export is invalid if we can't initialize directories.
-      @export_valid = initialize_directories
-      return unless @export_valid
+      return unless(type_valid?(type))
+      return unless initialize_directories
 
       case(type)
-      when 'ppt'
-        @target_path = ppt_path
+      when 'pptx'
+        @target_path = pptx_path
         @exporter = PowerPointCollectionExporter.new(collection, @target_path)
         @file_name = @exporter.pptx_file_name
       when 'pdf'
@@ -49,6 +28,11 @@ module Tufts
       end
 
       @full_path = "#{@target_path}/#{@file_name}"
+
+      @readable_filename =
+        Array(collection.title).first.underscore.gsub(' ', '_').gsub("'", '_') + '.' + type
+
+      @export_valid = true
     end
 
     # Retrieves asset if it exists, or creates it if it doesn't.
@@ -56,8 +40,12 @@ module Tufts
       return unless(@export_valid)
 
       if(asset_exists?)
+        puts "\n\n\nAsset exists, retrieving #{@full_path}.\n\n\n"
+        Rails.logger.info("\n\n\nAsset exists, retrieving #{@full_path}.\n\n\n")
         @full_path
       else
+        puts "\n\n\nAsset doesn't exist, creating #{@full_path}.\n\n\n"
+        Rails.logger.info("\n\n\nAsset doesn't exist, creating #{@full_path}.\n\n\n")
         @exporter.export
       end
     end
@@ -70,22 +58,26 @@ module Tufts
       File.exists?(@full_path)
     end
 
+    # For use in the controller, generating easier-to-read filenames.
+    def readable_filename
+      @readable_filename
+    end
+
     private
 
       def type_valid?(type)
-        if(type == 'pdf' || type == 'ppt')
+        if(type == 'pdf' || type == 'pptx')
           true
         else
-          Rails.logger.warn("#{type} is not a valid export type, use 'pdf' or 'ppt'.")
-          @export_valid = false
+          Rails.logger.warn("#{type} is not a valid export type, use 'pdf' or 'pptx'.")
           false
         end
       end
 
-      # Sets up the pdf and ppt directories and the base directory, if necessary.
+      # Sets up the pdf and pptx directories and the base directory, if necessary.
       def initialize_directories
         if(base_path.present?)
-          [base_path, pdf_path, ppt_path].each { |path| Dir.mkdir(path) unless File.exist?(path) }
+          [base_path, pdf_path, pptx_path].each { |path| Dir.mkdir(path) unless File.exist?(path) }
           true
         else
           Rails.logger.warn('Export directories not initialized in Tufts::ExportManagerService!')
@@ -96,15 +88,32 @@ module Tufts
         false
       end
 
-      # Shortcuts
       def base_path
+        if(self.class.export_base_path.blank?)
+          Rails.logger.info("\n\n#{self.class}.export_base_path not set! Setting now.\n\n")
+          load_base_path_from_config
+        end
+
         self.class.export_base_path
       end
+
       def pdf_path
-        self.class.pdf_path
+        base_path + '/pdfs'
       end
-      def ppt_path
-        self.class.ppt_path
+      def pptx_path
+        base_path + '/ppts'
+      end
+
+      # Save the export path on the class, so we don't have to keep reloading it.
+      def load_base_path_from_config(config = 'tufts_export.yml')
+        yaml_config =
+          YAML.safe_load(
+            File.read(
+              Rails.root.join('config', config)
+            )
+          )[Rails.env]
+
+        Tufts::ExportManagerService.export_base_path = yaml_config['export_path']
       end
   end
 end
