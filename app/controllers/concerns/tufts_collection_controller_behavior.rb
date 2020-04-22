@@ -26,10 +26,10 @@ module TuftsCollectionControllerBehavior
   ##
   # Generates a PDF of all the images in the collection for user to download.
   def dl_pdf
-    @curated_collection = ::Collection.find(params[:id])
+    @collection = ::Collection.find(params[:id])
     respond_to do |format|
       format.pdf do
-        export_manager = Tufts::ExportManagerService.new(@curated_collection, 'pdf')
+        export_manager = Tufts::ExportManagerService.new(@collection, 'pdf')
         send_file(export_manager.retrieve_asset,
                   filename: export_manager.readable_filename,
                   type: "application/pdf",
@@ -42,10 +42,10 @@ module TuftsCollectionControllerBehavior
   ##
   # Generates a Powerpoint of all the images in the collection for user to download.
   def dl_powerpoint
-    @curated_collection = ::Collection.find(params[:id])
+    @collection = ::Collection.find(params[:id])
     respond_to do |format|
       format.pptx do
-        export_manager = Tufts::ExportManagerService.new(@curated_collection, 'pptx')
+        export_manager = Tufts::ExportManagerService.new(@collection, 'pptx')
         send_file(export_manager.retrieve_asset,
                   filename: export_manager.readable_filename,
                   type: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
