@@ -36,6 +36,7 @@ module Hyrax
         unless(is_personal_collection?(@collection))
           Rails.cache.delete 'views/collections-sidebar-courses'
         end
+        Tufts::ExportManagerService.delete_all_assets(@collection)
         if @collection.destroy
           after_destroy(params[:id])
         else
@@ -117,6 +118,9 @@ module Hyrax
         full_collection_order[initial_offset,ending_offset] = items_to_update
 
         @collection.update_order(full_collection_order, :work)
+
+        #Delete pdfs and ppts for this collection
+        Tufts::ExportManagerService.delete_all_assets(@collection)
       end
 
       ##

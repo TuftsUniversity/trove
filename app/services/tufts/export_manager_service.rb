@@ -40,11 +40,9 @@ module Tufts
       return unless(@export_valid)
 
       if(asset_exists?)
-        puts "\n\n\nAsset exists, retrieving #{@full_path}.\n\n\n"
         Rails.logger.info("\n\n\nAsset exists, retrieving #{@full_path}.\n\n\n")
         @full_path
       else
-        puts "\n\n\nAsset doesn't exist, creating #{@full_path}.\n\n\n"
         Rails.logger.info("\n\n\nAsset doesn't exist, creating #{@full_path}.\n\n\n")
         @exporter.export
       end
@@ -52,6 +50,12 @@ module Tufts
 
     def delete_asset
       File.unlink(@full_path) if(@export_valid)
+    end
+
+    # Shortcut to make deleting all assets easily
+    def self.delete_all_assets(collection)
+      self.new(collection, 'pptx').delete_asset
+      self.new(collection, 'pdf').delete_asset
     end
 
     def asset_exists?
