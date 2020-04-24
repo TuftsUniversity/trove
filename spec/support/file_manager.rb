@@ -7,6 +7,7 @@ module FileManager
   end
 
   def destroy_export_dirs
-    FileUtils.rm_r(Tufts::ExportManagerService.export_base_path)
+    FileUtils.rm_r(Tufts::ExportManagerService.export_base_path) if
+      File.exists?(Tufts::ExportManagerService.export_base_path)
   end
 end

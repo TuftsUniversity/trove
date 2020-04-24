@@ -20,7 +20,7 @@ describe PowerPointCollectionExporter do
     it 'generates the file and returns the file path', :exporter => 'true' do
       export_file_path = exporter.export
       expect(export_file_path).to eq("#{target_dir}/#{exporter.pptx_file_name}")
-      expect(File).to exist(export_file_path)
+      expect(export_file_path).to exist_on_filesystem
     end
   end
 end

@@ -22,8 +22,8 @@ describe PdfCollectionExporter do
     it 'generates the file, returns the file path, deletes the leftover pptx file', :exporter => 'true' do
       export_file_path = exporter.export
       expect(export_file_path).to eq("#{target_dir}/#{exporter.pdf_file_name}")
-      expect(File.exist?(export_file_path)).to eq(true)
-      expect(File.exist?(pptx_file)).to eq(false)
+      expect(export_file_path).to exist_on_filesystem
+      expect(pptx_file).not_to exist_on_filesystem
     end
   end
 end
