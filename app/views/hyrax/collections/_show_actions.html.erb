@@ -1,5 +1,5 @@
-<% #@file  Copying the view for actions in dashboard views
- collection = Collection.find(@presenter.id)%>
+<% #@file  Copying the view to add custom actions to collections
+ collection = ::Collection.find(@presenter.id)%>
 <h2 class="sr-only"><%= t('hyrax.collection.actions.header') %></h2>
 
 <div class="dropdown tufts-action-button">
@@ -13,12 +13,14 @@
     <li>
       <%= link_to t("trove_collections.additional_actions.copy"), "copy/#{collection.id}", data: { turbolinks: false } %>
     </li>
-    <li>
-      <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{collection.id}", data: {turbolinks: false, confirm: t('copyright_acknowledgement')} %>
-    </li>
-    <li>
-      <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{collection.id}", data: { turbolinks: false, confirm: t('copyright_acknowledgement') } %>
-    </li>
+    <% if(collection.member_work_ids.count > 0) %>
+      <li>
+        <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{collection.id}", data: {turbolinks: false, confirm: t('copyright_acknowledgement')} %>
+      </li>
+      <li>
+        <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{collection.id}", data: { turbolinks: false, confirm: t('copyright_acknowledgement') } %>
+      </li>
+    <% end %>
   </ul>
 </div>
 
