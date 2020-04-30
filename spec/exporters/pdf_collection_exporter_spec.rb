@@ -10,7 +10,7 @@ describe PdfCollectionExporter do
   let(:exporter) { PdfCollectionExporter.new(collection, target_dir) }
   let(:pptx_file) { "#{target_dir}/#{collection.id}.pptx" }
 
-  it 'has a name for the export file', :exporter => 'true'  do
+  it 'has a name for the export file'  do
     expect(exporter.pdf_file_name).to eq("#{collection.id}.pdf")
   end
 
@@ -19,7 +19,7 @@ describe PdfCollectionExporter do
     after(:all) { destroy_export_dirs }
 
     # Ideally you don't test 3 things at once, but I don't want to run this 3 times.
-    it 'generates the file, returns the file path, deletes the leftover pptx file', :exporter => 'true' do
+    it 'generates the file, returns the file path, deletes the leftover pptx file', slow: true do
       export_file_path = exporter.export
       expect(export_file_path).to eq("#{target_dir}/#{exporter.pdf_file_name}")
       expect(export_file_path).to exist_on_filesystem

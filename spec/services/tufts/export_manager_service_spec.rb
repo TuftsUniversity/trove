@@ -96,7 +96,6 @@ describe Tufts::ExportManagerService do
       ppt_file = ppt_manager.instance_variable_get(:@full_path)
       ppt_manager.retrieve_asset
 
-
       expect(pdf_file).to exist_on_filesystem
       expect(ppt_file).to exist_on_filesystem
 
