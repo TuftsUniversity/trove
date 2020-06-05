@@ -12,8 +12,13 @@ FactoryBot.define do
     display_name { FFaker::Name.name }
     after(:create) { |user| user.remove_role(:admin) }
 
-    factory :admin do
-      after(:create) { |user| user.add_role('admin') }
+    factory :ldap_user do
+      username { 'person1' }
+      email { 'ransom@swaniawwski.org' }
+
+      factory :ldap_admin do
+        after(:create) { |user| user.add_role('admin') }
+      end
     end
   end
 end
