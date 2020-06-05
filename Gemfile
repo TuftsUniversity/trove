@@ -73,7 +73,7 @@ end
 group :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
-  #:gem 'ladle'
+  gem 'ladle'
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
 end
