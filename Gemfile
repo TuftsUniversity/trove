@@ -66,16 +66,14 @@ gem 'sidekiq', '~> 5.2'
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
   gem 'fcrepo_wrapper'
-
   gem 'rspec-rails'
-  gem 'factory_bot_rails'
-  gem 'ffaker'
-
-  gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
-  gem 'launchy'
-  gem 'webdrivers', '~> 4.0'
-
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
+group :test do
+  gem 'factory_bot_rails'
+  gem 'ffaker'
+  gem 'ladle'
+  gem 'capybara', '~> 2.13'
+  gem 'selenium-webdriver'
+end
