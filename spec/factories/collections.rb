@@ -90,6 +90,7 @@ FactoryBot.define do
 
     sequence(:title) { |n| ["Collection - #{n}"] }
     displays_in { ['trove'] }
+    visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
 
     after(:build) do |collection, evaluator|
       collection.apply_depositor_metadata(evaluator.user.user_key)

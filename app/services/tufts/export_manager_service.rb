@@ -52,7 +52,7 @@ module Tufts
       File.unlink(@full_path) if(@export_valid)
     end
 
-    # Shortcut to make deleting all assets easily
+    # Shortcut to make deleting all assets easy
     def self.delete_all_assets(collection)
       self.new(collection, 'pptx').delete_asset
       self.new(collection, 'pdf').delete_asset
