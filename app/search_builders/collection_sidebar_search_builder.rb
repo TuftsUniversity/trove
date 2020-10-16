@@ -8,6 +8,7 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
     :no_facets_or_highlight,
     :limit_by_collection_type,
     :limit_by_parent,
+    :limit_by_visibility_if_course,
     :limit_by_user_if_personal,
     :get_all_items
   ]
@@ -68,6 +69,13 @@ class CollectionSidebarSearchBuilder < Hyrax::CollectionSearchBuilder
       solr_params[:fq] << "!(member_of_collection_ids_ssim:*)"
     else
       solr_params[:fq] << "member_of_collection_ids_ssim:#{@parent_id}"
+    end
+  end
+
+  def limit_by_visibility_if_course(solr_params)
+    if(@type == 'course')
+      solr_params[:fq] ||= []
+      solr_params[:fq] << "visibility_ssi:open"
     end
   end
 

@@ -65,6 +65,7 @@ module Hyrax
         deposit: ["deposit"],
         read: ["edit", "read"]
       ).freeze
+
       def extract_discovery_permissions(access)
         access = :read if access.blank?
         ACCESS_LEVELS_FOR_LEVEL.fetch(access)
