@@ -76,4 +76,5 @@ group :test do
   gem 'ladle'
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'webdrivers', '~> 4.0', require: false
 end
