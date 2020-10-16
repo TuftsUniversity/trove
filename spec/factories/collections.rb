@@ -110,11 +110,6 @@ FactoryBot.define do
         # CollectionTypes are instantiated in rails_helper.
         collection.collection_type_gid = Hyrax::CollectionType.where(title: 'Personal Collection').first.gid
       end
-
-      #Needs to be a sub-factory of personal collections, so that it's valid in every way except its displays_in property.
-      factory :non_trove_collection do
-        displays_in { nil }
-      end
     end
 
     # Course Collections.
