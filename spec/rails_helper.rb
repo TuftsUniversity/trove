@@ -77,11 +77,11 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :system
 
   #Trove is based off these collection types existing, so might as well create them once, here.
-  config.before(:all) do
-    create(:personal_collection_type)
-    create(:course_collection_type)
+  config.before(:suite) do
+    FactoryBot.create(:personal_collection_type)
+    FactoryBot.create(:course_collection_type)
   end
-  config.after(:all) do
+  config.after(:suite) do
     Hyrax::CollectionType.destroy_all
   end
 
