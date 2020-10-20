@@ -3,7 +3,7 @@ rvm:
   - 2.6.1
 
 sudo: required
-dist: trusty
+dist: xenial
 cache: bundler
 
 notifications:
