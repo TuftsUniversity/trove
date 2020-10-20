@@ -11,7 +11,7 @@ notifications:
     - travis.lilleberg@tufts.edu
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 before_install:
 #- gem update --system
