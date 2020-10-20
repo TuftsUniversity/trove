@@ -14,15 +14,10 @@ jdk:
   - openjdk8
 
 before_install:
-#- gem update --system
 - gem install bundler
-- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+#- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 before_script:
-  # - export PATH=$PATH:/usr/lib/chromium-browser/
-#  - export DISPLAY=:99.0
-#  - sh -e /etc/init.d/xvfb start
-#  - sleep 3 # give xvfb some time to start
   - cp config/redis.yml.sample config/redis.yml
   - cp config/fedora.yml.sample config/fedora.yml
   - cp config/solr.yml.sample config/solr.yml
@@ -35,10 +30,8 @@ before_script:
   - cp config/tufts_export.yml.sample config/tufts_export.yml
   - bundle exec sidekiq -d -l /tmp/sidekiq.log
   - bundle exec rake db:create
-    # - sudo apt-get -y install libxml2-dev
 
 script:
-  #- bundle exec rubocop
   - bundle exec rake db:migrate
   - bundle exec rake travis
 
