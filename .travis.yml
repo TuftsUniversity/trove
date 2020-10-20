@@ -20,9 +20,9 @@ before_install:
 
 before_script:
   # - export PATH=$PATH:/usr/lib/chromium-browser/
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3 # give xvfb some time to start
+#  - export DISPLAY=:99.0
+#  - sh -e /etc/init.d/xvfb start
+#  - sleep 3 # give xvfb some time to start
   - cp config/redis.yml.sample config/redis.yml
   - cp config/fedora.yml.sample config/fedora.yml
   - cp config/solr.yml.sample config/solr.yml
@@ -51,3 +51,5 @@ addons:
 
 services:
   - redis-server
+  - mysql
+  - xvfb
