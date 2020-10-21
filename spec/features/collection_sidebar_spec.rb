@@ -102,11 +102,10 @@ RSpec.feature 'Collection Sidebar' do
       expect(page).to have_css('.ui-sortable-handle')
       arr_btn.click
       expect(page).not_to have_css('.ui-sortable-handle')
-      expect(1).to eq 1
     end
 
     ##
-    # This tests a lot of things, because I don't want to fully instantiate three collections
+    # This tests a few things, because I don't want to fully instantiate three collections
     #    over and over. It tests:
     # * Rearranging the sidebar generates a TopLevelCollectionOrder if it doesn't exist.
     # * Rearranging the sidebar updates the TopLevelCollectionOrder if it does exist.
@@ -121,7 +120,7 @@ RSpec.feature 'Collection Sidebar' do
 
       expect(TopLevelCollectionOrder.count).to eq(0)
 
-      # Rearranging the sidebar generates a TopLevelCollectionOrder if it doesn't exist.
+      # Rearranging the sidebar _generates_ a TopLevelCollectionOrder if it doesn't exist.
       rearrange_collections(arr_btn, collections_to_drag)
       expect(TopLevelCollectionOrder.count).to eq(1)
 
@@ -129,7 +128,7 @@ RSpec.feature 'Collection Sidebar' do
       collections_to_drag, ids = get_sidebar_els_and_ids
       expect(TopLevelCollectionOrder.search_by_user(user.id)).to eq(ids)
 
-      # Rearranging the sidebar updates the TopLevelCollectionOrder if it does exist.
+      # Rearranging the sidebar _updates_ the TopLevelCollectionOrder if it does exist.
       rearrange_collections(arr_btn, collections_to_drag)
       expect(TopLevelCollectionOrder.count).to eq(1)
 
