@@ -9,12 +9,25 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'active_fedora/cleaner'
 
-# Adding chromedriver for js testing.
+
 Capybara.server = :webrick
-Capybara.register_driver(:chrome) do |app|
+
+# Adding chromedriver for js testing.
+Capybara.register_driver :headless_chrome do |app|
+  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+  browser_options.headless!
+  browser_options.args << '--window-size=1920,1080'
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+end
+
+# For debugging JS tests - some tests involving mouse movements require headless mode.
+Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
-Capybara.javascript_driver = :chrome
+
+# Change to :chrome for js test debugging
+Capybara.javascript_driver = :headless_chrome
+
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
