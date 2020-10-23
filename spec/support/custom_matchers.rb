@@ -29,3 +29,15 @@ RSpec::Matchers.define :show_in_course_sidebar do
   failure_message { |actual| "Expected #{actual} to be listed in Course Collections Sidebar" }
   failure_message_when_negated { |actual| "Expected #{actual} to not be listed in Course Collections Sidebar" }
 end
+
+# Easy way to check if an image is in search results
+RSpec::Matchers.define :show_in_search_results do
+  match do |actual|
+    visit '/'
+    find('#search-submit-header').click
+    expect(page).to have_css("#document_#{actual.id}")
+  end
+
+  failure_message { |actual| "Expected #{actual} to be listed in Search Results" }
+  failure_message_when_negated { |actual| "Expected #{actual} to not be listed in Search Results" }
+end
