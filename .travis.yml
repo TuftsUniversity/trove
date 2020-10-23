@@ -15,7 +15,6 @@ jdk:
 
 before_install:
 - gem install bundler
-#- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 before_script:
   - cp config/redis.yml.sample config/redis.yml
@@ -45,4 +44,3 @@ addons:
 services:
   - redis-server
   - mysql
-  - xvfb
