@@ -46,9 +46,9 @@
   * Gets the collection id from the url.
   */
   collection_id = function() {
-      let url = window.location.pathname;
-      return url.substring(url.lastIndexOf('/') + 1);
-    };
+    let url = window.location.pathname;
+    return url.substring(url.lastIndexOf('/') + 1);
+  };
 
  /*
   * @function
