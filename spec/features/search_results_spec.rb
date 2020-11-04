@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'webdrivers/chromedriver'
 include FeatureMacros
 i_need_ldap
 
@@ -22,9 +21,8 @@ RSpec.feature 'Search Results' do
   end
 
   context '.tufts-dropzone dictates who can drag to which collection' do
-    scenario 'users can drag to personal colls, admin can drag to both', js: true, slow: true do
+    scenario 'users can drag to personal colls, admin can drag to both', slow: true do
       image1
-      c_coll = create(:course_collection)
       p_coll = create(:personal_collection, user: user)
 
       visit '/'
@@ -37,27 +35,18 @@ RSpec.feature 'Search Results' do
       find('#search-submit-header').click
       expect(page).to have_css("##{c_coll.id}.tufts-dropzone") # Admin can drop in course collection
     end
+  end
 
-  # scenario 'dragging an image into a collection adds it to the collection', js: true, slow: true do
-  #   coll = create(:personal_collection, user: user)
-  #
-  #   visit '/'
-  #   find('#search-submit-header').click
-  #
-  #   driver = page.driver.browser
-  #   target_img = driver.find_element(id: "document_#{image1.id}")
-  #
-  #   # target_img = find("#document_#{image1.id}")
-  #   # target_coll = find("##{coll.id}.tufts-dropzone")
-  #   #
-  #   # expect(coll.member_work_ids).to eq([])
-  #   # selenium_webdriver = page.driver.browser
-  #   # target_img = selenium_webdriver.find_element(id: "document_#{image1.}")
-  #   # target_coll = selenium_webdriver.find_element(id: "#{coll.id}")
-  #   # selenium_webdriver.action.click_and_hold(target_img).move_to(target_coll).release.perform
-  #   # target_img.drag_to(target_coll)
-  #   # sleep 2
-  #   # expect(coll.member_work_ids).to eq([image1.id])
-  # end
+  scenario 'dragging an image into a collection adds it to the collection' do
+    # There doesn't appear to be any meaningful way to test this via javascript.
+    # MDN states in the DragEvent constructor:
+    ##   Although this interface has a constructor, it is not possible to create a useful
+    ##   DataTransfer object from script, since DataTransfer objects have a processing and
+    ##   security model that is coordinated by the browser during drag-and-drops.
+    # We use DataTransfer objects, and this combined with fact that Selenium doesn't support
+    # drag events, we have to just go straight to the route for now.
+
+    # I considered doing a test against the route that the AJAX call hits, but that route
+    # is native to Hyrax, and thus is tested by Hyrax already.
   end
 end
