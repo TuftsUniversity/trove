@@ -49,7 +49,7 @@ module Tufts
     end
 
     def delete_asset
-      File.unlink(@full_path) if(@export_valid)
+      File.unlink(@full_path) if(@export_valid && asset_exists?)
     end
 
     # Shortcut to make deleting all assets easy
