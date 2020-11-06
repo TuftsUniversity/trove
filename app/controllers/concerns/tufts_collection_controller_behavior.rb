@@ -18,7 +18,12 @@ module TuftsCollectionControllerBehavior
 
     set_permissions(new_collection)
     copy_work_order(new_collection) if @collection.work_order.present?
-    AddWorksToCollectionJob.perform_later(only_work_ids, new_collection.id) if only_work_ids.present?
+
+    if(Rails.env == "test")
+      AddWorksToCollectionJob.perform_now(only_work_ids, new_collection.id) if only_work_ids.present?
+    else
+      AddWorksToCollectionJob.perform_later(only_work_ids, new_collection.id) if only_work_ids.present?
+    end
 
     redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
   end
