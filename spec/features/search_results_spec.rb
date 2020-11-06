@@ -18,6 +18,9 @@ RSpec.feature 'Search Results' do
     scenario 'non_trove images should not display' do
       expect(create(:image, displays_in: nil)).not_to show_in_search_results
     end
+
+    # Trove also filters out unpublished images, but not sure how to replicate those images
+    # without spinning up mira. Trove doesn't have a concept of published in it.
   end
 
   context '.tufts-dropzone dictates who can drag to which collection' do
@@ -38,13 +41,14 @@ RSpec.feature 'Search Results' do
   end
 
   scenario 'dragging an image into a collection adds it to the collection' do
-    # There doesn't appear to be any meaningful way to test this via javascript.
-    # MDN states in the DragEvent constructor:
+    # There doesn't appear to be any meaningful way to test this via capybara/selenium.
+
+    # MDN states in DragEvent:
     ##   Although this interface has a constructor, it is not possible to create a useful
     ##   DataTransfer object from script, since DataTransfer objects have a processing and
     ##   security model that is coordinated by the browser during drag-and-drops.
     # We use DataTransfer objects, and this combined with fact that Selenium doesn't support
-    # drag events, we have to just go straight to the route for now.
+    # drag javascript events, this doesn't feel feasible at the moment.
 
     # I considered doing a test against the route that the AJAX call hits, but that route
     # is native to Hyrax, and thus is tested by Hyrax already.
