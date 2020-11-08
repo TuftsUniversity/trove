@@ -51,7 +51,7 @@ RSpec.feature 'Search Results' do
     # We use DataTransfer objects, and this combined with fact that Selenium doesn't support
     # drag javascript events, this doesn't feel feasible at the moment.
 
-    # I considered doing a test against the route that the AJAX call hits, but that route
+    # I considered doing a test against the route that the AJAX calls, but that route
     # is native to Hyrax, and thus is tested by Hyrax already.
   end
 end

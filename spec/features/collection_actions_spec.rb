@@ -17,10 +17,10 @@ RSpec.feature 'Collection Actions' do
     Collection.all.select { |c| c.collection_type.title == "Course Collection" }
   end
 
-  context 'copy collection action' do
+  context 'copy collection' do
     let(:coll) { create(:course_collection, description: ['abstract or description']) }
 
-    scenario 'creates a new collection with copied title and metadata', slow: true do
+    scenario 'creates a new personal collection with copied title and metadata', slow: true do
       coll
       expect(my_collections.count).to eq(0)
 
@@ -34,6 +34,7 @@ RSpec.feature 'Collection Actions' do
       expect(all_cs.count).to eq(1)
 
       c = all_cs.first
+      expect(is_personal_collection?(c)).to be(true)
       expect(c.title).to eq(coll.title)
       expect(c.description).not_to be_empty
       expect(c.description).to eq(coll.description)
@@ -43,7 +44,7 @@ RSpec.feature 'Collection Actions' do
       coll
       image1 = create(:image)
       image2 = create(:image)
-      order = [image2.id, image2.id]
+      order = [image2.id, image1.id]
       coll.add_member_objects([image1.id, image2.id])
       coll.update_order(order, :work)
 
@@ -64,10 +65,10 @@ RSpec.feature 'Collection Actions' do
     # This functionality is already well tested in the exporters, services, and writers tests.
   end
 
-  context 'upgrade collection action' do
+  context 'upgrade collection' do
     let(:coll) { create(:personal_collection, user: user, with_permission_template: true) }
 
-    scenario 'non-admin cannot see upgrade button' do
+    scenario 'only admin can see upgrade link' do
       coll
       visit "/dashboard/collections/#{coll.id}"
       expect(page).not_to have_content('Upgrade to Course Collection')
@@ -77,6 +78,8 @@ RSpec.feature 'Collection Actions' do
       expect(page).to have_content('Upgrade to Course Collection')
     end
 
+    # This uses the most of the same code as copy collection, so no need to repeat testing
+    # the copying of metadata, members, or member orders. It's the same code.
     scenario 'copies a personal collection but makes it a course collection' do
       user.add_role('admin')
       coll
