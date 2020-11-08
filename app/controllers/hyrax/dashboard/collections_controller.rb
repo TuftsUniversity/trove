@@ -75,8 +75,7 @@ module Hyrax
         ActiveFedora::SolrService.instance.conn.commit
 
         set_permissions(new_collection)
-        copy_work_order(new_collection) if @collection.work_order.present?
-        AddWorksToCollectionJob.perform_later(only_work_ids, new_collection.id) if only_work_ids.present?
+        copy_images_and_order(new_collection)
 
         redirect_to root_path, notice: t('trove_collections.additional_actions.notices.upgrade_success')
       end
