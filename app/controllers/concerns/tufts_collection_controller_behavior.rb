@@ -17,14 +17,7 @@ module TuftsCollectionControllerBehavior
     ActiveFedora::SolrService.instance.conn.commit
 
     set_permissions(new_collection)
-    copy_work_order(new_collection) if @collection.work_order.present?
-
-    if(Rails.env == "test")
-      AddWorksToCollectionJob.perform_now(only_work_ids, new_collection.id) if only_work_ids.present?
-    else
-      AddWorksToCollectionJob.perform_later(only_work_ids, new_collection.id) if only_work_ids.present?
-    end
-
+    copy_images_and_order(new_collection)
     redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
   end
 
@@ -79,6 +72,16 @@ module TuftsCollectionControllerBehavior
       new_collection.apply_depositor_metadata(current_user.user_key)
       new_collection.save
       new_collection
+    end
+
+    def copy_images_and_order(new_coll)
+      copy_work_order(new_coll) if @collection.work_order.present?
+
+      if(Rails.env == "test")
+        AddWorksToCollectionJob.perform_now(only_work_ids, new_coll.id) if only_work_ids.present?
+      else
+        AddWorksToCollectionJob.perform_later(only_work_ids, new_coll.id) if only_work_ids.present?
+      end
     end
 
     ##
