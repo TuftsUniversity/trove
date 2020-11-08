@@ -20,13 +20,14 @@ RSpec.feature 'Search Results' do
     end
 
     # Trove also filters out unpublished images, but not sure how to replicate those images
-    # without spinning up mira. Trove doesn't have a concept of published in it.
+    # without spinning up MIRA. Trove doesn't have a concept of "published" in it.
   end
 
   context '.tufts-dropzone dictates who can drag to which collection' do
     scenario 'users can drag to personal colls, admin can drag to both', slow: true do
       image1
       p_coll = create(:personal_collection, user: user)
+      c_coll = create(:course_collection)
 
       visit '/'
       find('#search-submit-header').click
