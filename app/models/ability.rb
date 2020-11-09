@@ -28,8 +28,10 @@ class Ability
     can [:dl_powerpoint], Collection
     can [:dl_pdf], Collection
     can [:copy], Collection
-
+    can [:update_work_order], Collection, depositor: current_user.username
+    can [:update_subcollection_order], Collection, depositor: current_user.username
   end
+
   def trove_admin_permissions
     return unless admin?
     # TODO: deprecate this. We no longer have a dashboard just for admins
