@@ -17,17 +17,10 @@ RSpec.feature 'Collection Actions' do
     Collection.all.select { |c| c.collection_type.title == "Course Collection" }
   end
 
-<<<<<<< HEAD
-  context 'copy collection' do
-    let(:coll) { create(:course_collection, description: ['abstract or description']) }
-
-    scenario 'creates a new personal collection with copied title and metadata', slow: true do
-=======
   context 'copy collection action' do
     let(:coll) { create(:course_collection, description: ['abstract or description']) }
 
     scenario 'creates a new collection with copied title and metadata', slow: true do
->>>>>>> b7c1e39313a5ee152dd8431636503a9171242f0f
       coll
       expect(my_collections.count).to eq(0)
 
