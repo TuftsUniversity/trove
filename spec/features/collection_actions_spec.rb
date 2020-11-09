@@ -44,11 +44,8 @@ RSpec.feature 'Collection Actions' do
       coll
       image1 = create(:image)
       image2 = create(:image)
-<<<<<<< HEAD
       order = [image2.id, image1.id]
-=======
-      order = [image2.id, image2.id]
->>>>>>> b7c1e39313a5ee152dd8431636503a9171242f0f
+
       coll.add_member_objects([image1.id, image2.id])
       coll.update_order(order, :work)
 
@@ -69,17 +66,11 @@ RSpec.feature 'Collection Actions' do
     # This functionality is already well tested in the exporters, services, and writers tests.
   end
 
-<<<<<<< HEAD
-  context 'upgrade collection' do
-    let(:coll) { create(:personal_collection, user: user, with_permission_template: true) }
 
-    scenario 'only admin can see upgrade link' do
-=======
   context 'upgrade collection action' do
     let(:coll) { create(:personal_collection, user: user, with_permission_template: true) }
 
     scenario 'non-admin cannot see upgrade button' do
->>>>>>> b7c1e39313a5ee152dd8431636503a9171242f0f
       coll
       visit "/dashboard/collections/#{coll.id}"
       expect(page).not_to have_content('Upgrade to Course Collection')
@@ -89,11 +80,8 @@ RSpec.feature 'Collection Actions' do
       expect(page).to have_content('Upgrade to Course Collection')
     end
 
-<<<<<<< HEAD
     # This uses the most of the same code as copy collection, so no need to repeat testing
     # the copying of metadata, members, or member orders. It's the same code.
-=======
->>>>>>> b7c1e39313a5ee152dd8431636503a9171242f0f
     scenario 'copies a personal collection but makes it a course collection' do
       user.add_role('admin')
       coll
