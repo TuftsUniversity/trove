@@ -39,7 +39,7 @@ RSpec.feature 'Reordering works and subcollections' do
     images[0].drag_to(images[1])
     images[1].drag_to(images[2]) # Shuffle them around a bit
     images[2].drag_to(images[0])
-    sleep 1
+    sleep 5
 
     new_order = Collection.first.work_order
     expect(new_order).not_to eq([])
