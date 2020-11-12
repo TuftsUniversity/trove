@@ -26,6 +26,8 @@ RSpec.feature 'Reordering works and subcollections' do
   end
 
   scenario 'rearranged work orders are persisted', slow: true, js: true do
+    user.add_role('admin')
+
     coll
     image1 = create(:image)
     image2 = create(:image)
