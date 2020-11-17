@@ -2,7 +2,7 @@ require 'rails_helper'
 include FeatureMacros
 i_need_ldap
 
-RSpec.feature 'Edit Collection Info Customizations' do
+RSpec.feature 'Layout Changes' do
   let(:user) { create(:ldap_user) }
 
   before(:each) do
