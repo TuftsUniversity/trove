@@ -20,6 +20,7 @@ module Hyrax
         Hyrax.config.iiif_image_size_default
       )
       # @see https://github.com/samvera-labs/iiif_manifest
+      # Tufts fix: Changes width and height to use actual image width and height, instead of pre-set values.
       IIIFManifest::DisplayImage.new(url,
                                      width: original_file.width.empty? ? 50000 : original_file.width.first ,
                                      height: original_file.height.empty? ? 50000 : original_file.height.first,
