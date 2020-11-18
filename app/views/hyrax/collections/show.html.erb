@@ -6,7 +6,7 @@
 <div class="hyc-container collection public-view" itemscope itemtype="http://schema.org/CollectionPage">
   <div class="row hyc-header">
     <div class="col-md-12">
-      <header <%= header_stuff %>>
+      <header <%= raw(header_stuff) %>>
 
         <div class="show-collection-buttons">
           <%= render 'show_actions', presenter: @presenter %>

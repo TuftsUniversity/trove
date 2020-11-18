@@ -1,3 +1,4 @@
+<% # Patched to use our custom sort on subcollections %>
 <% if @subcollection_docs.nil? || @subcollection_docs.empty? %>
   <div class="alert alert-warning" role="alert"><%= t('hyrax.collections.show.no_visible_subcollections') %></div>
 <% else %>
