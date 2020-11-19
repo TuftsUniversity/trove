@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.feature 'unauthenticated users' do
-  context 'is redirected to the login page' do
+  context 'are redirected to the login page' do
     let(:login_page) { '/users/sign_in' }
     let(:work) { create(:image) }
 
