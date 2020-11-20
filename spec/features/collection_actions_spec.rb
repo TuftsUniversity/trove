@@ -5,6 +5,7 @@ i_need_ldap
 RSpec.feature 'Collection Actions' do
   let(:user) { create(:ldap_user) }
   let(:coll) { create(:personal_collection, user: user, with_permission_template: true) }
+  let(:image) { create(:image) }
 
   before(:each) do
     sign_in(user)
@@ -20,8 +21,6 @@ RSpec.feature 'Collection Actions' do
 
   context 'button existence and permissions' do
     scenario 'show screen should have the right buttons and not the wrong ones' do
-      image = create(:image)
-
       visit "/collections/#{coll.id}"
       buttons = find('.show-collection-buttons')
       expect(buttons).not_to have_content('Download PDF')
@@ -30,6 +29,7 @@ RSpec.feature 'Collection Actions' do
       expect(buttons).to have_content('Copy Collection')
       expect(buttons).to have_content('Manage collection')
 
+      # Can only download collections if they have images in them
       coll.add_member_objects([image.id])
       visit "/collections/#{coll.id}"
       buttons = find('.show-collection-buttons')
@@ -39,7 +39,6 @@ RSpec.feature 'Collection Actions' do
 
     scenario 'can copy and download other peoples collections, but cant manage them' do
       other_coll = create(:personal_collection)
-      image = create(:image)
       other_coll.add_member_objects([image.id])
 
       visit "/collections/#{other_coll.id}"
@@ -52,7 +51,6 @@ RSpec.feature 'Collection Actions' do
     end
 
     scenario 'edit screen should have the right buttons and not the wrong ones' do
-      image = create(:image)
       user.add_role('admin')
 
       visit "/dashboard/collections/#{coll.id}"
@@ -106,7 +104,7 @@ RSpec.feature 'Collection Actions' do
 
     scenario 'copies images and image order', slow: true do
       c_coll
-      image1 = create(:image)
+      image1 = image
       image2 = create(:image)
       order = [image2.id, image1.id]
 
