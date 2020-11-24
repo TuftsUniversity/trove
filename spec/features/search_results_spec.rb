@@ -29,8 +29,9 @@ RSpec.feature 'Search Results' do
       p_coll = create(:personal_collection, user: user)
       c_coll = create(:course_collection)
 
-      visit '/'
-      find('#search-submit-header').click
+      # visit '/'
+      # find('#search-submit-header').click
+      visit search_catalog_path
       expect(page).to have_css("##{p_coll.id}.tufts-dropzone") # Can drop in personal collection
       expect(page).to have_css("##{c_coll.id}") # Can see course collection ...
       expect(page).not_to have_css("##{c_coll.id}.tufts-dropzone") # ... but can't drop in it

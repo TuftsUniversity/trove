@@ -8,13 +8,14 @@ RSpec.feature 'Layout Changes on Collection Pages' do
     let(:coll) { create(:personal_collection, user: user, with_permission_template: true) }
     let(:image) { create(:image) }
 
+
     before(:each) do
       coll.add_member_objects([image.id])
       sign_in(user)
     end
 
     scenario 'show page' do
-      visit "/collections/#{coll.id}"
+      visit hyrax.collection_path(coll.id)
 
       # Header shouldn't contain:
       # * Visibility badge
@@ -53,7 +54,7 @@ RSpec.feature 'Layout Changes on Collection Pages' do
 
     scenario 'edit page' do
       user.add_role('admin') # Need admin role for the Add Works buttons to appear
-      visit "/dashboard/collections/#{coll.id}"
+      visit hyrax.dashboard_collection_path(coll.id)
 
       # No big header saying COLLECTION
       expect(page).not_to have_css('.main-header')

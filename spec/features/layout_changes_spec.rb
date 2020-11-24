@@ -16,12 +16,12 @@ RSpec.feature 'General Layout Changes' do
 
   scenario 'no citations option on Images' do
     image = create(:image)
-    visit "/concern/images/#{image.id}"
+    visit hyrax_image_path(id: image.id)
     expect(page).not_to have_css('.citations button')
   end
 
   scenario 'no Issue Type in contact form' do
-    visit 'contact'
+    visit hyrax.contact_path
     expect(page).not_to have_content('Issue Type')
   end
 end

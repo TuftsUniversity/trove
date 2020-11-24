@@ -11,12 +11,12 @@ RSpec.feature 'unauthenticated users' do
     end
 
     scenario 'when attempting to access a work' do
-      visit("/concern/images/#{work.id}")
+      visit hyrax_image_path(id: work.id)
       expect(current_path).to eq login_page
     end
 
     scenario 'when attempting to access the admin dashboard' do
-      visit("/dashboard")
+      visit hyrax.dashboard_path
       expect(current_path).to eq login_page
     end
   end

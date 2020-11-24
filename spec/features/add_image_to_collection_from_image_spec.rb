@@ -7,7 +7,7 @@ RSpec.feature 'Add image to collection from image page' do
   context 'adding images from image show page' do
     let(:user) { create(:ldap_user) }
     # For some reason, factories aren't loading with deposit perms for non-admins.
-    # Non-admins on the actual site work just fine, though
+    # Non-admins on the actual site work fine, though.
     let(:my_coll) { create(
       :personal_collection,
       user: user,
@@ -22,7 +22,7 @@ RSpec.feature 'Add image to collection from image page' do
     end
 
     def search_in_and_return_modal
-      visit("/concern/images/#{image.id}")
+      visit hyrax_image_path(id: image.id)
       click_on('Add to collection')
       fill_in('search', with: 'coll')
       find('.collection-list-modal')

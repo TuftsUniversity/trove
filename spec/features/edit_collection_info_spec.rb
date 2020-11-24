@@ -8,7 +8,7 @@ RSpec.feature 'Edit Collection Info Customizations' do
 
   before(:each) do
     sign_in(user)
-    visit("/dashboard/collections/#{coll.id}/edit")
+    visit hyrax.edit_dashboard_collection_path(id: coll.id)
   end
 
   scenario 'discovery tab does not contain registered visibility option - "Tufts University" sets to open visibility' do

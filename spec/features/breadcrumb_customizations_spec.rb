@@ -11,7 +11,6 @@ RSpec.feature 'Breadcrumb Customizations' do
     sign_in(user)
     coll.add_member_objects([image.id])
     title = coll.title.first
-    coll_url = hyrax.collection_path(id: coll.id)
 
     visit '/'
     click_on(title)
@@ -19,6 +18,6 @@ RSpec.feature 'Breadcrumb Customizations' do
 
     bc = find('.breadcrumb')
     expect(bc).to have_content(title)
-    expect(bc).to have_css("a[href=\"#{coll_url}\"]")
+    expect(bc).to have_css("a[href=\"#{hyrax.collection_path(id: coll.id)}\"]")
   end
 end

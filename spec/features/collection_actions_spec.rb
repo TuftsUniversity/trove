@@ -11,6 +11,14 @@ RSpec.feature 'Collection Actions' do
     sign_in(user)
   end
 
+  def collection_page(id = coll.id)
+    hyrax.collection_path(id: id)
+  end
+
+  def dashboard_page(id = coll.id)
+    hyrax.dashboard_collection_path(id: id)
+  end
+
   def my_collections
     Collection.where("depositor_tesim: #{user.username}")
   end
@@ -21,7 +29,7 @@ RSpec.feature 'Collection Actions' do
 
   context 'button existence and permissions' do
     scenario 'show screen should have the right buttons and not the wrong ones' do
-      visit "/collections/#{coll.id}"
+      visit collection_page
       buttons = find('.show-collection-buttons')
       expect(buttons).not_to have_content('Download PDF')
       expect(buttons).not_to have_content('Download Powerpoint')
@@ -31,7 +39,7 @@ RSpec.feature 'Collection Actions' do
 
       # Can only download collections if they have images in them
       coll.add_member_objects([image.id])
-      visit "/collections/#{coll.id}"
+      visit collection_page
       buttons = find('.show-collection-buttons')
       expect(buttons).to have_content('Download PDF')
       expect(buttons).to have_content('Download Powerpoint')
@@ -41,7 +49,7 @@ RSpec.feature 'Collection Actions' do
       other_coll = create(:personal_collection)
       other_coll.add_member_objects([image.id])
 
-      visit "/collections/#{other_coll.id}"
+      visit collection_page(other_coll.id)
       buttons = find('.show-collection-buttons')
       expect(buttons).not_to have_content('Manage collection')
       expect(buttons).to have_content('Additional Actions')
@@ -53,7 +61,7 @@ RSpec.feature 'Collection Actions' do
     scenario 'edit screen should have the right buttons and not the wrong ones' do
       user.add_role('admin')
 
-      visit "/dashboard/collections/#{coll.id}"
+      visit dashboard_page
       buttons = all('.collection-title-row-content')[1]
       expect(buttons).not_to have_content('Add to collection')
       expect(buttons).not_to have_content('Download PDF')
@@ -66,14 +74,14 @@ RSpec.feature 'Collection Actions' do
 
       # Can only download collections if they have images in them
       coll.add_member_objects([image.id])
-      visit "/dashboard/collections/#{coll.id}"
+      visit dashboard_page
       buttons = all('.collection-title-row-content')[1]
       expect(buttons).to have_content('Download PDF')
       expect(buttons).to have_content('Download Powerpoint')
 
       # Can't upgrade a collection unless you're an admin
       user.remove_role('admin')
-      visit "/dashboard/collections/#{coll.id}"
+      visit dashboard_page
       buttons = all('.collection-title-row-content')[1]
       expect(buttons).not_to have_content('Upgrade to Course Collection')
     end
@@ -86,7 +94,7 @@ RSpec.feature 'Collection Actions' do
       c_coll
       expect(my_collections.count).to eq(0)
 
-      visit("/collections/#{c_coll.id}")
+      visit collection_page(c_coll.id)
       within('.tufts-action-button') do
         find('button').click
         find('.copy-collection').click
@@ -111,7 +119,7 @@ RSpec.feature 'Collection Actions' do
       c_coll.add_member_objects([image1.id, image2.id])
       c_coll.update_order(order, :work)
 
-      visit("/collections/#{c_coll.id}")
+      visit collection_page(c_coll.id)
       within('.tufts-action-button') do
         find('button').click
         find('.copy-collection').click
@@ -138,7 +146,7 @@ RSpec.feature 'Collection Actions' do
 
       expect(course_collections.count).to eq(0)
 
-      visit "/dashboard/collections/#{coll.id}"
+      visit dashboard_page
       within('.tufts-action-button') do
         find('button').click
         find('.upgrade-collection').click
