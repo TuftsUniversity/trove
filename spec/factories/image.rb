@@ -6,7 +6,11 @@ FactoryBot.define do
     displays_in { ['trove'] }
 
     transient do
-      user { nil }
+      user { create(:user) }
+    end
+
+    after(:build) do |image, evaluator|
+      image.depositor = evaluator.user.user_key
     end
   end
 end
