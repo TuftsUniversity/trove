@@ -12,17 +12,32 @@ RSpec.feature 'Image Page Layout Changes' do
     sign_in(user)
   end
 
-  scenario 'no citations option on Images' do
+  scenario 'lots of things shouldnt display on image pages', current: true do
     visit image_page
+
+    # No big header saying IMAGE
+    expect(page).not_to have_css('h1.work-type-tag')
+
+    # No visibility tags
+    expect(page).not_to have_content('Public')
+    expect(page).not_to have_content('Private')
+
+    # No citations
     expect(page).not_to have_content('Citations')
-  end
 
-  scenario 'no social media buttons on image pages' do
-    visit image_page
+    # No social media buttons
     expect(page).not_to have_css('.social-media')
+
+    # No Relationships section
+    expect(page).not_to have_content('Relationships')
+    expect(page).not_to have_content('In Administrative Set')
+
+    # No Related Items section
+    expect(page).not_to have_content('Items')
+    expect(page).not_to have_css('table.related-files')
   end
 
-  scenario 'swap Download image link for link to IIIF viewer, on image pages' do
+  scenario 'swap Download image link for link to IIIF viewer' do
     work = create(:image, user: user)
     fs = create(:file_set, user: user)
     allow(fs).to receive(:mime_type).and_return('image/png')
@@ -34,7 +49,7 @@ RSpec.feature 'Image Page Layout Changes' do
     expect(page).to have_content('open in viewer')
   end
 
-  scenario 'associated collections on image page are displayed and separated by collection type' do
+  scenario 'associated collections are displayed and separated by collection type' do
     p = create(:personal_collection, title: ['test-personal'])
     p.add_member_objects(image.id)
     c = create(:course_collection, title: ['test-course'])
