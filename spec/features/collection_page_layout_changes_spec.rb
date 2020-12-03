@@ -1,17 +1,21 @@
 require 'rails_helper'
+require 'webdrivers/chromedriver'
 include FeatureMacros
 i_need_ldap
 
 RSpec.feature 'Layout Changes on Collection Pages' do
+  let(:user) { create(:ldap_user) }
+
+  before(:each) do
+    sign_in(user)
+  end
+
   context 'lots of things shouldnt display on collection pages' do
-    let(:user) { create(:ldap_user) }
     let(:coll) { create(:personal_collection, user: user, with_permission_template: true) }
     let(:image) { create(:image) }
 
-
     before(:each) do
       coll.add_member_objects([image.id])
-      sign_in(user)
     end
 
     scenario 'show page' do
@@ -92,5 +96,38 @@ RSpec.feature 'Layout Changes on Collection Pages' do
       expect(results).not_to have_css('.visibility-link')
       expect(results).not_to have_content('Is part of:')
     end
+  end
+
+  scenario 'add-subcollection modal shows collection type and sorts collections options', js: true do
+    perms = { deposit_users: [user.user_key] }
+
+    coll1 = create(
+      :personal_collection,
+      user: user,
+      with_permission_template: perms,
+      title: ['cccc']
+    )
+    coll2 = create(
+      :personal_collection,
+      user: user,
+      with_permission_template: perms,
+      title: ['bbbb']
+    )
+    coll3 = create(
+      :personal_collection,
+      user: user,
+      with_permission_template: perms,
+      title: ['aaaa']
+    )
+
+    visit hyrax.dashboard_collection_path(coll1.id)
+    click_on('Add a subcollection')
+
+    modal_content = find("#add-subcollection-modal-#{coll1.id} .modal-body")
+    expect(modal_content).to have_content('(Listing Personal Collections)')
+
+    # Alphabetize collections in select
+    select_values = modal_content.all('select > option').collect(&:text)
+    expect(select_values).to eq(['Select', coll3.title.first, coll2.title.first])
   end
 end
