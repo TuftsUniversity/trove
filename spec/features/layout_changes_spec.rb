@@ -38,4 +38,40 @@ RSpec.feature 'General Layout Changes' do
     visit hyrax.contact_path
     expect(page).not_to have_content('Issue Type')
   end
+
+  scenario 'no metadata displayed next to featured works' do
+    image = create(:image)
+    create(:featured_work, work_id: image.id)
+
+    visit '/'
+    fw = find('#featured_works')
+    expect(fw).to have_content(image.title.first)
+    expect(fw).not_to have_css('h3')
+    expect(fw).not_to have_content('Depositor')
+    expect(fw).not_to have_content('Keywords')
+  end
+
+  scenario 'nothing but featured works and sidebar on homepage' do
+    visit '/'
+    expect(page).to have_css('#collections-sidebar')
+    expect(page).not_to have_css('#homeTabs')
+    expect(page).not_to have_content('Recently Uploaded')
+    expect(page).not_to have_content('Explore Collections')
+    expect(page).not_to have_content('Featured Researcher')
+  end
+
+  scenario 'associated collections on image page are displayed and separated by collection type' do
+    p = create(:personal_collection, title: ['test-personal'])
+    p.add_member_objects(image.id)
+    c = create(:course_collection, title: ['test-course'])
+    c.add_member_objects(image.id)
+
+    visit hyrax_image_path(id: image.id)
+    dts = all('.panel-body dt')
+    dds = all('.panel-body dd')
+    expect(dts[1]).to have_content('Course Collections')
+    expect(dds[1]).to have_content('test-course')
+    expect(dts[2]).to have_content('Personal Collections')
+    expect(dds[2]).to have_content('test-personal')
+  end
 end
