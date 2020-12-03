@@ -74,4 +74,9 @@ RSpec.feature 'General Layout Changes' do
     expect(dts[2]).to have_content('Personal Collections')
     expect(dds[2]).to have_content('test-personal')
   end
+
+  scenario 'no social media buttons on image pages', current: true do
+    visit image_page
+    expect(page).not_to have_css('.social-media')
+  end
 end
