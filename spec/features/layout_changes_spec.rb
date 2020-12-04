@@ -9,6 +9,15 @@ RSpec.feature 'General Layout Changes' do
     sign_in(user)
   end
 
+  scenario 'no language picker or notifications in masthead', current: true do
+    visit '/'
+    masthead = find('#masthead')
+    expect(masthead).not_to have_css('span[title="Switch language"]')
+    expect(masthead).not_to have_css('#language-dropdown-menu')
+    expect(masthead).not_to have_css('.fa-bell')
+    expect(masthead).not_to have_css('a[href="/notifications?locale=en"]')
+  end
+
   scenario 'no dropdown menu in the main search bar' do
     visit '/'
     expect(find('#search-form-header')).not_to have_css('button.dropdown-toggle')
@@ -17,6 +26,12 @@ RSpec.feature 'General Layout Changes' do
   scenario 'no Issue Type in contact form' do
     visit hyrax.contact_path
     expect(page).not_to have_content('Issue Type')
+  end
+
+  scenario 'no banner image or site title in header' do
+    visit '/'
+    expect(page).not_to have_css('.image-masthead')
+    expect(page).not_to have_css('.site-title')
   end
 
   scenario 'nothing but featured works and sidebar on homepage' do
