@@ -16,18 +16,18 @@ module Hyrax
       referer = request.referer
       unless referer.nil?
         match_data = referer.match /(trove\-\w{9})/
-        
+
         unless match_data.nil?
           id = match_data[0]
           resp = ActiveFedora::SolrService.get("id:#{id}")
-          doc = resp['response']['docs'].first          
-          collection_title = doc["title_tesim"].first          
+          doc = resp['response']['docs'].first
+          collection_title = doc["title_tesim"].first
           add_breadcrumb "#{collection_title}", "/collections/#{id}", :title => "#{collection_title}"
         end
       end
 
-      super     
-      
+      super
+
     end
     # Finds a solr document matching the id and sets @presenter
     # @raise CanCan::AccessDenied if the document is not found or the user doesn't have access to it.  
