@@ -26,7 +26,7 @@ RSpec.feature 'Reordering works and subcollections' do
     return list, list.map { |node| node['data-id'] }
   end
 
-  skip 'rearranged work orders are persisted', slow: true, js: true do
+  scenario 'rearranged work orders are persisted', slow: true, js: true do
     user.add_role('admin')
 
     coll
@@ -65,7 +65,7 @@ RSpec.feature 'Reordering works and subcollections' do
     colls[0].drag_to(colls[2])
     colls[1].drag_to(colls[0]) #Shuffle shuffle
     colls[2].drag_to(colls[0])
-    sleep 5
+    sleep 1
 
     new_order = Collection.find(coll.id).subcollection_order
     expect(new_order).not_to eq([])
