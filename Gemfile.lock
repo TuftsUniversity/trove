@@ -539,7 +539,7 @@ GEM
       actionpack (>= 4.2)
     public_suffix (3.0.3)
     pul_uv_rails (2.0.1)
-    puma (3.12.0)
+    puma (3.12.6)
     qa (2.2.0)
       activerecord-import
       deprecation
