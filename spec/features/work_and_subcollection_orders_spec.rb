@@ -65,7 +65,7 @@ RSpec.feature 'Reordering works and subcollections' do
     colls[0].drag_to(colls[2])
     colls[1].drag_to(colls[0]) #Shuffle shuffle
     colls[2].drag_to(colls[0])
-    sleep 1
+    sleep 5
 
     new_order = Collection.first.subcollection_order
     expect(new_order).not_to eq([])
