@@ -77,7 +77,8 @@ module ActiveFedora
       # @return [Integer] number of records matching
       def count(query, args = {})
         args = args.merge(rows: 0)
-        SolrService.query(query, args)['response']['numFound'].to_i
+        resp = SolrService.post(query)
+        resp['response']['numFound'].to_i
       end
 
       # @param [Hash] doc the document to index, or an array of docs
