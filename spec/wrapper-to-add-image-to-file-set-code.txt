@@ -1,0 +1,3 @@
+  def wrapper!(user:, file:, relation:, file_set:)
+    JobIoWrapper.create_with_varied_file_handling!(user: user, file: file, relation: relation, file_set: file_set)
+  end

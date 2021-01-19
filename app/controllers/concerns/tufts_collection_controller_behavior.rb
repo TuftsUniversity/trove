@@ -17,34 +17,38 @@ module TuftsCollectionControllerBehavior
     ActiveFedora::SolrService.instance.conn.commit
 
     set_permissions(new_collection)
-    copy_work_order(new_collection) if @collection.work_order.present?
-    AddWorksToCollectionJob.perform_later(only_work_ids, new_collection.id) if only_work_ids.present?
-
+    copy_images_and_order(new_collection)
     redirect_to root_path, notice: t('hyrax.dashboard.my.action.collection_create_success')
   end
 
   ##
   # Generates a PDF of all the images in the collection for user to download.
   def dl_pdf
-    @curated_collection = ::Collection.find(params[:id])
+    @collection = ::Collection.find(params[:id])
     respond_to do |format|
       format.pdf do
-        exporter = PdfCollectionExporter.new(@curated_collection)
-        send_file(exporter.export, filename: exporter.pdf_file_name, type: "application/pdf", :disposition => 'attachment')
+        export_manager = Tufts::ExportManagerService.new(@collection, 'pdf')
+        send_file(export_manager.retrieve_asset,
+                  filename: export_manager.readable_filename,
+                  type: "application/pdf",
+                  disposition: 'attachment'
+        )
       end
     end
   end
 
   ##
-  # Generates a Powerpoint of all the images in the collection for user to donwload.
+  # Generates a Powerpoint of all the images in the collection for user to download.
   def dl_powerpoint
-    @curated_collection = ::Collection.find(params[:id])
+    @collection = ::Collection.find(params[:id])
     respond_to do |format|
       format.pptx do
-        exporter = PowerPointCollectionExporter.new(@curated_collection)
-        send_file(exporter.export,
-                  filename: exporter.pptx_file_name,
-                  type: "application/vnd.openxmlformats-officedocument.presentationml.presentation", :disposition => 'attachment')
+        export_manager = Tufts::ExportManagerService.new(@collection, 'pptx')
+        send_file(export_manager.retrieve_asset,
+                  filename: export_manager.readable_filename,
+                  type: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                  disposition: 'attachment'
+        )
       end
     end
   end
@@ -68,6 +72,16 @@ module TuftsCollectionControllerBehavior
       new_collection.apply_depositor_metadata(current_user.user_key)
       new_collection.save
       new_collection
+    end
+
+    def copy_images_and_order(new_coll)
+      copy_work_order(new_coll) if @collection.work_order.present?
+
+      if(Rails.env == "test")
+        AddWorksToCollectionJob.perform_now(only_work_ids, new_coll.id) if only_work_ids.present?
+      else
+        AddWorksToCollectionJob.perform_later(only_work_ids, new_coll.id) if only_work_ids.present?
+      end
     end
 
     ##

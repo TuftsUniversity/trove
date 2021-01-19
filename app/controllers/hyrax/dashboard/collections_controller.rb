@@ -36,6 +36,7 @@ module Hyrax
         unless(is_personal_collection?(@collection))
           Rails.cache.delete 'views/collections-sidebar-courses'
         end
+        Tufts::ExportManagerService.delete_all_assets(@collection)
         if @collection.destroy
           after_destroy(params[:id])
         else
@@ -74,8 +75,7 @@ module Hyrax
         ActiveFedora::SolrService.instance.conn.commit
 
         set_permissions(new_collection)
-        copy_work_order(new_collection) if @collection.work_order.present?
-        AddWorksToCollectionJob.perform_later(only_work_ids, new_collection.id) if only_work_ids.present?
+        copy_images_and_order(new_collection)
 
         redirect_to root_path, notice: t('trove_collections.additional_actions.notices.upgrade_success')
       end
@@ -117,6 +117,9 @@ module Hyrax
         full_collection_order[initial_offset,ending_offset] = items_to_update
 
         @collection.update_order(full_collection_order, :work)
+
+        #Delete pdfs and ppts for this collection
+        Tufts::ExportManagerService.delete_all_assets(@collection)
       end
 
       ##

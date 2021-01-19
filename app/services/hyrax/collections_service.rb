@@ -1,29 +1,21 @@
- module Hyrax
-   class CollectionsService
-     attr_reader :context
+require_dependency Hyrax::Engine.root.join('app', 'services', 'hyrax', 'collections_service').to_s
 
-     class_attribute :list_search_builder_class
-     self.list_search_builder_class = Hyrax::CollectionSearchBuilder
-
-     # @param [#repository,#blacklight_config,#current_ability] context
-     def initialize(context)
-       @context = context
-     end
-
-     # @param [Symbol] access :read or :edit
-     def search_results(access)
-       builder = list_search_builder('read')
-       builder = builder.rows(10000)
-       response = context.repository.search(builder)
-       response.documents
-     end
-
-     private
-
-       def list_search_builder(access)
-         list_search_builder_class.new(context)
-                                  .rows(1000)
-                                  .with_access(access)
-       end
+module Hyrax
+ class CollectionsService
+   # @param [Symbol] access :read or :edit
+   def search_results(access)
+     builder = list_search_builder('read')
+     builder = builder.rows(10000) # Patching to get all collections
+     response = context.repository.search(builder)
+     response.documents
    end
+
+   private
+
+     def list_search_builder(access)
+       list_search_builder_class.new(context)
+                                .rows(1000) # Patching to get all collections
+                                .with_access(access)
+     end
  end
+end

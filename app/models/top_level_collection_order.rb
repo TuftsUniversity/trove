@@ -76,7 +76,7 @@ class TopLevelCollectionOrder < ::ActiveRecord::Base
 
     ##
     # All the ids that are top level course collections
-    # @param {int/nil} user_id
+    # @param {int/str} user_id
     #   The id of the user whose collections we need, or nil for course collections
     def self.possible_ids(user_id)
       query = []

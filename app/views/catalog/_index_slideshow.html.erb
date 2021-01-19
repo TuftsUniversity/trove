@@ -1,6 +1,7 @@
-<% 
-   file_set_id = document._source["hasRelatedImage_ssim"] 
-   file_set = FileSet.find(file_set_id).first unless file_set_id.nil?
+<%
+  # Use IIIF if possible
+  file_set_id = document._source["hasRelatedImage_ssim"]
+  file_set = FileSet.find(file_set_id).first unless file_set_id.nil?
 %>
 <div class="item<%= ' active' if document_counter == 0 %>">
   <div class="frame">

@@ -38,7 +38,7 @@ group :development do
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
   #gem 'spring'
-  #gem 'spring-watcher-listen', '~> 2.0.0'
+  #gem 'spring-commands-rspec'
 end
 
 gem 'hyrax', '2.4.0'
@@ -66,17 +66,15 @@ gem 'sidekiq', '~> 5.2'
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
   gem 'fcrepo_wrapper'
-
   gem 'rspec-rails'
-  gem 'factory_bot_rails'
-  gem 'ffaker'
-  gem 'database_cleaner'
-
-  gem 'capybara', '~> 2.13'
-  gem 'selenium-webdriver'
-  gem 'launchy'
-  gem 'webdrivers', '~> 4.0'
-
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
+group :test do
+  gem 'factory_bot_rails'
+  gem 'ffaker'
+  gem 'ladle'
+  gem 'capybara', '~> 2.13'
+  gem 'selenium-webdriver'
+  gem 'webdrivers', '~> 4.0', require: false
+end

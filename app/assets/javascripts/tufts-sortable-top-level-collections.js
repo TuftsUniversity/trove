@@ -17,8 +17,6 @@
       list = $(xpaths['list']);
 
       if(button.length === 0 || list.length === 0) {
-        window.console.warn("Couldn't find elements for sortableTopLevelCollection: ");
-        window.console.warn(xpaths);
         return;
       }
 

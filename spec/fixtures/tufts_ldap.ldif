@@ -1,0 +1,82 @@
+
+version: 1
+
+dn: ou=people,dc=example,dc=org
+objectClass: top
+objectClass: organizationalUnit
+ou: people
+
+dn: uid=person1,ou=people,dc=example,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: person1
+uid: person1
+sn: Wilderman
+givenName: Arely
+mail: ransom@swaniawski.org
+uid: person0_1
+# Password is "password"
+#userpassword: {SHA}pGlmZX1VOEdHHb30HZezeVNFxGM=
+userpassword: {SHA}W6ph5Mm5Pz8GgiULbPgzG37mj9g=
+
+dn: uid=person2,ou=people,dc=example,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: person2
+uid: person2
+sn: Champlin
+givenName: Connie
+mail: aron_fritsch@hoeger.net
+uid: person0_2
+# Password is "password"
+#userpassword: {SHA}pGlmZX1VOEdHHb30HZezeVNFxGM=
+userpassword: {SHA}W6ph5Mm5Pz8GgiULbPgzG37mj9g=
+
+dn: uid=person3,ou=people,dc=example,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: person3
+uid: person3
+sn: Schumm
+givenName: Jack
+mail: orville_breitenberg@hettingerhand.net
+uid: person0_3
+# Password is "password"
+#userpassword: {SHA}pGlmZX1VOEdHHb30HZezeVNFxGM=
+userpassword: {SHA}W6ph5Mm5Pz8GgiULbPgzG37mj9g=
+
+dn: uid=person4,ou=people,dc=example,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: person4
+uid: person4
+sn: Cruickshank
+givenName: Osvaldo
+mail: macy@hermiston.com
+uid: person0_4
+# Password is "password"
+#userpassword: {SHA}pGlmZX1VOEdHHb30HZezeVNFxGM=
+userpassword: {SHA}W6ph5Mm5Pz8GgiULbPgzG37mj9g=
+
+dn: uid=person5,ou=people,dc=example,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: person5
+uid: person5
+sn: Towne
+givenName: Trystan
+mail: janelle@bogan.com
+uid: person0_5
+# Password is "password"
+#userpassword: {SHA}pGlmZX1VOEdHHb30HZezeVNFxGM=
+userpassword: {SHA}W6ph5Mm5Pz8GgiULbPgzG37mj9g=

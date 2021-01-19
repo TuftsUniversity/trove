@@ -1,21 +1,33 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-require 'spec_helper'
-
 ENV['RAILS_ENV'] ||= 'test'
-
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+
+require 'spec_helper'
 require 'rspec/rails'
-require 'active_fedora/cleaner'
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'active_fedora/cleaner'
+
+
+Capybara.server = :webrick
 
 # Adding chromedriver for js testing.
-Capybara.server = :webrick
-Capybara.register_driver(:chrome) do |app|
+Capybara.register_driver :headless_chrome do |app|
+  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+  browser_options.headless!
+  browser_options.args << '--window-size=1920,1080'
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+end
+
+# For debugging JS tests - some tests involving mouse movements require headless mode.
+Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
-Capybara.javascript_driver = :chrome
+
+# Change to :chrome for js test debugging
+Capybara.javascript_driver = :headless_chrome
+
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -30,7 +42,7 @@ Capybara.javascript_driver = :chrome
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -42,13 +54,17 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
+  include LdapManager
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = false
+
+  # Documentation claims this defaults to 'true', but I had to set it to get it to work.
+  config.use_transactional_fixtures = true
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -71,24 +87,18 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   #
   config.include FactoryBot::Syntax::Methods
+  config.include Devise::Test::IntegrationHelpers, type: :system
 
+  #Trove is based off these collection types existing, so might as well create them once, here.
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+    FactoryBot.create(:personal_collection_type)
+    FactoryBot.create(:course_collection_type)
+  end
+  config.after(:suite) do
+    Hyrax::CollectionType.destroy_all
   end
 
-  config.before do |example|
-    # Pass `:clean' to destroy objects in fedora/solr and start from scratch
-    ActiveFedora::Cleaner.clean! if example.metadata[:clean]
-
-    if example.metadata[:type] == :feature && Capybara.current_driver != :rack_test
-      DatabaseCleaner.strategy = :truncation
-    else
-      DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.start
-    end
-  end
-
-  config.after do
-    DatabaseCleaner.clean
+  config.after(:each) do
+    ActiveFedora::Cleaner.clean!
   end
 end

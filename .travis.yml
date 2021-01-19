@@ -3,7 +3,7 @@ rvm:
   - 2.6.1
 
 sudo: required
-dist: trusty
+dist: xenial
 cache: bundler
 
 notifications:
@@ -11,11 +11,10 @@ notifications:
     - travis.lilleberg@tufts.edu
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 before_install:
-  - gem update --system
-  - gem install bundler
+- gem install bundler
 
 before_script:
   - cp config/redis.yml.sample config/redis.yml
@@ -26,16 +25,22 @@ before_script:
   - cp config/blacklight.yml.sample config/blacklight.yml
   - cp config/secrets.yml.sample config/secrets.yml
   - cp config/ldap.yml.sample config/ldap.yml
+  - cp config/java.yml.sample config/java.yml
+  - cp config/tufts_export.yml.sample config/tufts_export.yml
+  - bundle exec sidekiq -d -l /tmp/sidekiq.log
   - bundle exec rake db:create
 
 script:
-  #- bundle exec rubocop
   - bundle exec rake db:migrate
-    #- bundle exec rake travis
+  - bundle exec rake travis
 
 addons:
+  chrome: stable
   apt:
     packages:
      - imagemagick
+     - libreoffice
+
 services:
   - redis-server
+  - mysql

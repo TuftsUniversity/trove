@@ -1,3 +1,5 @@
+// Patched by tufts to remove autocomplete functionality.
+
 Blacklight.onLoad(function () {
 
   /**

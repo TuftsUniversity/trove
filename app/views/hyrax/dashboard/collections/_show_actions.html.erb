@@ -1,6 +1,6 @@
 <% #@file  Removing the Add to Collection button %>
 <h2 class="sr-only"><%= t('hyrax.collection.actions.header') %></h2>
-<div class="dropdown">
+<div class="dropdown tufts-action-button">
   <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
     <span class="sr-only" data-search-element="label"><%= t("trove_collections.additional_actions.label") %></span>
     <span aria-hidden="true"><%= t("trove_collections.additional_actions.label") %></span>
@@ -9,17 +9,40 @@
 
   <ul class="dropdown-menu pull-right">
     <li>
-      <%= link_to t("trove_collections.additional_actions.copy"), "copy/#{@collection.id}", data: { turbolinks: false } %>
+      <%= link_to t("trove_collections.additional_actions.copy"),
+                  "copy/#{@collection.id}",
+                  class: 'copy-collection',
+                  data: { turbolinks: false }
+      %>
     </li>
-    <li>
-      <%= link_to t("trove_collections.additional_actions.powerpoint"), "dl_powerpoint/#{@collection.id}", data: { turbolinks: false, confirm: t('copyright_acknowledgement')  } %>
-    </li>
-    <li>
-      <%= link_to t("trove_collections.additional_actions.pdf"), "dl_pdf/#{@collection.id}", data: { turbolinks: false, confirm: t('copyright_acknowledgement') } %>
-    </li>
+    <% if(@collection.member_work_ids.count > 0) %>
+      <li>
+        <%= link_to t("trove_collections.additional_actions.pdf"),
+                    "dl_pdf/#{@collection.id}",
+                    class: 'download-pdf',
+                    data: {
+                        turbolinks: false,
+                        confirm: t('copyright_acknowledgement')
+                    }
+        %>
+      </li>
+      <li>
+        <%= link_to t("trove_collections.additional_actions.powerpoint"),
+                    "dl_powerpoint/#{@collection.id}",
+                    class: 'download-ppt',
+                    data: {
+                        turbolinks: false,
+                        confirm: t('copyright_acknowledgement')
+                    }
+        %>
+      </li>
+    <% end %>
     <% if is_personal_collection?(@collection) && current_user.admin? %>
       <li>
-        <%= link_to t("trove_collections.additional_actions.upgrade"), "upgrade/#{@collection.id}", data: { turbolinks: false } %>
+        <%= link_to t("trove_collections.additional_actions.upgrade"),
+                    "upgrade/#{@collection.id}",
+                    class: 'upgrade-collection',
+                    data: { turbolinks: false } %>
       </li>
     <% end %>
   </ul>

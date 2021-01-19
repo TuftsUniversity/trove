@@ -11,7 +11,7 @@
       <section>
         <div itemscope itemtype="http://schema.org/CollectionPage" class="row collection">
           <div class="col-sm-3 text-center">
-              <%= render 'hyrax/collections/media_display', presenter: @presenter %>
+              <%= render 'hyrax/collections/collection_media_display', presenter: @presenter %>
               <%= link_to t('.public_view_label'), collection_path(id: @presenter.id) %>
           </div>
           <div class="col-sm-9 collection-description-wrapper">
