@@ -7,7 +7,7 @@ end
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.2'
 # Use sqlite3 as the database for Active Record
 gem 'mysql2'
 gem 'sqlite3', '~> 1.3.6'
@@ -41,8 +41,8 @@ group :development do
   #gem 'spring-commands-rspec'
 end
 
-gem 'hyrax', '2.4.0'
-gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'update'
+#gem 'hyrax', '2.4.0'
+gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'hyrax-2.9'
 
 gem 'rsolr', '>= 1.0'
 gem 'blacklight_range_limit', '~> 6.3', '>= 6.3.2'
