@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.6.1'
+
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
@@ -41,7 +43,7 @@ group :development do
   #gem 'spring-commands-rspec'
 end
 
-#gem 'hyrax', '2.4.0'
+gem 'hyrax', '2.9.3'
 gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'hyrax-2.9'
 
 gem 'rsolr', '>= 1.0'
