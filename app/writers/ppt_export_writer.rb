@@ -63,7 +63,7 @@ class PptExportWriter
     end
 
     def images_with_paths
-      work_order = collection.work_order.empty? ? collection.member_object_ids : collection.work_order
+      work_order = collection.work_order.empty? ? collection.member_work_ids : collection.work_order
 
       work_order.flatten.map { |member|
         member_image = Image.find(member)
