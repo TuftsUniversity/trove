@@ -30,9 +30,7 @@ unless Rails.env.production?
       ) do
         FcrepoWrapper.wrap(fcrepo_params) do
           Rake::Task["hyrax:default_admin_set:create"].invoke
-          RSpec::Core::RakeTask.new(:spec) do |t|
-            t.rspec_opts = "--tag ~noci"
-          end
+          Rake::Task['spec'].invoke
         end
       end
     end
