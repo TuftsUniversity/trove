@@ -1,5 +1,3 @@
-#@file
-# Temporary monkey patch until Epigaea gets upgraded
 require_dependency Hyrax::Engine.root.join('app', 'presenters', 'hyrax', 'collection_presenter').to_s
 
 module Hyrax
@@ -16,6 +14,7 @@ module Hyrax
        :language, :identifier, :based_near, :related_url]
     end
 
+    # PATCH: Temporary patch until Epigaea gets upgraded
     def collection_type
       begin
         @collection_type ||= Hyrax::CollectionType.find_by_gid!(collection_type_gid)
