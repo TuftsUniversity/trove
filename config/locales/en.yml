@@ -31,7 +31,9 @@
 
 en:
   cancel: "Cancel"
-  copyright_acknowledgement: "This material is for teaching purposes or your personal research use. Any other uses require you to determine the copyright status of the material you are using. Learn more about copyright, fair use, and open access at http://sites.tufts.edu/scholarlycommunication/"
+  copyright_acknowledgement:
+    label: "Usage Information"
+    value: "This material is for teaching purposes or your personal research use. Any other uses require you to determine the copyright status of the material you are using. Learn more about copyright, fair use, and open access at http://sites.tufts.edu/scholarlycommunication/"
   trove_collections:
     new:
       header: "New %{type_title}"

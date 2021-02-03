@@ -54,10 +54,10 @@ module Hyrax
       json = iiif_manifest_builder.manifest_for(presenter: iiif_manifest_presenter)
       json['metadata'] ||= []
       json['metadata'] << {
-        'label' => "Usage Information",
-        'value' => [I18n.t('copyright_acknowledgement')]
+        'label' => I18n.t('copyright_acknowledgement.label'),
+        'value' => [I18n.t('copyright_acknowledgement.value')]
       }
-      
+
       respond_to do |wants|
         wants.json { render json: json }
         wants.html { render json: json }
