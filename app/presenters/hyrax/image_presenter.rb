@@ -14,20 +14,6 @@ module Hyrax
       solr_document[:member_of_collection_ids_ssim]
     end
 
-    # IIIF metadata for inclusion in the manifest
-    #  Called by the `iiif_manifest` gem to add metadata
-    #
-    # @return [Array] array of metadata hashes
-    def manifest_metadata
-      metadata = []      
-   
-      metadata << {
-        'label' => "Usage Information",
-        'value' => [I18n.t('copyright_acknowledgement')]
-      }
-      metadata
-    end
-
     ##
     # @function
     # Returns a hash of course and personal collections that this image is a member of.
