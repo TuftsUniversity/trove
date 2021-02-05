@@ -1,12 +1,10 @@
 source 'https://rubygems.org'
-
-ruby '2.6.1'
-
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
 end
 
+ruby '2.6.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2'
@@ -14,7 +12,7 @@ gem 'rails', '~> 5.2'
 gem 'mysql2'
 gem 'sqlite3', '~> 1.3.6'
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -46,7 +44,7 @@ end
 gem 'hyrax', '2.9.3'
 gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'hyrax-2.9'
 
-gem 'rsolr', '>= 1.0'
+gem 'rsolr', '>= 1.0', '< 3'
 gem 'blacklight_range_limit', '~> 6.3', '>= 6.3.2'
 
 gem 'bootstrap-sass', '~> 3.0'
@@ -61,7 +59,7 @@ gem 'hydra-role-management'
 
 gem 'pretender'
 
-gem 'riiif', '~> 1.1'
+gem 'riiif', '~> 2.0'
 
 gem 'sidekiq', '~> 5.2'
 
@@ -76,7 +74,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'ladle'
-  gem 'capybara', '~> 2.13'
+  gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   gem 'webdrivers', '~> 4.0', require: false
 end
