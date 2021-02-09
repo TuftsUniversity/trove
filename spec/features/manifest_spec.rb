@@ -8,6 +8,6 @@ RSpec.feature 'IIIF Manifest Customizations' do
     image = create(:image)
 
     visit manifest_hyrax_image_path(image.id)
-    expect(page).to have_content(I18n.t('copyright_acknowledgement'))
+    expect(page).to have_content(I18n.t('copyright_acknowledgement.value'))
   end
 end

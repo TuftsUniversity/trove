@@ -30,8 +30,7 @@ unless Rails.env.production?
       ) do
         FcrepoWrapper.wrap(fcrepo_params) do
           Rake::Task["hyrax:default_admin_set:create"].invoke
-          # Rake::Task["tufts:fixtures:refresh"].invoke
-          Rake::Task["spec"].invoke
+          Rake::Task['spec'].invoke
         end
       end
     end

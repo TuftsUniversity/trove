@@ -73,7 +73,9 @@ module Hyrax
         ids = PermissionTemplateAccess.for_user(ability: self,
                                                 access: ['deposit', 'manage'])
                                       .joins(:permission_template)
-                                      .pluck('DISTINCT source_id')
+                                      .select(:source_id) # PATCH: Fixing Dangerous query method that will not be in Rails 6.0.
+                                      .distinct           # Fixed in Hyrax 3.0 - can be removed when upgrading to that.
+                                      .pluck(:source_id)  #
         query = "_query_:\"{!raw f=has_model_ssim}AdminSet\" AND {!terms f=id}#{ids.join(',')}"
         ActiveFedora::SolrService.count(query, method: :post).positive?
       end
