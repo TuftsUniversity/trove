@@ -56,7 +56,7 @@ gem 'devise-guests', '~> 0.6'
 gem 'devise_ldap_authenticatable'
 gem 'simple_token_authentication', '~> 1.0'
 gem 'hydra-role-management'
-
+gem 'okcomputer'
 gem 'pretender'
 
 gem 'riiif', '~> 2.0'
