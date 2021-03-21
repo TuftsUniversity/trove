@@ -34,7 +34,7 @@ config/solr.yml
 config/sidekiq.yml
 config/tufts_export.yml
 public/assets/
-
+public/branding/
 fits.log
 
 .idea
