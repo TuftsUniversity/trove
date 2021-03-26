@@ -26,7 +26,7 @@ before_script:
   - cp config/secrets.yml.sample config/secrets.yml
   - cp config/ldap.yml.sample config/ldap.yml
   - cp config/java.yml.sample config/java.yml
-  - cp config/tufts_export.yml.sample config/tufts_export.yml
+  - cp config/tufts.yml.sample config/tufts.yml
   - bundle exec sidekiq -d -l /tmp/sidekiq.log
   - bundle exec rake db:create
 

@@ -109,7 +109,7 @@ module Tufts
       end
 
       # Save the export path on the class, so we don't have to keep reloading it.
-      def load_base_path_from_config(config = 'tufts_export.yml')
+      def load_base_path_from_config(config = 'tufts.yml')
         yaml_config =
           YAML.safe_load(
             File.read(

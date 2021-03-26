@@ -32,7 +32,7 @@ config/redis.yml
 config/secrets.yml
 config/solr.yml
 config/sidekiq.yml
-config/tufts_export.yml
+config/tufts.yml
 public/assets/
 
 fits.log

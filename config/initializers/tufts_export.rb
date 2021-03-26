@@ -2,7 +2,7 @@
 yaml_config =
   YAML.safe_load(
     File.read(
-      Rails.root.join('config', 'tufts_export.yml')
+      Rails.root.join('config', 'tufts.yml')
     )
   )[Rails.env]
 
