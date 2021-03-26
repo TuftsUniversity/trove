@@ -1,6 +1,14 @@
 development:
   export_path: ''
+  ldap:
+    name:
+    email:
+    active:
 test:
   export_path: ''
 production:
   export_path: ''
+  ldap:
+    name:
+    email:
+    active:
