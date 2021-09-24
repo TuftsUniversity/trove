@@ -87,7 +87,7 @@ jobs:
         cp config/ldap.yml.sample config/ldap.yml
         cp config/java.yml.sample config/java.yml
         cp config/tufts.yml.sample config/tufts.yml
-  - name: Create database    
+    - name: Create database
       run: |
         RAILS_ENV=test bundle exec rake db:create
         RAILS_ENV=test bundle exec rake db:migrate --trace
