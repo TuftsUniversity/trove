@@ -39,27 +39,23 @@ group :development do
   #gem 'spring-commands-rspec'
 end
 
-gem 'hyrax', '2.9.3'
-gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'hyrax-2.9'
-
-gem 'rsolr', '>= 1.0', '< 3'
 gem 'blacklight_range_limit', '~> 6.3', '>= 6.3.2'
-
 gem 'bootstrap-sass', '~> 3.0'
-gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
-gem 'jquery-rails'
-
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
 gem 'devise_ldap_authenticatable'
-gem 'simple_token_authentication', '~> 1.0'
 gem 'hydra-role-management'
+gem 'hyrax', '2.9.3'
+gem 'jquery-rails'
+gem 'mimemagic', '0.3.10'
 gem 'okcomputer'
 gem 'pretender'
-
 gem 'riiif', '~> 2.0'
-
+gem 'rsolr', '>= 1.0', '< 3'
 gem 'sidekiq', '~> 5.2'
+gem 'simple_token_authentication', '~> 1.0'
+gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'hyrax-2.9'
+gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
