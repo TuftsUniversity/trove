@@ -105,7 +105,7 @@ jobs:
       run: |
         bundle exec rails assets:precompile &> /dev/null
     - name: Run tests
-      run: xvfb-run -a bundle exec rake spec
+      run: xvfb-run -a bundle exec rake spec SPEC_OPTS="--tag ~noci" 
       env:
         RAILS_ENV: test        
         TMPDIR: /tmp
