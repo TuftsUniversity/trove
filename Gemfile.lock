@@ -615,7 +615,8 @@ GEM
       actionpack (>= 4.2)
     public_suffix (4.0.6)
     pul_uv_rails (2.0.1)
-    puma (3.12.6)
+    puma (5.6.2)
+      nio4r (~> 2.0)
     qa (5.6.0)
       activerecord-import
       deprecation
@@ -927,7 +928,7 @@ DEPENDENCIES
   mysql2
   okcomputer
   pretender
-  puma (~> 3.11)
+  puma (~> 5.6)
   rails (~> 5.2)
   riiif (~> 2.0)
   rsolr (>= 1.0, < 3)
