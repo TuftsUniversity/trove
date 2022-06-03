@@ -54,7 +54,7 @@ gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'sidekiq', '~> 5.2'
 gem 'simple_token_authentication', '~> 1.0'
-gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'hyrax-2.9'
+gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', tag: 'v1.2.9'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 
 group :development, :test do

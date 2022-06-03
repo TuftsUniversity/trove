@@ -1,14 +1,14 @@
 GIT
   remote: https://github.com/TuftsUniversity/tufts-curation
-  revision: 0fdf7186f47677860829141cfc479165b333a37a
-  branch: hyrax-2.9
+  revision: 2b9a3c3295e27a04803232c22a243c10f385b458
+  tag: v1.2.9
   specs:
     tufts-curation (0.1.0)
-      active-fedora (~> 12.1)
+      active-fedora (>= 11.5, <= 12.99)
       activerecord
       activesupport
       chronic
-      hyrax (~> 2.9)
+      hyrax (>= 2.1.0, <= 2.9.9)
 
 GEM
   remote: https://rubygems.org/
