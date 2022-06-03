@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     continue-on-error: ${{ matrix.experimental }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     env:
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
