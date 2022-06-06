@@ -9,7 +9,7 @@ describe PowerPointCollectionExporter do
   let(:collection) { build_stubbed(:course_collection) }
   let(:exporter) { PowerPointCollectionExporter.new(collection, target_dir) }
 
-  it 'has a name for the export file' noci: true do
+  it 'has a name for the export file', noci: true do
     expect(exporter.pptx_file_name).to eq("#{collection.id}.pptx")
   end
 

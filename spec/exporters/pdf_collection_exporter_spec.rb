@@ -10,7 +10,7 @@ describe PdfCollectionExporter do
   let(:exporter) { PdfCollectionExporter.new(collection, target_dir) }
   let(:pptx_file) { "#{target_dir}/#{collection.id}.pptx" }
 
-  it 'has a name for the export file'  noci: true do
+  it 'has a name for the export file', noci: true do
     expect(exporter.pdf_file_name).to eq("#{collection.id}.pdf")
   end
 
