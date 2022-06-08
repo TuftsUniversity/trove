@@ -180,7 +180,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.10)
-    connection_pool (2.2.3)
+    connection_pool (2.2.5)
     crass (1.0.6)
     declarative (0.0.20)
     declarative-option (0.1.0)
@@ -612,7 +612,7 @@ GEM
       rdf
     racc (1.6.0)
     rack (2.2.3.1)
-    rack-protection (2.1.0)
+    rack-protection (2.2.0)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -705,7 +705,7 @@ GEM
       rexml (~> 3.2)
     redic (1.5.3)
       hiredis
-    redis (4.1.4)
+    redis (4.5.1)
     redis-namespace (1.8.1)
       redis (>= 3.0.4)
     redlock (1.2.1)
@@ -783,11 +783,11 @@ GEM
       rdf-xsd (~> 3.1)
       sparql (~> 3.1)
       sxp (~> 1.1)
-    sidekiq (5.2.9)
+    sidekiq (5.2.10)
       connection_pool (~> 2.2, >= 2.2.2)
       rack (~> 2.0)
       rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 4.2)
+      redis (~> 4.5, < 4.6.0)
     signet (0.14.1)
       addressable (~> 2.3)
       faraday (>= 0.17.3, < 2.0)
