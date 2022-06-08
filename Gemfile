@@ -16,7 +16,7 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'therubyracer', platforms: :ruby 
+gem 'therubyracer', platforms: :ruby
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
@@ -54,11 +54,11 @@ gem 'riiif', '~> 2.0'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'sidekiq', '~> 5.2'
 gem 'simple_token_authentication', '~> 1.0'
-gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', branch: 'hyrax-2.9'
+gem 'tufts-curation', git: 'https://github.com/TuftsUniversity/tufts-curation', tag: 'v1.2.9'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
 
 group :development, :test do
-  gem 'solr_wrapper', '>= 0.3'
+  gem 'solr_wrapper', '~> 2.1.0'
   gem 'fcrepo_wrapper'
   gem 'rspec-rails'
   gem 'simplecov'
