@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'webdrivers'
 
 SimpleCov.start 'rails' do
   if ENV['CI']
