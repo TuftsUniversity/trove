@@ -43,6 +43,14 @@ jobs:
             experimental: true
 
     steps:
+    - name: Pin chrome
+    - uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: 114.0
+      id: setup-chrome
+    - run: |
+        echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+        ${{ steps.setup-chrome.outputs.chrome-path }} --version
     - name: Install OS packages
       run: |
         sudo apt-get update
