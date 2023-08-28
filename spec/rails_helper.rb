@@ -28,6 +28,7 @@ require 'active_fedora/cleaner'
 
 
 Capybara.server = :webrick
+Webdrivers::Chromedriver.required_version = '106.0.5249.21'
 
 # Adding chromedriver for js testing.
 Capybara.register_driver :headless_chrome do |app|
