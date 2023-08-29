@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'webdrivers'
 
 SimpleCov.start 'rails' do
   if ENV['CI']
@@ -29,11 +30,15 @@ require 'active_fedora/cleaner'
 
 Capybara.server = :webrick
 
+Webdrivers::Chromedriver.required_version = '106.0.5249.21'
+custom_chrome_path = '/opt/hostedtoolcache/chromium/1036826/x64/chrome'
+
 # Adding chromedriver for js testing.
 Capybara.register_driver :headless_chrome do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new
   browser_options.headless!
   browser_options.args << '--window-size=1920,1080'
+  browser_options.binary = custom_chrome_path
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end
 
