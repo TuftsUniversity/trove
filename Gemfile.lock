@@ -893,7 +893,7 @@ DEPENDENCIES
   blacklight_range_limit (~> 6.3, >= 6.3.2)
   bootstrap-sass (~> 3.0)
   byebug
-  capybara (>= 2.15)
+  capybara
   coffee-rails (~> 4.2)
   devise
   devise-guests (~> 0.6)

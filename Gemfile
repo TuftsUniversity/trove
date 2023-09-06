@@ -70,7 +70,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'ladle'
-  gem 'capybara', '>= 2.15'
+  gem 'capybara'
   gem 'selenium-webdriver'
   gem 'webdrivers', '~> 4.0', require: false
 end
