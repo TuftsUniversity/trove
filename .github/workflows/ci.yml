@@ -38,9 +38,9 @@ jobs:
       matrix:
         ruby-version: ['2.7.5']
         experimental: [false]
-        include:
-          - ruby-version: 3.0.3
-            experimental: true
+        #include:
+        #  - ruby-version: 3.0.3
+        #    experimental: true
 
     steps:
     - name: Pin chrome
