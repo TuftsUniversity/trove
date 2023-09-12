@@ -1,6 +1,20 @@
 require 'simplecov'
 require 'webdrivers'
 
+SimpleCov.start 'rails' do
+  if ENV['CI']
+    require 'simplecov-lcov'
+
+    SimpleCov::Formatter::LcovFormatter.config do |c|
+      c.report_with_single_file = true
+      c.single_report_path = 'coverage/lcov.info'
+    end
+
+    formatter SimpleCov::Formatter::LcovFormatter
+  end
+
+  add_filter %w[version.rb initializer.rb]
+end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
@@ -16,14 +30,23 @@ require 'active_fedora/cleaner'
 
 Capybara.server = :webrick
 
-Webdrivers::Chromedriver.required_version = '106.0.5249.21'
-custom_chrome_path = '/opt/hostedtoolcache/chromium/1036826/x64/chrome'
+
+
+# this is for github actions only
+if ENV['CI']
+  Webdrivers::Chromedriver.required_version = '106.0.5249.21'
+  custom_chrome_path = '/opt/hostedtoolcache/chromium/1036826/x64/chrome'
+else
+  Webdrivers::Chromedriver.required_version = "114.0.5735.90"
+end
 
 # Adding chromedriver for js testing.
 Capybara.register_driver :headless_chrome do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new
   browser_options.headless!
   browser_options.args << '--window-size=1920,1080'
+  browser_options.args << '--no-sandbox'
+  browser_options.args << '--disable-dev-shm-usage'
   browser_options.binary = custom_chrome_path
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end

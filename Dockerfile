@@ -44,6 +44,8 @@ ADD Gemfile.lock /data
 RUN mkdir /data/build
 ADD ./build/install_gems.sh /data/build
 RUN ./build/install_gems.sh
+RUN mkdir /data/pdfs
+
 
 # Add the application code
 ADD . /data
