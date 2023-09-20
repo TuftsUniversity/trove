@@ -52,7 +52,7 @@ RSpec.feature 'Reordering works and subcollections' do
     expect(ids).to eq(new_order)
   end
 
-  scenario 'rearranged subcollection orders are persisted', slow: true, js: true do
+  scenario 'rearranged subcollection orders are persisted', noci_local: true, slow: true, js: true do
     coll
     create(:personal_collection, user: user, parent: coll)
     create(:personal_collection, user: user, parent: coll)

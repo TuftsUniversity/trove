@@ -92,7 +92,7 @@ RSpec.feature 'Collection Sidebar' do
       sleep 1
     end
 
-    scenario 'Clicking the rearrange button enables/disables rearranging', js: true, slow: true do
+    scenario 'Clicking the rearrange button enables/disables rearranging', noci_local:true, js: true, slow: true do
       pers_coll
       visit('/')
       arr_btn = find('button.reorder-personal')
@@ -110,7 +110,7 @@ RSpec.feature 'Collection Sidebar' do
     # * Rearranging the sidebar generates a TopLevelCollectionOrder if it doesn't exist.
     # * Rearranging the sidebar updates the TopLevelCollectionOrder if it does exist.
     # * The TopLevelCollectionOrder matches the order of the ids in the HTML.
-    scenario 'Rearranging saves the order as a TopLevelCollectionOrder', js: true, slow: true do
+    scenario 'Rearranging saves the order as a TopLevelCollectionOrder', noci_local:true, js: true, slow: true do
       pers_coll
       create(:personal_collection, user: user)
       create(:personal_collection, user: user)

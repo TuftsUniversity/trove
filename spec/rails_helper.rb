@@ -37,7 +37,8 @@ if ENV['CI']
   Webdrivers::Chromedriver.required_version = '106.0.5249.21'
   custom_chrome_path = '/opt/hostedtoolcache/chromium/1036826/x64/chrome'
 else
-  Webdrivers::Chromedriver.required_version = "114.0.5735.90"
+  #Webdrivers::Chromedriver.required_version = "114.0.5735.90"
+  Webdrivers::Chromedriver.required_version = '106.0.5249.21'
 end
 
 # Adding chromedriver for js testing.
@@ -47,6 +48,7 @@ Capybara.register_driver :headless_chrome do |app|
   browser_options.args << '--window-size=1920,1080'
   browser_options.args << '--no-sandbox'
   browser_options.args << '--disable-dev-shm-usage'
+  browser_options.args << '--disable-gpu'
   browser_options.binary = custom_chrome_path
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end
