@@ -97,7 +97,7 @@ jobs:
         RAILS_ENV=test bundle exec sidekiq -d -l /tmp/sidekiq.log
     - name: Setup hyrax test environment
       run: |
-        bundle exec rake hydra:test_server &
+        bundle exec rake hydra:test_server
         sleep 150
 #    - name: Rubbocop
 #      run: |
