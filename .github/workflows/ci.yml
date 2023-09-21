@@ -95,10 +95,11 @@ jobs:
     - name: Set up sidekiq
       run: |
         RAILS_ENV=test bundle exec sidekiq -d -l /tmp/sidekiq.log
-    - name: Setup hyrax test environment
+    - uses: JarvusInnovations/background-action@v1
+      name: Setup hyrax test environment
       run: |
-        bundle exec rake hydra:test_server
-        sleep 150
+        bundle exec rake hydra:test_server &
+        sleep 180
 #    - name: Rubbocop
 #      run: |
 #        bundle exec rubocop
