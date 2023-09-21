@@ -44,7 +44,7 @@ RSpec.feature 'Add image to collection from image page' do
       expect(my_coll.member_work_ids).to eq([image.id])
     end
 
-    scenario 'admins can add images to all collections', noci_local: true, js: true do
+    scenario 'admins can add images to all collections', noci_local: true, noci: true, js: true do
       user.add_role('admin')
 
       my_coll

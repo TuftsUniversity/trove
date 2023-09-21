@@ -47,7 +47,7 @@ describe Tufts::ExportManagerService do
       expect(full_path).to exist_on_filesystem
     end
 
-    it 'doesnt generate a file if it already exists', noci_local: true  do
+    it 'doesnt generate a file if it already exists', noci_local: true, noci: true do
       ppt_files = ppt_manager.export_base_path + '/ppts/*'
 
       expect(Dir[ppt_files].count).to be 0
@@ -88,7 +88,7 @@ describe Tufts::ExportManagerService do
   end
 
   describe '#self.delete_all_assets', noci_local: true, slow: true do
-    xit 'deletes both pdf and ppt files for collection' do
+    it 'deletes both pdf and ppt files for collection', noci_local: true, noci: true do
       pdf_manager = Tufts::ExportManagerService.new(collection, 'pdf')
       pdf_file = pdf_manager.instance_variable_get(:@full_path)
       pdf_manager.retrieve_asset
