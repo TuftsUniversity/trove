@@ -96,7 +96,6 @@ jobs:
       run: |
         RAILS_ENV=test bundle exec sidekiq -d -l /tmp/sidekiq.log
     - name: Setup hyrax test environment
-      uses: JarvusInnovations/background-action@v1
       run: |
         bundle exec rake hydra:test_server &
         sleep 180
