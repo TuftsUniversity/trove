@@ -1,6 +1,0 @@
-development:
-  export_path: '/usr/local/hydra/mira-data/exports'
-test:
-  export_path: '/data/pdfs'
-production:
-  export_path: '/usr/local/hydra/mira-data/exports'
