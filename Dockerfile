@@ -1,4 +1,4 @@
-FROM ruby:2.7.7
+FROM ruby:2.7.5
 
 ARG RAILS_ENV
 ARG SECRET_KEY_BASE
@@ -15,36 +15,12 @@ ENV LC_ALL C.UTF-8
 # --allow-unauthenticated needed for yarn package
 RUN apt-get update && apt-get upgrade -y && \
   apt-get install --no-install-recommends -y ca-certificates nodejs \
-  build-essential libpq-dev libreoffice imagemagick unzip ghostscript vim \
+  build-essential libpq-dev libreoffice unzip ghostscript vim \
+  ffmpeg \
+  clamav-freshclam clamav-daemon libclamav-dev \
   libqt5webkit5-dev xvfb xauth default-jre-headless --fix-missing --allow-unauthenticated
 
-RUN apt-get update && apt-get install -y wget gnupg
-RUN apt-get install -y wget apt-transport-https gnupg
-RUN echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
-
-RUN wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public| apt-key add - \
-    && apt-get update \
-    && apt-get install -y temurin-8-jdk
-
-RUN update-java-alternatives --set /usr/lib/jvm/temurin-8-jdk-amd64
-
-RUN apt-get update && apt-get install -y wget unzip libatk1.0-0 libgtk-3-0 libgbm1
-
-# Download and extract Google Chrome
-RUN wget https://github.com/Alex313031/thorium/releases/download/M114.0.5735.134/thorium-browser_114.0.5735.134_amd64.zip && \
-    unzip chrome-linux.zip -d /usr/local/bin/ && \
-    rm chrome-linux.zip
-
-# Create a symbolic link to the Chrome binary
-RUN ln -s /usr/local/bin/thorium /usr/local/bin/google-chrome
-RUN ln -s /usr/local/bin/thorium /usr/local/bin/chrome
-RUN ln -s /usr/local/bin/thorium /usr/local/bin/chromium
-
-# Cleanup unnecessary files
-RUN apt-get remove -y wget unzip && apt-get clean
-
-# Verify the installation
-RUN google-chrome --version
+RUN apt-get install chromium -y
 
 # Increase stack size limit to help working with large works
 ENV RUBY_THREAD_MACHINE_STACK_SIZE 8388608
