@@ -58,19 +58,31 @@ if ENV['IN_DOCKER'].present? || ENV['HUB_URL'].present?
   Capybara.app_host = "http://#{ip}:#{Capybara.server_port}"
   Capybara.default_driver = :selenium_chrome_headless_sandboxless
 else
+  # this is for github actions only
+
   Webdrivers::Chromedriver.required_version = '106.0.5249.21'
   custom_chrome_path = '/opt/hostedtoolcache/chromium/1036826/x64/chrome'
 
   # Adding chromedriver for js testing.
-  Capybara.register_driver :selenium_chrome_headless_sandboxless do |app|
-    browser_options = ::Selenium::WebDriver::Chrome::Options.new
-    browser_options.headless!
-    browser_options.args << '--window-size=1920,1080'
-    browser_options.binary = custom_chrome_path
-    Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
-  end
+Capybara.register_driver :headless_chrome do |app|
+  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+  browser_options.headless!
+  browser_options.args << '--window-size=1920,1080'
+  browser_options.args << '--no-sandbox'
+  browser_options.args << '--disable-dev-shm-usage'
+  browser_options.args << '--disable-gpu'
+  browser_options.binary = custom_chrome_path
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+end
 
-  Capybara.default_driver = :selenium_chrome_headless_sandboxless
+# For debugging JS tests - some tests involving mouse movements require headless mode.
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+# Change to :chrome for js test debugging
+Capybara.javascript_driver = :headless_chrome
+
 
 end
 
