@@ -28,7 +28,7 @@ RSpec.feature 'Collection Actions' do
   end
 
   context 'button existence and permissions' do
-    scenario 'show screen should have the right buttons and not the wrong ones' do
+    scenario 'show screen should have the right buttons and not the wrong ones', js: true, noci_local: true do
       visit collection_page
       buttons = find('.show-collection-buttons')
       expect(buttons).not_to have_content('Download PDF')
@@ -45,7 +45,7 @@ RSpec.feature 'Collection Actions' do
       expect(buttons).to have_content('Download Powerpoint')
     end
 
-    scenario 'can copy and download other peoples collections, but cant manage them' do
+    scenario 'can copy and download other peoples collections, but cant manage them', js: true, noci_local: true do
       other_coll = create(:personal_collection)
       other_coll.add_member_objects([image.id])
 
@@ -58,7 +58,7 @@ RSpec.feature 'Collection Actions' do
       expect(buttons).to have_content('Download Powerpoint')
     end
 
-    scenario 'edit screen should have the right buttons and not the wrong ones' do
+    scenario 'edit screen should have the right buttons and not the wrong ones', js: true, noci_local: true do
       user.add_role('admin')
 
       visit dashboard_page

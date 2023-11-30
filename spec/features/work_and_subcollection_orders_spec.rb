@@ -26,7 +26,7 @@ RSpec.feature 'Reordering works and subcollections' do
     return list, list.map { |node| node['data-id'] }
   end
 
-  scenario 'rearranged work orders are persisted', slow: true, noci: true, js: true do
+  scenario 'rearranged work orders are persisted', slow: true, noci: true, js: true, noci_local: true do
     user.add_role('admin')
 
     coll

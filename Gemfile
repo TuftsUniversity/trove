@@ -71,6 +71,7 @@ group :test do
   gem 'ffaker'
   gem 'ladle'
   gem 'capybara', '>= 2.15'
+  gem 'capybara-screenshot'
   gem 'selenium-webdriver'
   gem 'webdrivers', '~> 4.0', require: false
 end

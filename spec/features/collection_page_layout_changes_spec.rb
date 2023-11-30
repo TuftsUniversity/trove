@@ -56,7 +56,7 @@ RSpec.feature 'Layout Changes on Collection Pages' do
       expect(results).not_to have_content('Is part of:')
     end
 
-    scenario 'edit page' do
+    scenario 'edit page', js: true, noci_local: true do
       user.add_role('admin') # Need admin role for the Add Works buttons to appear
       visit hyrax.dashboard_collection_path(coll.id)
 
