@@ -56,7 +56,7 @@ RSpec.feature 'Collection Sidebar' do
   end
 
   context 'adding a collection via + button' do
-    scenario 'collection appears in sidebar', slow: true, js: true, noci_local: true do
+    scenario 'collection appears in sidebar', slow: true, noci_local: true do
       user.add_role('admin')
       visit('/')
 
