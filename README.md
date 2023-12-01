@@ -1,24 +1,20 @@
-# README
+# Trove
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## About
 
-Things you may want to cover:
+Collections in Trove are available for use by Tufts University faculty and students, for teaching and research purposes. Collections will include images selected by faculty for teaching Art History courses. Faculty and students can create personal collections of images selected from those available in Trove.
 
-* Ruby version
 
-* System dependencies
+## Running Test Locally
 
-* Configuration
+* MIRA test docker environment should be running already
 
-* Database creation
 
-* Database initialization
+```
+docker-compose up test
+docker exec -it trove_test_1 /bin/bash
+xvfb-run -a bundle exec rake spec SPEC_OPTS="--tag ~noci_local"
 
-* How to run the test suite
+```
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+There are two testing tags, noci and noci_local some tests aren't working in the dockerized environment we'll re-address when we move to Ruby 3
