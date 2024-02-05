@@ -1,13 +1,13 @@
 development:
-  export_path: ''
+  export_path: '/usr/local/hydra/mira-data/exports'
   ldap:
     name:
     email:
     active:
 test:
-  export_path: ''
+  export_path: '/data/pdfs'
 production:
-  export_path: ''
+  export_path: '/usr/local/hydra/mira-data/exports'
   ldap:
     name:
     email:

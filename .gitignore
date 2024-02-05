@@ -46,3 +46,7 @@ config/java.yml
 # Spring stuff
 bin/rspec
 bin/spring
+
+# env files
+.env
+coverage/

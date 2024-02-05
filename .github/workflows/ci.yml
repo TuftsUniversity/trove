@@ -38,10 +38,6 @@ jobs:
       matrix:
         ruby-version: ['2.7.5']
         experimental: [false]
-        include:
-          - ruby-version: 3.0.3
-            experimental: true
-
     steps:
     - name: Pin chrome
       uses: abhi1693/setup-browser@v0.3.4
@@ -63,7 +59,7 @@ jobs:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Update rubygems
       run: |
-        gem update --system
+        gem install rubygems-update -v 3.4.22
         gem install bundler:2.3.15
 
     - name: Set up JDK 1.8
@@ -102,7 +98,7 @@ jobs:
     - name: Setup hyrax test environment
       run: |
         bundle exec rake hydra:test_server &
-        sleep 150
+        sleep 180
 #    - name: Rubbocop
 #      run: |
 #        bundle exec rubocop

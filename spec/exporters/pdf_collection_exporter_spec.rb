@@ -19,7 +19,7 @@ describe PdfCollectionExporter do
     after(:all) { destroy_export_dirs }
 
     # Ideally you don't test 3 things at once, but I don't want to run this 3 times.
-    it 'generates the file, returns the file path, deletes the leftover pptx file', noci: true, slow: true do
+    it 'generates the file, returns the file path, deletes the leftover pptx file', noci_local: true, noci: true, slow: true do
       export_file_path = exporter.export
       expect(export_file_path).to eq("#{target_dir}/#{exporter.pdf_file_name}")
       expect(export_file_path).to exist_on_filesystem

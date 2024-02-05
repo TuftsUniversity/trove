@@ -7,7 +7,7 @@ RSpec.feature 'Breadcrumb Customizations' do
   let(:coll) { create(:personal_collection, user: user) }
   let(:image) { create(:image) }
 
-  scenario 'referring Collection should show in breadcrumbs on image pages' do
+  scenario 'referring Collection should show in breadcrumbs on image pages', js: true, noci_local: true do
     sign_in(user)
     coll.add_member_objects([image.id])
     title = coll.title.first

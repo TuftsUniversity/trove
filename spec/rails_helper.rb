@@ -24,20 +24,54 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require 'spec_helper'
 require 'rspec/rails'
+require 'capybara-screenshot/rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'active_fedora/cleaner'
 
-
 Capybara.server = :webrick
+Capybara::Screenshot.autosave_on_failure = false
 
-Webdrivers::Chromedriver.required_version = '106.0.5249.21'
-custom_chrome_path = '/opt/hostedtoolcache/chromium/1036826/x64/chrome'
+if ENV['IN_DOCKER'].present? || ENV['HUB_URL'].present?
+  args = %w[disable-gpu no-sandbox whitelisted-ips window-size=1400,1400]
+  args.push('headless') if ActiveModel::Type::Boolean.new.cast(ENV['CHROME_HEADLESS_MODE'])
 
-# Adding chromedriver for js testing.
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome("goog:chromeOptions" => { args: args })
+
+  Capybara.register_driver :selenium_chrome_headless_sandboxless do |app|
+    driver = Capybara::Selenium::Driver.new(app,
+                                       browser: :remote,
+                                       desired_capabilities: capabilities,
+                                       url: ENV['HUB_URL'])
+
+    # Fix for capybara vs remote files. Selenium handles this for us
+    driver.browser.file_detector = lambda do |argss|
+      str = argss.first.to_s
+      str if File.exist?(str)
+    end
+
+    driver
+  end
+
+  Capybara.server_host = '0.0.0.0'
+  Capybara.server_port = 3010
+  Capybara.javascript_driver = :selenium_chrome_headless_sandboxless
+  ip = IPSocket.getaddress(Socket.gethostname)
+  Capybara.app_host = "http://#{ip}:#{Capybara.server_port}"
+  Capybara.default_driver = :selenium_chrome_headless_sandboxless
+else
+  # this is for github actions only
+
+  Webdrivers::Chromedriver.required_version = '106.0.5249.21'
+  custom_chrome_path = '/opt/hostedtoolcache/chromium/1036826/x64/chrome'
+
+  # Adding chromedriver for js testing.
 Capybara.register_driver :headless_chrome do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new
   browser_options.headless!
   browser_options.args << '--window-size=1920,1080'
+  browser_options.args << '--no-sandbox'
+  browser_options.args << '--disable-dev-shm-usage'
+  browser_options.args << '--disable-gpu'
   browser_options.binary = custom_chrome_path
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end
@@ -49,6 +83,11 @@ end
 
 # Change to :chrome for js test debugging
 Capybara.javascript_driver = :headless_chrome
+
+
+end
+
+# Change to :chrome for js test debugging
 
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

@@ -14,11 +14,11 @@ describe Tufts::ExportManagerService do
 
   after(:each) { destroy_export_dirs }
 
-  it 'is invalid if the directories cant be created' do
-    Tufts::ExportManagerService.export_base_path = '/'
+  it 'is invalid if the directories cant be created', noci_local: true do
+    Tufts::ExportManagerService.export_base_path = '/non-existant-dir'
     expect(ppt_manager.instance_variable_get(:@export_valid)).to be false
 
-    Tufts::ExportManagerService.export_base_path = @target_path
+    Tufts::ExportManagerService.export_base_path =  Rails.root.join('tmp', 'exports').to_s
   end
 
   it 'is invalid with an invalid type' do
@@ -26,8 +26,8 @@ describe Tufts::ExportManagerService do
         .instance_variable_get(:@export_valid)).to be false
   end
 
-  it 'creates the test directories if they dont already exist' do
-    base_path = Tufts::ExportManagerService.export_base_path
+  it 'creates the test directories if they dont already exist', noci_local: true  do
+    base_path = Rails.root.join('tmp', 'exports').to_s
     pdf_path = base_path + '/pdfs'
     pptx_path = base_path + '/ppts'
 
@@ -38,7 +38,7 @@ describe Tufts::ExportManagerService do
   end
 
   describe '#retrieve_asset' do
-    it 'generates the file if it doesnt already exist' do
+    it 'generates the file if it doesnt already exist', noci_local: true  do
       ppt_manager
       full_path = ppt_manager.instance_variable_get(:@full_path)
 
@@ -47,7 +47,7 @@ describe Tufts::ExportManagerService do
       expect(full_path).to exist_on_filesystem
     end
 
-    it 'doesnt generate a file if it already exists' do
+    it 'doesnt generate a file if it already exists', noci_local: true, noci: true do
       ppt_files = ppt_manager.export_base_path + '/ppts/*'
 
       expect(Dir[ppt_files].count).to be 0
@@ -75,7 +75,7 @@ describe Tufts::ExportManagerService do
       expect(ppt_manager.asset_exists?).to be true
     end
 
-    it 'returns false if asset doesnt exist' do
+    it 'returns false if asset doesnt exist', noci_local: true do
       expect(ppt_manager.asset_exists?).to be false
     end
   end
@@ -87,8 +87,8 @@ describe Tufts::ExportManagerService do
     end
   end
 
-  describe '#self.delete_all_assets', slow: true do
-    it 'deletes both pdf and ppt files for collection' do
+  describe '#self.delete_all_assets', noci_local: true, slow: true do
+    it 'deletes both pdf and ppt files for collection', noci_local: true, noci: true do
       pdf_manager = Tufts::ExportManagerService.new(collection, 'pdf')
       pdf_file = pdf_manager.instance_variable_get(:@full_path)
       pdf_manager.retrieve_asset

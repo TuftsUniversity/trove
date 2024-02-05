@@ -7,7 +7,14 @@ module FileManager
   end
 
   def destroy_export_dirs
-    FileUtils.rm_r(Tufts::ExportManagerService.export_base_path) if
-      File.exists?(Tufts::ExportManagerService.export_base_path)
+    yaml_config =
+    YAML.safe_load(
+      File.read(
+        Rails.root.join('config', 'tufts.yml')
+      )
+    )[Rails.env]
+
+
+    FileUtils.rm_r(yaml_config['export_path']) if File.exists?(yaml_config['export_path'])
   end
 end
