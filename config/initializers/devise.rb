@@ -1,19 +1,22 @@
 # frozen_string_literal: true
+require "omniauth-shibboleth"
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
   # ==> LDAP Configuration
-  config.ldap_logger = true
-  config.ldap_create_user = true
-  # config.ldap_update_password = true
-  config.ldap_config = Rails.root.join('config', 'ldap.yml')
-  # config.ldap_check_group_membership = false
-  # config.ldap_check_group_membership_without_admin = false
-  # config.ldap_check_attributes = false
-  # config.ldap_check_attributes_presence = false
-  config.ldap_use_admin_to_bind = false
-  # config.ldap_ad_group_check = false
+  if Rails.env.development? || Rails.env.test?
+    config.ldap_logger = true
+    config.ldap_create_user = true
+    # config.ldap_update_password = true
+    config.ldap_config = Rails.root.join('config', 'ldap.yml')
+    # config.ldap_check_group_membership = false
+    # config.ldap_check_group_membership_without_admin = false
+    # config.ldap_check_attributes = false
+    # config.ldap_check_attributes_presence = false
+    config.ldap_use_admin_to_bind = false
+    # config.ldap_ad_group_check = false
+  end
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
@@ -312,4 +315,13 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  if Rails.env.production? || Rails.env.stage?
+    config.omniauth :shibboleth, {
+      uid_field: 'uid',
+      info_fields: { display_name: 'displayName', uid: 'uid', mail: 'mail' },
+      callback_url: '/users/auth/shibboleth/callback',
+      strategy_class: OmniAuth::Strategies::Shibboleth
+    }
+  end
 end
