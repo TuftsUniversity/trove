@@ -19,7 +19,13 @@ class User < ApplicationRecord
   include Blacklight::User
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :ldap_authenticatable, :rememberable, :validatable
+  if Rails.env.development? || Rails.env.test?
+    devise :ldap_authenticatable, :rememberable, :validatable
+  else
+    devise_modules = [:omniauthable, :rememberable, omniauth_providers: [:shibboleth]]
+    ##devise_modules.prepend(:database_authenticatable) if AuthConfig.use_database_auth?
+    devise(*devise_modules)
+  end
 
   # Method added by Blacklight; Blacklight uses #to_s on your
   # user class to get a user-displayable login/identifier for
@@ -51,6 +57,27 @@ class User < ApplicationRecord
     self.email = Devise::LDAP::Adapter.get_ldap_param(username, "mail").first
     self.display_name = Devise::LDAP::Adapter.get_ldap_param(username, "tuftsEduDisplayNameLF").first
   end
+
+  # allow omniauth (including shibboleth) logins
+  #   this will create a local user based on an omniauth/shib login
+  #   if they haven't logged in before
+  def self.from_omniauth(auth)
+    Rails.logger.warn "auth = #{auth.inspect}"
+    user = find_by(username: auth[:uid])
+    if user.nil?
+      user = User.create(
+        email: auth[:mail],
+        username: auth[:uid],
+        display_name: auth[:name]
+      )
+    else
+      user.display_name = auth[:name]
+      user.username = auth[:uid]
+      user.email = auth[:mail]
+      user.save
+    end
+    user
+  end
 end
 
 
@@ -64,6 +91,8 @@ module Hyrax::User
       u.password = ('a'..'z').to_a.shuffle(random: Random.new).join
       u.save
       u
+    rescue ActiveRecord::RecordNotUnique
+      retry
     end
   end
 end
