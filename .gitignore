@@ -50,3 +50,7 @@ bin/spring
 # env files
 .env
 coverage/
+
+trove-lock
+trove.pid
+.DS_Store
